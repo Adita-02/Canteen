@@ -1,0 +1,4913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আহার বিলাস</title>
+<link rel="icon" href="https://i.pinimg.com/originals/59/0b/ef/590befc22b65174e683ac4b0e7263968.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;900&family=Noto+Serif+Bengali:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4e9d7; --paper:#faf1e2; --ink:#2b1d10; --muted:#8a7a63;
+  --line:rgba(90,68,40,.16); --orange:#d98a2b; --orange2:#c98a2d;
+  --accent:#e9a23b; --accent2:#f0b45a; --red:#b8542f; --dark:#3a2416;
+  --choc:#2a1a0e; --caramel:#c98a2d; --maroon:#6e3218; --ochre:#d9a441;
+  --gold:#f0b45a; --cream:#fdf6e9; --warm:#f8edd8;
+  --shadow-sm:0 6px 18px rgba(60,40,15,.10);
+  --shadow-md:0 16px 38px rgba(60,40,15,.16);
+  --shadow-lg:0 30px 70px rgba(60,40,15,.22);
+  --radius:26px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+button{font:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal[data-delay="1"]{transition-delay:.08s}
+.reveal[data-delay="2"]{transition-delay:.16s}
+.reveal[data-delay="3"]{transition-delay:.24s}
+.reveal[data-delay="4"]{transition-delay:.32s}
+.reveal[data-delay="5"]{transition-delay:.40s}
+@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+.shell{min-height:100vh;position:relative;overflow:hidden}
+.shell:before,.shell:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none;animation:drift 16s ease-in-out infinite alternate}
+.shell:before{width:520px;height:520px;background:linear-gradient(135deg,#d8c9a6,#c89b5c);right:-180px;top:-190px;opacity:.45}
+.shell:after{width:460px;height:460px;background:linear-gradient(135deg,#e3d3b4,#c98a2d);left:-230px;bottom:80px;opacity:.35;animation-delay:-6s}
+@keyframes drift{to{transform:translate(40px,30px) scale(1.06)}}
+
+/* ===== Navbar ===== */
+.nav{
+  width:min(1200px,calc(100% - 32px));margin:12px auto 0;height:74px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:12px;z-index:50;
+  padding:0 16px;
+  background:rgba(250,239,222,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+  border:1px solid rgba(90,68,40,.10);border-radius:20px;
+  box-shadow:0 6px 18px rgba(60,40,15,.06);
+  transition:box-shadow .4s var(--ease),background .4s ease;
+}
+.nav.scrolled{background:rgba(250,239,222,.92);box-shadow:0 14px 34px rgba(60,40,15,.16)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.04em}
+.brand img{transition:transform .4s var(--ease)}
+.brand:hover img{transform:scale(1.05)}
+.navlinks{display:flex;gap:28px;font-size:13px;color:#676861;font-weight:500}
+.navlinks a, .navlinks button{position:relative;transition:color .3s;background:none;border:none;font:inherit;cursor:pointer;color:#676861;padding:0}
+.navlinks a:after, .navlinks button:after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--accent);border-radius:2px;transition:width .35s var(--ease)}
+.navlinks a:hover, .navlinks button:hover{color:var(--ink)}
+.navlinks a:hover:after, .navlinks button:hover:after{width:100%}
+.nav-actions{display:flex;gap:9px;align-items:center}
+.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:50%;display:grid;place-items:center;transition:.3s var(--ease);font-size:18px;color:var(--ink)}
+.iconbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);background:#fff}
+.login{padding:10px 18px;border:1px solid var(--ink);border-radius:22px;background:transparent;font-size:13px;font-weight:600;transition:.3s var(--ease);position:relative;overflow:hidden}
+.login:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+.menu-toggle{display:none}
+.mobile-menu{position:fixed;left:16px;right:16px;top:96px;z-index:49;
+  background:rgba(250,239,222,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(90,68,40,.12);border-radius:20px;box-shadow:var(--shadow-lg);
+  padding:14px;display:flex;flex-direction:column;gap:4px;
+  opacity:0;transform:translateY(-14px) scale(.98);pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.mobile-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.mobile-menu a, .mobile-menu button{padding:13px 16px;border-radius:13px;font-size:15px;font-weight:600;color:var(--ink);transition:.25s;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;width:100%}
+.mobile-menu a:hover, .mobile-menu button:hover{background:var(--warm);color:var(--maroon)}
+.mobile-menu .m-btn{margin-top:8px}
+@media(max-width:900px){.menu-toggle{display:grid}.navlinks{display:none}}
+
+/* ===== Hero ===== */
+.hero{
+  width:min(1180px,calc(100% - 44px));
+  margin: 10px auto 40px;
+  min-height:560px;
+  display:grid;
+  grid-template-columns:1.15fr 0.95fr;
+  gap:40px;
+  align-items:center;
+  position:relative;
+  z-index:2;
+}
+.hero-main{position:relative;padding:30px 0 20px 48px;display:flex;flex-direction:column;justify-content:center}
+.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:14px;display:inline-flex;align-items:center;gap:8px}
+.kicker:before{content:"";width:26px;height:1px;background:var(--accent)}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(233,162,59,.16);border:1px solid rgba(233,162,59,.35);
+  color:var(--maroon);font-size:10.5px;font-weight:700;padding:6px 12px;border-radius:30px;letter-spacing:.03em;margin-bottom:12px;align-self:flex-start}
+.hero-badge .live{width:7px;height:7px;border-radius:50%;background:#8db95b;box-shadow:0 0 0 0 rgba(141,185,91,.5);animation:pulse 2s infinite}
+.hero h1{font-family:"Space Grotesk";font-size:clamp(32px,3.8vw,50px);line-height:1.12;letter-spacing:-.02em;max-width:440px;color:var(--maroon)}
+.hero h1 em{font-style:normal;font-weight:400;color:#8a6a45}
+.hero h1 strong{background:linear-gradient(120deg,var(--maroon),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{max-width:400px;color:#706e65;line-height:1.65;margin:16px 0 18px;font-size:13.5px}
+.cta-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:24px}
+.primary{background:linear-gradient(120deg,var(--maroon),var(--accent));color:#fff;border:0;padding:14px 26px;border-radius:30px;font-weight:600;box-shadow:0 12px 26px rgba(110,50,24,.32);transition:.35s var(--ease);position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px}
+.primary:after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s var(--ease)}
+.primary:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(110,50,24,.45)}
+.primary:hover:after{left:120%}
+.secondary{background:transparent;border:1px solid var(--line);padding:13px 22px;border-radius:30px;font-weight:600;color:var(--ink);transition:.3s var(--ease)}
+.secondary:hover{border-color:var(--maroon);transform:translateY(-2px);background:#fff}
+
+.vertical-line{position:absolute;left:17px;top:40px;height:430px;width:1px;background:var(--line)}
+.vertical-line:after{content:"";position:absolute;left:-4px;top:0;width:9px;height:9px;border-radius:50%;background:var(--accent);animation:dotdrop 3s ease-in-out infinite}
+@keyframes dotdrop{0%,100%{top:0}50%{top:40px}}
+.side-dots{position:absolute;left:0;top:150px;display:flex;flex-direction:column;gap:13px}
+.side-dots i{width:4px;height:4px;background:#c9c4b8;border-radius:50%}
+.side-dots i:first-child{background:var(--accent);width:6px;height:6px;box-shadow:0 0 0 4px rgba(233,162,59,.18)}
+.dish-tag{font-size:12px;font-weight:600;color:#8b8c84;margin-bottom:12px;transition:opacity .25s ease;font-family:"Noto Serif Bengali","DM Sans",serif;display:inline-block}
+.dish-tag.is-hidden{opacity:0}
+
+/* ===== Large Hero Plate Showcase (Original Circular Plate Design) ===== */
+.hero-visual{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  min-height:460px;
+}
+.hero-plate-wrap{
+  position:relative;
+  width:clamp(320px, 32vw, 420px);
+  height:clamp(320px, 32vw, 420px);
+  display:grid;
+  place-items:center;
+}
+.ambient{
+  position:absolute;
+  inset:-25px;
+  background:radial-gradient(circle,rgba(237,219,185,.9),rgba(228,207,159,.5) 55%,transparent 75%);
+  border-radius:50%;
+  z-index:0;
+  filter:blur(18px);
+  animation:ambientPulse 8s ease-in-out infinite alternate;
+}
+@keyframes ambientPulse{0%{transform:scale(.95);opacity:.75}100%{transform:scale(1.08);opacity:1}}
+
+.plate{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:linear-gradient(145deg,#e9e1d1,#d6ccb7);
+  box-shadow:0 25px 60px rgba(60,40,15,.22), inset 0 2px 8px rgba(255,255,255,.6), inset 0 -6px 14px rgba(60,40,15,.18);
+  display:grid;
+  place-items:center;
+  animation:floatPlate 6s ease-in-out infinite;
+}
+@keyframes floatPlate{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(-1.5deg)}}
+.plate:after{
+  content:"";
+  width:84%;
+  height:84%;
+  border-radius:50%;
+  background:linear-gradient(145deg,#d2c5af,#bfb199);
+  box-shadow:inset 0 4px 10px rgba(0,0,0,.15), 0 2px 4px rgba(255,255,255,.4);
+  position:absolute;
+}
+.plate:before{
+  content:"";
+  position:absolute;
+  width:92%;
+  height:92%;
+  border-radius:50%;
+  border:2px dashed rgba(201,138,45,.55);
+  z-index:1;
+  animation:spin 28s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.food{
+  position:relative;
+  z-index:2;
+  width:78%;
+  height:78%;
+  border-radius:50%;
+  object-fit:cover;
+  box-shadow:0 18px 40px rgba(0,0,0,.3);
+  transition:opacity .4s ease,transform .4s cubic-bezier(.3,.7,.4,1);
+  will-change:opacity,transform;
+  border:4px solid rgba(255,255,255,.4);
+}
+.food.is-hidden{opacity:0;transform:translate(14px,-20px) scale(.82) rotate(-8deg)}
+
+.plate-dish-info{
+  position:absolute;
+  bottom:-12px;
+  background:rgba(253,246,233,.92);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(110,50,24,.15);
+  padding:8px 20px;
+  border-radius:30px;
+  box-shadow:0 10px 24px rgba(60,40,15,.14);
+  z-index:4;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-family:"Noto Serif Bengali","Space Grotesk",serif;
+  font-weight:600;
+  color:var(--maroon);
+  font-size:14px;
+}
+.plate-dish-info .score-pill{
+  background:var(--accent);
+  color:#fff;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:12px;
+  font-family:"Space Grotesk";
+  font-weight:700;
+}
+.plate-float-badge{
+  position:absolute;
+  top:10px;
+  right:-10px;
+  background:linear-gradient(135deg,var(--maroon),var(--dark));
+  color:#fff6e9;
+  border-radius:20px;
+  padding:6px 14px;
+  font-size:11px;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(0,0,0,.2);
+  z-index:4;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  animation:tagFloat 4.5s ease-in-out infinite;
+}
+.plate-float-badge .dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#8db95b;
+  box-shadow:0 0 0 0 rgba(141,185,91,.5);
+  animation:pulse 2s infinite;
+}
+@keyframes tagFloat{0%,100%{transform:rotate(3deg) translateY(0)}50%{transform:rotate(3deg) translateY(-6px)}}
+
+/* ===== Dishes Switcher (Original 4 Menu Items) ===== */
+.dishes{position:relative;margin-top:20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.dish{width:82px;text-align:center;opacity:.65;transition:all .35s var(--ease);padding:8px 5px 9px;border-radius:16px;border:1px solid transparent;cursor:pointer}
+.dish.active{opacity:1;transform:translateY(-4px);background:#fff;border-color:var(--line);box-shadow:var(--shadow-md)}
+.thumb{width:58px;height:58px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 8px 18px rgba(0,0,0,.1);transition:transform .4s var(--ease);margin:0 auto}
+.dish:hover .thumb{transform:scale(1.12) rotate(3deg)}
+.dish span{display:block;font-size:9.5px;line-height:1.2;margin-top:6px;color:#64655e;font-family:"Noto Serif Bengali","DM Sans",serif;font-weight:500}
+.arrow{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:17px;flex:0 0 auto;transition:.3s var(--ease);color:var(--ink)}
+.arrow:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(1.1)}
+.quick-actions{display:flex;gap:14px;align-items:center;margin-top:16px}
+.qa-btn{width:34px;height:34px;border-radius:50%;border:0;background:transparent;color:#9a9b93;display:grid;place-items:center;transition:.3s var(--ease)}
+.qa-btn svg{width:16px;height:16px}
+.qa-btn:hover{color:var(--ink);background:rgba(0,0,0,.05);transform:translateY(-2px)}
+.qa-btn.mic{width:44px;height:44px;background:#fff;color:var(--ink);box-shadow:var(--shadow-sm);border:1px solid var(--line);position:relative}
+.qa-btn.mic svg{width:18px;height:18px}
+.qa-btn.mic:hover{background:var(--accent);color:#fff;border-color:var(--accent);animation:micPulse 1.6s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:var(--shadow-sm)}50%{box-shadow:0 0 0 8px rgba(233,162,59,.18)}}
+
+/* ===== Trust strip ===== */
+.trust-strip{width:min(1080px,calc(100% - 44px));margin:0 auto 70px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;position:relative;z-index:3}
+.trust-card{background:#fffdf7;border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;gap:14px;align-items:flex-start;transition:.4s var(--ease)}
+.trust-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md);border-color:var(--accent)}
+.trust-icon{width:42px;height:42px;border-radius:13px;background:var(--warm);color:var(--maroon);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.trust-card:hover .trust-icon{background:var(--accent);color:#fff}
+.trust-card b{font-size:13px}.trust-card p{font-size:11px;color:#777;margin-top:4px;line-height:1.5}
+
+/* ===== Reports Section ===== */
+.section{width:min(1080px,calc(100% - 44px));margin:0 auto 90px;position:relative;z-index:3}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:24px}
+.section h2{font-family:"Space Grotesk";font-size:38px;letter-spacing:-.055em;color:var(--maroon)}
+.section-head p{font-size:12px;color:#777365;max-width:340px;line-height:1.5}
+.toast{position:fixed;right:24px;bottom:24px;background:var(--choc);color:white;padding:13px 17px;border-radius:14px;font-size:12px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.3s;z-index:9999;box-shadow:var(--shadow-md)}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* =========================================================
+   ===== 3D COMBO & TODAY'S MENU SHOWCASE (REFERENCE STYLE) =====
+   ========================================================= */
+.menu-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(26,16,8,.84);
+  backdrop-filter:blur(22px) saturate(140%);
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  z-index:999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+.menu-modal-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* =========================================================
+   ===== PINTEREST COZY CAFE MENU MODAL (REFERENCE STYLE) =====
+   ========================================================= */
+.menu-showcase-box{
+  position:relative;
+  width:min(1000px, 100%);
+  max-height:90vh;
+  overflow-y:auto;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:36px;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+  transform:scale(.94) translateY(20px);
+  transition:transform .4s cubic-bezier(.2,.8,.3,1);
+  display:flex;
+  flex-direction:column;
+  padding:28px 24px;
+}
+.menu-modal-overlay.open .menu-showcase-box{
+  transform:scale(1) translateY(0);
+}
+
+/* Modal Close Button */
+.modal-close-btn{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(0,0,0,.08);
+  border:1px solid var(--line);
+  color:var(--ink);
+  font-size:16px;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  z-index:10;
+  transition:.3s var(--ease);
+}
+.modal-close-btn:hover{
+  background:var(--choc);
+  color:#fff;
+  transform:rotate(90deg) scale(1.1);
+}
+
+.modal-header-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:20px;
+  padding-right:45px;
+  flex-wrap:wrap;
+}
+.modal-top-tabs{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.modal-tab-pill{
+  background:var(--bg);
+  border:1.5px solid var(--line);
+  color:var(--ink);
+  padding:8px 18px;
+  border-radius:999px;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .3s var(--ease);
+}
+.modal-tab-pill.active{
+  background:var(--choc);
+  color:#fff;
+  border-color:var(--choc);
+}
+.modal-ext-link{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:11.5px;
+  font-weight:700;
+  color:var(--accent);
+  text-decoration:none;
+  padding:6px 14px;
+  background:rgba(184,84,47,.1);
+  border-radius:999px;
+  transition:.25s;
+}
+.modal-ext-link:hover{
+  background:var(--accent);
+  color:#fff;
+}
+
+/* Top Featured Organic Hero Window */
+.modal-featured-hero{
+  position:relative;
+  background:linear-gradient(145deg, #dfc19c 0%, #ce9f70 45%, #b97f4d 100%);
+  border-radius:36px 100px 36px 48px / 48px 40px 60px 36px;
+  padding:30px 28px;
+  margin-bottom:28px;
+  box-shadow:0 16px 36px rgba(60,30,10,.14);
+  border:2px solid rgba(255,255,255,.5);
+}
+.modal-script-title{
+  font-family:"Playfair Display", "Noto Serif Bengali", serif;
+  font-size:clamp(24px, 3.8vw, 36px);
+  font-weight:700;
+  font-style:italic;
+  color:#2b1406;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.modal-hero-layout{
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:24px;
+  align-items:center;
+}
+@media(max-width:780px){
+  .modal-hero-layout{grid-template-columns:1fr;gap:18px}
+  .modal-featured-hero{padding:20px 16px;border-radius:24px}
+}
+.modal-image-window{
+  background:rgba(255,250,240,.35);
+  backdrop-filter:blur(8px);
+  border:2px solid rgba(255,255,255,.6);
+  border-radius:32px 70px 32px 60px / 46px 32px 60px 32px;
+  padding:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:220px;
+}
+.modal-big-dish{
+  max-width:88%;
+  max-height:210px;
+  object-fit:contain;
+  filter:drop-shadow(0 14px 24px rgba(45,20,5,.3));
+  transition:all .35s var(--ease);
+}
+.modal-detail-card{
+  background:var(--paper);
+  border-radius:22px 30px 22px 24px;
+  padding:22px 20px;
+  box-shadow:0 12px 30px rgba(50,25,10,.12);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.modal-tag-row{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.modal-tag-pill{
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  background:#f4e2cc;
+  color:#6e3218;
+  padding:3px 10px;
+  border-radius:999px;
+}
+.modal-dish-title{
+  font-family:"Noto Serif Bengali", "Playfair Display", serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--choc);
+  line-height:1.2;
+}
+.modal-dish-desc{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.modal-price-row{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+}
+.modal-main-price{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:26px;
+  font-weight:700;
+  color:var(--maroon);
+}
+.modal-old-price{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:14px;
+  color:#a8947e;
+  text-decoration:line-through;
+}
+.modal-order-btn{
+  background:linear-gradient(135deg, var(--choc) 0%, var(--accent) 100%);
+  color:#fff;
+  border:none;
+  border-radius:999px;
+  padding:10px 22px;
+  font-family:"Space Grotesk", sans-serif;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .3s var(--ease);
+  width:fit-content;
+}
+.modal-order-btn:hover{
+  transform:translateY(-2px);
+  background:linear-gradient(135deg, var(--accent) 0%, var(--ochre) 100%);
+}
+
+/* Bottom Dishes Grid / Shelf in Modal */
+.modal-shelf-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+.modal-shelf-head h4{
+  font-family:"Playfair Display", "Noto Serif Bengali", serif;
+  font-size:18px;
+  color:var(--choc);
+}
+.modal-shelf-head span{
+  font-size:11.5px;
+  color:var(--muted);
+}
+.modal-dishes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+  gap:14px;
+}
+@media(max-width:540px){
+  .modal-dishes-grid{grid-template-columns:repeat(2, 1fr);gap:10px}
+}
+.modal-dish-card{
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:20px 28px 18px 22px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  transition:all .3s var(--ease);
+  position:relative;
+}
+.modal-dish-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--caramel);
+  box-shadow:var(--shadow-sm);
+}
+.modal-dish-card.active{
+  border-color:var(--accent);
+  box-shadow:0 10px 24px rgba(184,84,47,.22);
+}
+.modal-card-img-wrap{
+  width:100%;
+  height:110px;
+  background:linear-gradient(145deg, #ecd8c2 0%, #dfbe9e 100%);
+  border-radius:14px 20px 14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px;
+}
+.modal-card-img{
+  max-width:85%;
+  max-height:90px;
+  object-fit:contain;
+  filter:drop-shadow(0 6px 12px rgba(45,20,5,.2));
+  transition:transform .3s var(--ease);
+}
+.modal-dish-card:hover .modal-card-img{
+  transform:scale(1.1);
+}
+.modal-card-title{
+  font-family:"Noto Serif Bengali", sans-serif;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--choc);
+  margin:8px 0 3px;
+  line-height:1.2;
+}
+.modal-card-desc{
+  font-size:10.5px;
+  color:var(--muted);
+  line-height:1.4;
+  margin-bottom:8px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.modal-card-foot{
+  margin-top:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.modal-card-price{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:14px;
+  font-weight:700;
+  color:var(--maroon);
+}
+.modal-card-btn{
+  font-size:10px;
+  font-weight:700;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:4px 10px;
+  border-radius:999px;
+}
+.modal-dish-card:hover .modal-card-btn,
+.modal-dish-card.active .modal-card-btn{
+  background:var(--choc);
+  color:#fff;
+}
+html.dark-mode .modal-featured-hero{
+  background:linear-gradient(145deg, #3d2715 0%, #29190c 100%);
+  border-color:rgba(255,255,255,.1);
+}
+html.dark-mode .modal-script-title{color:#f3e9d5}
+html.dark-mode .modal-image-window{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1)}
+html.dark-mode .modal-detail-card{background:#22180d;border:1px solid rgba(255,255,255,.1)}
+html.dark-mode .modal-card-img-wrap{background:linear-gradient(145deg, #382615 0%, #24180c 100%)}
+html.dark-mode .modal-card-title{color:#f3e9d5}
+html.dark-mode .modal-card-price{color:var(--gold)}
+.dock-mode-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* ===== Bulb toggle ===== */
+.bulb-toggle{position:relative;width:40px;height:66px;background:transparent;border:0;padding:0;margin-top:-8px;display:flex;flex-direction:column;align-items:center;transform-origin:top center;transition:transform .3s var(--ease)}
+.bulb-toggle:hover{transform:scale(1.08)}
+.bulb-toggle:active{transform:scale(.96)}
+.bulb-wire{width:1.5px;height:28px;background:linear-gradient(180deg,#cfc9bb,#a9aa9e);border-radius:2px;position:relative;transition:background .4s ease;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.bulb-shade{position:relative;width:26px;height:26px;margin-top:-1px;background:radial-gradient(circle at 35% 28%,#7a6a55,#3a2416 72%);border-radius:50% 50% 52% 48%/62% 62% 38% 38%;box-shadow:inset 0 2px 4px rgba(255,255,255,.28),inset 0 -3px 6px rgba(0,0,0,.5),0 5px 10px rgba(0,0,0,.28);transition:all .55s var(--ease)}
+.bulb-glow{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%) scale(.2);background:radial-gradient(circle,#fff7d6,#ffd76b 60%);opacity:0;transition:all .5s var(--ease)}
+.bulb-halo{position:absolute;left:50%;top:50%;width:22px;height:22px;border-radius:50%;transform:translate(-50%,-50%) scale(.4);border:1.5px solid rgba(255,215,107,0);opacity:0;pointer-events:none;transition:all .5s var(--ease)}
+.bulb-toggle.on .bulb-shade{background:radial-gradient(circle at 40% 30%,#fff3c4,#f0b45a 55%,#d98a2b);box-shadow:0 0 22px 5px rgba(255,215,107,.65),inset 0 1px 3px rgba(255,255,255,.7)}
+.bulb-toggle.on .bulb-glow{opacity:1;transform:translate(-50%,-50%) scale(1);animation:bulbFlicker 4.5s ease-in-out infinite}
+.bulb-toggle.on .bulb-halo{opacity:1;animation:haloPulse 2.2s ease-out infinite}
+.bulb-toggle.on .bulb-wire{background:#ffd76b;box-shadow:0 0 8px rgba(255,215,107,.8)}
+@keyframes haloPulse{0%{transform:translate(-50%,-50%) scale(.4);border-color:rgba(255,215,107,.85);opacity:.95}100%{transform:translate(-50%,-50%) scale(2.6);border-color:rgba(255,215,107,0);opacity:0}}
+@keyframes bulbFlicker{0%,100%{opacity:1}91%{opacity:1}93%{opacity:.72}95%{opacity:1}97%{opacity:.85}}
+
+/* ===== Back to top ===== */
+#toTop{position:fixed;right:26px;bottom:26px;z-index:40;width:48px;height:48px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--maroon),var(--accent));color:#fff;font-size:19px;display:grid;place-items:center;box-shadow:0 12px 24px rgba(110,50,24,.38);opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:.4s var(--ease);cursor:pointer;overflow:hidden}
+#toTop:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-100%) skewX(-20deg);transition:transform .6s var(--ease)}
+#toTop.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+#toTop:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 16px 30px rgba(110,50,24,.5)}
+#toTop:hover:after{transform:translateX(100%) skewX(-20deg)}
+
+/* ===== Rich Footer ===== */
+.footer{background:linear-gradient(160deg,#3a2416,#2a1a0e);color:#e5d3b4;margin-top:40px;position:relative;z-index:3;overflow:hidden}
+.footer:before{content:"";position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(233,162,59,.18),transparent 70%);right:-120px;top:-120px;pointer-events:none}
+.footer:after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent) 30%,var(--accent2) 70%,transparent);opacity:.9}
+.footer-inner {position:relative;z-index:2;width:min(1080px,calc(100% - 44px));margin:0 auto;padding:40px 0 40px;display:grid;grid-template-columns: 1.5fr 1fr 1.2fr;gap:40px}
+.footer h4{font-family:"Space Grotesk";font-size:14px;letter-spacing:.04em;color:#fff;margin-bottom:16px;position:relative;padding-bottom:10px}
+.footer h4:after{content:"";position:absolute;left:0;bottom:0;width:26px;height:2px;background:var(--accent);border-radius:2px}
+.footer .fbrand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.footer .fbrand img{transition:transform .4s var(--ease);border-radius:14px}
+.footer .fbrand:hover img{transform:scale(1.05)}
+.footer .fabout{font-size:11.5px;line-height:1.7;color:#c9b591;max-width:280px;margin-bottom:20px}
+.footer .fsocial{display:flex;gap:10px}
+.footer .fsocial a{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:14px;transition:.35s var(--ease);color:#c9b591}
+.footer .fsocial a:hover{background:linear-gradient(135deg,var(--accent),var(--maroon));color:#fff;transform:translateY(-4px) scale(1.12);box-shadow:0 10px 22px rgba(233,162,59,.45)}
+.footer ul.flist{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer ul.flist a{font-size:11.5px;color:#c9b591;transition:.3s;display:inline-flex;align-items:center;gap:7px}
+.footer ul.flist a:before{content:"›";color:var(--accent);font-weight:700}
+.footer ul.flist a:hover{color:#fff;transform:translateX(3px)}
+.footer .contact li{display:flex;gap:10px;align-items:flex-start;font-size:11.5px;color:#c9b591;margin-bottom:12px;line-height:1.5}
+.footer .contact li span{color:var(--accent);flex:0 0 auto}
+.news-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:20px;position:relative;transition:.3s var(--ease)}
+.news-card:hover{background:rgba(255,255,255,.06);border-color:rgba(233,162,59,.3)}
+.news-note{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.news-ico{font-size:16px;color:var(--accent);background:rgba(233,162,59,.15);width:32px;height:32px;display:grid;place-items:center;border-radius:10px;flex:0 0 auto}
+.news-card p{font-size:11.5px;color:#c9b591;line-height:1.5;margin:0}
+.news-trust{margin-top:14px;font-size:10.5px;color:#a89477;display:flex;align-items:center;gap:6px}
+.news-trust span{color:#8db95b;font-weight:bold}
+.footer .news-input{display:flex;background:rgba(255,255,255,.08);border-radius:14px;padding:4px;overflow:hidden;transition:box-shadow .3s ease,background .3s ease}
+.footer .news-input:focus-within{box-shadow:0 0 0 2px rgba(233,162,59,.45);background:rgba(255,255,255,.14)}
+.footer .news-input input{flex:1;background:transparent;border:0;outline:0;color:#fff;font:inherit;font-size:11px;padding:9px 12px}
+.footer .news-input input::placeholder{color:#a89477}
+.footer .news-input button{background:var(--accent);color:#fff;border:0;border-radius:11px;padding:9px 14px;font-size:11px;font-weight:600;transition:.3s;position:relative;overflow:hidden}
+.footer .news-input button:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.45),transparent);transform:translateX(-100%) skewX(-20deg);transition:transform .55s var(--ease)}
+.footer .news-input button:hover{background:var(--accent2)}
+.footer .news-input button:hover:after{transform:translateX(100%) skewX(-20deg)}
+
+/* ===== Clothesline ===== */
+.clothesline{position:relative;margin-top:-6px;height:210px;overflow:hidden}
+.clothesline .rope{position:absolute;left:-2%;right:-2%;top:34px;height:4px;border-radius:4px;background:linear-gradient(90deg,transparent,rgba(240,180,90,.9) 8%,rgba(240,180,90,.55) 50%,rgba(240,180,90,.9) 92%,transparent);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.clothesline .post{position:absolute;top:0;width:7px;height:74px;background:linear-gradient(#6b4a22,#3a2416);border-radius:4px}
+.clothesline .post.l{left:8px}.clothesline .post.r{right:8px}
+.clothesline .post:after{content:'';position:absolute;left:50%;top:-7px;transform:translateX(-50%);width:13px;height:13px;border-radius:50%;background:#d9a441}
+.hang-wrap{position:absolute;left:0;right:0;top:0;height:100%;width:100%;transform-origin:top center}
+.hang-wrap .pin{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:20px;height:26px;background:linear-gradient(180deg,#c98a2d,#a8701f);border-radius:5px;box-shadow:0 3px 5px rgba(0,0,0,.3);z-index:3}
+.hang-wrap .pin:before{content:'';position:absolute;left:4px;top:2px;width:12px;height:2px;background:#8a5a1e;border-radius:2px}
+.hang-wrap .string{position:absolute;left:50%;top:40px;transform:translateX(-50%);width:2px;height:34px;background:rgba(233,162,59,.7)}
+.order-slip{position:absolute;left:50%;top:74px;transform:translateX(-50%);transform-origin:top center;width:118px;background:linear-gradient(145deg,#fffdf7,#f4e8d4);border:1px solid rgba(90,60,30,.15);border-radius:14px;padding:10px 10px 9px;text-align:center;box-shadow:0 14px 28px rgba(0,0,0,.25)}
+.order-slip .slip-photo{width:46px;height:46px;object-fit:cover;border-radius:50%;border:2px solid #fff;filter:drop-shadow(0 2px 5px rgba(0,0,0,.2));margin:0 auto 6px;display:block}
+.order-slip .slip-tag{font-family:"Space Grotesk";font-size:8px;letter-spacing:.12em;color:#b8542f;font-weight:700}
+.order-slip .slip-name{font-family:"Noto Serif Bengali","Space Grotesk",serif;font-size:12px;color:#3a2416;margin:2px 0;font-weight:600}
+.order-slip .slip-price{font-family:"Space Grotesk";font-size:12px;color:#6e3218;font-weight:700}
+.order-slip.plain{padding:14px 8px 12px;background:linear-gradient(145deg,#5c2d18,#3a2416);border-color:transparent}
+.order-slip.plain .slip-tag{color:#f0b45a;font-size:11px;letter-spacing:.16em}
+.order-slip.plain .slip-name{color:#fff6e9;font-size:13px}
+.order-slip.plain .slip-price{color:#f0b45a}
+.order-slip.coupon{width:126px;background:linear-gradient(145deg,#fdf6e9,#f4e8d4);border:1px dashed #c98a2d}
+.order-slip.coupon .slip-tag{color:#6e3218}
+.order-slip.coupon .slip-name{color:#b8542f}
+.order-slip.coupon .coupon-code{font-family:"Space Grotesk";font-size:15px;font-weight:700;letter-spacing:.08em;color:#3a2416;background:linear-gradient(120deg,#f0b45a,#d9a441);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:2px 0 3px}
+.order-slip.coupon .coupon-off{display:inline-block;background:#e9a23b;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.05em}
+@keyframes sway{0%,100%{transform:rotate(-5.5deg)}25%{transform:rotate(-1deg)}50%{transform:rotate(6deg)}75%{transform:rotate(1.5deg)}}
+.hang-item{position:absolute;transform-origin:top center;animation:sway 3.4s ease-in-out infinite}
+.hang-item:nth-child(1){left:3%;animation-duration:3.2s;animation-delay:0s}
+.hang-item:nth-child(2){left:13%;animation-duration:3.7s;animation-delay:.6s}
+.hang-item:nth-child(3){left:23%;animation-duration:3.1s;animation-delay:1.1s}
+.hang-item:nth-child(4){left:33%;animation-duration:3.8s;animation-delay:.3s}
+.hang-item:nth-child(5){left:43%;animation-duration:3.3s;animation-delay:.9s}
+.hang-item:nth-child(6){left:53%;animation-duration:3.5s;animation-delay:.4s}
+.hang-item:nth-child(7){left:63%;animation-duration:3.6s;animation-delay:1.4s}
+.hang-item:nth-child(8){left:73%;animation-duration:3.9s;animation-delay:.2s}
+.hang-item:nth-child(9){left:83%;animation-duration:3.4s;animation-delay:.8s}
+.hang-item:nth-child(10){left:93%;animation-duration:3.6s;animation-delay:.5s}
+@media (prefers-reduced-motion: reduce){.hang-item{animation:none}}
+
+/* ===== Dark mode ===== */
+html.dark-mode{--bg:#181108;--paper:#241a0e;--ink:#f3e9d5;--muted:#b7a585;--line:rgba(255,255,255,.14);--accent:#d98a2b;--accent2:#e9a23b}
+html.dark-mode body{background:var(--bg);color:var(--ink);transition:background .4s ease,color .4s ease}
+html.dark-mode .nav{background:rgba(26,18,8,.72);border-color:rgba(255,255,255,.1)}
+html.dark-mode .nav.scrolled{background:rgba(26,18,8,.94)}
+html.dark-mode .nav .login{border-color:var(--ink);color:var(--ink)}
+html.dark-mode .navlinks a, html.dark-mode .navlinks button{color:var(--muted)}
+html.dark-mode .navlinks a:hover, html.dark-mode .navlinks button:hover{color:#fff}
+html.dark-mode .iconbtn{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--ink)}
+html.dark-mode .hero h1{color:#f3e9d5}
+html.dark-mode .hero h1 em{color:#d2c3a6}
+html.dark-mode .hero p{color:var(--muted)}
+html.dark-mode .secondary{color:#f3e9d5;border-color:rgba(255,255,255,.18)}
+html.dark-mode .dish.active{background:#241b0f;border-color:rgba(255,255,255,.12)}
+html.dark-mode .dish span{color:#c7bda6}
+html.dark-mode .arrow{background:#241b0f;color:#f3e9d5;border-color:rgba(255,255,255,.15)}
+html.dark-mode .qa-btn{color:#c5bda9}
+html.dark-mode .qa-btn:hover{color:#fff}
+html.dark-mode .qa-btn.mic{background:#241b0f;color:#f3e9d5}
+html.dark-mode .trust-card{background:#221a0e;color:#f3e9d5}
+html.dark-mode .trust-card b{color:#f3e9d5}
+html.dark-mode .trust-card p{color:var(--muted)}
+html.dark-mode .trust-icon{background:#3a2a14;color:#f3e9d5}
+html.dark-mode .plate{background:#2a1a0e;box-shadow:0 25px 60px rgba(0,0,0,.5), inset 0 2px 8px rgba(255,255,255,.1)}
+html.dark-mode .plate:after{background:#3a2416}
+html.dark-mode .ambient{background:radial-gradient(circle,rgba(60,35,16,.85),rgba(40,22,10,.5) 55%,transparent 75%)}
+html.dark-mode .plate-dish-info{background:rgba(36,26,14,.92);color:#f3e9d5;border-color:rgba(255,255,255,.12)}
+html.dark-mode .shell:before{background:#241d12}
+html.dark-mode .shell:after{background:#241a0e}
+html.dark-mode .dish-tag{color:var(--muted)}
+html.dark-mode .showcase-dock{background:#221a0e;color:#f3e9d5;box-shadow:0 -12px 35px rgba(0,0,0,.4)}
+html.dark-mode .dock-title{color:#fff}
+html.dark-mode .dock-items{color:#c7bda6}
+html.dark-mode .dock-price{color:var(--gold)}
+html.dark-mode .ctrl-nav-btn{background:#3a2a14;color:#f3e9d5;border-color:rgba(255,255,255,.15)}
+html.dark-mode .stat-pill{background:#3a2a14;color:#f3e9d5;border-color:rgba(255,255,255,.1)}
+html.dark-mode .dock-mode-btn{background:#3a2a14;color:#f3e9d5;border-color:rgba(255,255,255,.15)}
+html.dark-mode .dock-mode-btn.active{background:var(--accent);color:#2a1a0e;border-color:var(--accent)}
+html.dark-mode .mobile-menu{background:rgba(26,18,8,.98);border-color:rgba(255,255,255,.12)}
+html.dark-mode .mobile-menu a, html.dark-mode .mobile-menu button{color:#f3e9d5}
+html.dark-mode .mobile-menu a:hover, html.dark-mode .mobile-menu button:hover{background:#3a2a14;color:#fff}
+
+/* ===== Responsive ===== */
+@media(max-width:960px){
+  .hero{grid-template-columns:1fr;text-align:center;gap:30px}
+  .hero-main{padding:20px 10px;align-items:center;text-align:center}
+  .hero h1{max-width:500px}
+  .hero p{max-width:440px}
+  .kicker:before{display:none}
+  .hero-badge{align-self:center}
+  .vertical-line,.side-dots{display:none}
+  .dishes{justify-content:center}
+  .hero-visual{min-height:auto;padding:10px 0 30px}
+  .trust-strip{grid-template-columns:1fr}
+  .section h2{font-size:32px}
+  .section-head{display:block}
+  .section-head p{margin-top:8px}
+  .showcase-dock{grid-template-columns:1fr;text-align:center;gap:18px;padding:20px}
+  .dock-price-row{justify-content:center}
+  .dock-controls{justify-content:center}
+  .dock-stats{align-items:center;flex-direction:row;justify-content:center;flex-wrap:wrap}
+  .dock-mode-switch{flex-direction:column;gap:10px;align-items:center}
+  .footer-inner {grid-template-columns: 1.5fr 1fr 1.2fr;height:210px}
+  .stage-card.pos-left{width:140px;height:140px;transform:translateX(-130px) scale(.75) rotate(-5deg)}
+  .stage-card.pos-right{width:140px;height:140px;transform:translateX(130px) scale(.75) rotate(5deg)}
+  .showcase-bg-text{font-size:70px;top:10%}
+  .hero-plate-wrap{width:290px;height:290px}
+  .plate-float-badge{display:none}
+}
+@media(max-width:520px){
+  .nav{width:calc(100% - 28px)}
+  .hero{width:calc(100% - 28px)}
+  .dishes{gap:6px}
+  .dish{width:70px}
+  .dish:nth-child(4){display:none}
+  .stage-card.pos-left{transform:translateX(-100px) scale(.68) rotate(-4deg)}
+  .stage-card.pos-right{transform:translateX(100px) scale(.68) rotate(4deg)}
+  .footer-inner {grid-template-columns: 1.5fr 1fr 1.2fr;grid-template-columns:repeat(4,1fr);gap:20px;padding:24px 0 10px;align-items:start}
+}
+@media(max-width:960px){.problem-notes-wrap{grid-template-columns:repeat(2,1fr);gap:20px}}
+@media(max-width:540px){.problem-notes-wrap{grid-template-columns:1fr}}
+
+.sticky-note-card{
+  position:relative;
+  background:#fffdf6;
+  border:1px solid rgba(90,68,40,.14);
+  border-radius:18px;
+  padding:26px 20px 20px;
+  box-shadow:0 12px 24px rgba(60,40,15,.08), 0 2px 6px rgba(0,0,0,.04);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.sticky-note-card.rot-1{transform:rotate(-2.2deg) translateY(0)}
+.sticky-note-card.rot-2{transform:rotate(1.6deg) translateY(14px)}
+.sticky-note-card.rot-3{transform:rotate(-1.4deg) translateY(-6px)}
+.sticky-note-card.rot-4{transform:rotate(2.4deg) translateY(10px)}
+.sticky-note-card:hover{transform:rotate(0deg) translateY(-8px) scale(1.03)!important;box-shadow:0 18px 36px rgba(60,40,15,.16);z-index:5}
+
+.note-pin{
+  position:absolute;
+  top:-9px;
+  left:50%;
+  transform:translateX(-50%);
+  width:16px;
+  height:18px;
+  background:linear-gradient(180deg,#c98a2d,#a8701f);
+  border-radius:4px;
+  box-shadow:0 2px 5px rgba(0,0,0,.3);
+  z-index:2;
+}
+.note-pin:before{
+  content:"";
+  position:absolute;
+  left:3px;
+  top:2px;
+  width:10px;
+  height:2px;
+  background:#8a5a1e;
+  border-radius:1px;
+}
+.note-icon{font-size:22px;margin-bottom:8px;display:block}
+.sticky-note-card b{font-size:13.5px;color:var(--ink);display:block;margin-bottom:6px;line-height:1.3}
+.sticky-note-card p{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* 2. Stakeholders: Connected Horizontal / Zig-Zag Timeline */
+.timeline-track-wrap{
+  position:relative;
+  margin:40px 0 20px;
+  padding:30px 0;
+}
+.timeline-axis{
+  position:absolute;
+  top:50%;
+  left:3%;
+  right:3%;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--maroon) 50%,var(--caramel));
+  border-radius:3px;
+  transform:translateY(-50%);
+  z-index:1;
+}
+.timeline-nodes{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.timeline-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+}
+.timeline-item.pos-top{margin-bottom:70px}
+.timeline-item.pos-bottom{margin-top:70px}
+.timeline-item.pos-top .timeline-box{margin-bottom:20px}
+.timeline-item.pos-bottom .timeline-box{margin-top:20px}
+
+.timeline-dot{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid var(--maroon);
+  box-shadow:0 0 0 4px rgba(233,162,59,.3);
+  flex-shrink:0;
+  z-index:3;
+  transition:transform .3s var(--ease), background .3s;
+}
+.timeline-item:hover .timeline-dot{transform:scale(1.3);background:var(--accent)}
+
+.timeline-box{
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:18px 16px;
+  box-shadow:var(--shadow-sm);
+  transition:all .35s var(--ease);
+  width:100%;
+  text-align:left;
+}
+.timeline-item:hover .timeline-box{
+  transform:translateY(-6px);
+  box-shadow:var(--shadow-md);
+  border-color:var(--accent);
+}
+.timeline-box .role-badge{display:inline-block;font-size:9.5px;font-weight:700;color:var(--maroon);background:rgba(233,162,59,.18);padding:3px 8px;border-radius:12px;margin-bottom:6px}
+.timeline-box h3{font-family:"Space Grotesk";font-size:15px;color:var(--maroon);margin-bottom:4px}
+.timeline-box p{font-size:11.5px;color:var(--muted);line-height:1.5}
+
+@media(max-width:880px){
+  .timeline-axis{top:0;bottom:0;left:20px;width:3px;height:auto;transform:none}
+  .timeline-nodes{grid-template-columns:1fr;gap:24px;padding-left:46px}
+  .timeline-item{align-items:flex-start}
+  .timeline-item.pos-top,.timeline-item.pos-bottom{margin:0}
+  .timeline-item.pos-top .timeline-box,.timeline-item.pos-bottom .timeline-box{margin:0}
+  .timeline-dot{position:absolute;left:-35px;top:18px}
+}
+
+/* 3. Complaint Demo: Realistic Phone-Mockup Frame */
+.complaint-demo-wrap{
+  background:linear-gradient(135deg,rgba(250,239,222,.9),rgba(244,233,215,.95));
+  border:1px solid var(--line);
+  border-radius:32px;
+  padding:40px;
+  display:grid;
+  grid-template-columns:1fr 1.05fr;
+  gap:44px;
+  align-items:center;
+}
+@media(max-width:960px){
+  .complaint-demo-wrap{grid-template-columns:1fr;padding:24px;gap:28px}
+}
+.complaint-pitch h3{font-family:"Space Grotesk";font-size:26px;color:var(--maroon);margin-bottom:12px}
+.complaint-pitch p{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:20px}
+.complaint-pitch .pitch-pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 16px;box-shadow:var(--shadow-sm)}
+
+.phone-mockup-frame{
+  background:#2a1a0e;
+  border-radius:38px;
+  padding:12px;
+  box-shadow:0 24px 50px rgba(42,26,14,.25), 0 0 0 2px #4a3422;
+  position:relative;
+  max-width:440px;
+  margin:0 auto;
+  width:100%;
+}
+.phone-notch{
+  width:90px;
+  height:14px;
+  background:#1a1008;
+  border-radius:0 0 10px 10px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+.phone-notch:before{content:"";width:30px;height:3px;background:#3a2416;border-radius:2px}
+.phone-notch:after{content:"";width:6px;height:6px;background:#2b4263;border-radius:50%}
+
+.phone-screen{
+  background:#fffdf7;
+  border-radius:28px;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.phone-screen .screen-title{font-size:11px;font-weight:700;color:var(--maroon);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cat-chip{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:6px 11px;font-size:10.5px;color:var(--ink);cursor:pointer;transition:.25s;font-weight:600}
+.cat-chip.active, .cat-chip:hover{background:var(--maroon);color:#fff;border-color:var(--maroon)}
+.form-textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:9px 12px;font-size:11.5px;font-family:inherit;color:var(--ink);resize:none;outline:none}
+.form-textarea:focus{border-color:var(--accent)}
+.photo-upload-stub{border:2px dashed var(--line);border-radius:12px;padding:12px;text-align:center;font-size:11px;color:var(--muted);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.photo-upload-stub:hover{border-color:var(--accent);color:var(--ink);background:#fff}
+
+/* 4. Trust Score: Ascending Staircase Layout */
+.staircase-wrap{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:20px;
+  padding-top:30px;
+}
+@media(max-width:860px){
+  .staircase-wrap{flex-direction:column;align-items:stretch;gap:16px}
+}
+.stair-step{
+  flex:1;
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:24px 24px 18px 18px;
+  padding:26px 20px;
+  text-align:center;
+  box-shadow:var(--shadow-sm);
+  transition:all .35s var(--ease);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.stair-step.step-1{min-height:270px;background:linear-gradient(180deg,#fffdf7 60%,rgba(244,233,215,.6))}
+.stair-step.step-2{min-height:320px;background:linear-gradient(180deg,#fffdf7 50%,rgba(240,225,200,.75))}
+.stair-step.step-3{min-height:370px;background:linear-gradient(180deg,#fffdf7 40%,rgba(240,180,90,.22));border-color:var(--gold);box-shadow:0 14px 34px rgba(217,138,43,.18)}
+
+.stair-step:hover{transform:translateY(-8px);box-shadow:var(--shadow-md)}
+.stair-badge-icon{font-size:32px;margin-bottom:10px}
+.stair-step.step-3 .stair-badge-icon{font-size:42px;animation:trophyBounce 3s ease-in-out infinite alternate}
+@keyframes trophyBounce{0%{transform:scale(1)}100%{transform:scale(1.12) rotate(4deg)}}
+
+.stair-step h4{font-family:"Space Grotesk";font-size:18px;color:var(--maroon);margin-bottom:6px}
+.stair-step p{font-size:11.5px;color:var(--muted);line-height:1.55}
+.stair-perk{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);font-size:11px;font-weight:700;color:var(--ink)}
+
+/* 5. Pre-Order: Perforated Food Receipt / Ticket Strip */
+.perforated-ticket{
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:24px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  position:relative;
+  box-shadow:0 14px 32px rgba(60,40,15,.08);
+  overflow:hidden;
+}
+@media(max-width:860px){
+  .perforated-ticket{grid-template-columns:1fr}
+}
+.ticket-segment{
+  padding:32px 26px;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.ticket-segment:not(:last-child):after{
+  content:"";
+  position:absolute;
+  right:0;
+  top:14px;
+  bottom:14px;
+  width:0;
+  border-right:2px dashed var(--line);
+}
+@media(max-width:860px){
+  .ticket-segment:not(:last-child):after{
+    right:14px;
+    left:14px;
+    top:auto;
+    bottom:0;
+    width:auto;
+    height:0;
+    border-right:0;
+    border-bottom:2px dashed var(--line);
+  }
+}
+.ticket-stamp{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:"Space Grotesk";
+  font-size:11px;
+  font-weight:700;
+  color:var(--maroon);
+  background:rgba(184,84,47,.12);
+  border:1px dashed var(--maroon);
+  padding:3px 10px;
+  border-radius:6px;
+  width:fit-content;
+}
+.ticket-segment b{font-size:14px;color:var(--ink)}
+.ticket-segment p{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* 6. Dashboard Preview: Full-Bleed Dark Band */
+.dash-band-full{
+  width:100vw;
+  position:relative;
+  left:50%;
+  right:50%;
+  margin-left:-50vw;
+  margin-right:-50vw;
+  background:linear-gradient(160deg,#2a1a0e 0%,#1a0f08 100%);
+  padding:80px 0;
+  margin-top:40px;
+  margin-bottom:60px;
+  color:#fff;
+  border-top:1px solid rgba(255,255,255,.1);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.dash-band-inner{
+  width:min(1080px,calc(100% - 44px));
+  margin:0 auto;
+}
+.dash-band-inner .section-head h2{color:#fff}
+.dash-band-inner .section-head p{color:#c9b591}
+.dash-preview-box{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:32px;
+  box-shadow:0 25px 60px rgba(0,0,0,.5);
+}
+.dash-topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:16px;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.dash-badge{background:rgba(233,162,59,.2);border:1px solid var(--gold);color:var(--gold);font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:20px}
+.dash-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:860px){.dash-metrics{grid-template-columns:repeat(2,1fr)}}
+.metric-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px;text-align:left}
+.metric-val{font-family:"Space Grotesk";font-size:28px;font-weight:700;color:var(--gold);line-height:1}
+.metric-lbl{font-size:10.5px;color:#c9b591;margin-top:6px}
+.metric-trend{font-size:9.5px;color:#8db95b;margin-top:4px;font-weight:600}
+.dash-log{background:rgba(0,0,0,.35);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,.06);font-size:11.5px;color:#e5d3b4}
+.dash-log-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.dash-log-row:last-child{border-bottom:0}
+
+/* 7. Reports: Minimal Horizontal Arrow Flow (Light Bubbles) */
+.bubble-flow-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:20px 0;
+}
+@media(max-width:860px){
+  .bubble-flow-wrap{flex-direction:column;gap:24px}
+}
+.flow-step-bubble{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:10px;
+}
+.flow-circle{
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#fffdf7,var(--warm));
+  border:2px solid var(--accent);
+  color:var(--maroon);
+  font-family:"Space Grotesk";
+  font-size:20px;
+  font-weight:700;
+  display:grid;
+  place-items:center;
+  box-shadow:var(--shadow-sm);
+  transition:transform .3s var(--ease);
+}
+.flow-step-bubble:hover .flow-circle{transform:scale(1.12);background:var(--accent);color:#fff}
+.flow-step-bubble b{font-size:13.5px;color:var(--ink)}
+.flow-step-bubble p{font-size:11.5px;color:var(--muted);max-width:240px;line-height:1.5}
+.flow-arrow{
+  font-size:24px;
+  color:var(--accent);
+  font-weight:700;
+  opacity:.7;
+  flex-shrink:0;
+  animation:arrowNudge 2s ease-in-out infinite alternate;
+}
+@media(max-width:860px){.flow-arrow{transform:rotate(90deg)}}
+@keyframes arrowNudge{0%{transform:translateX(-3px)}100%{transform:translateX(3px)}}
+
+/* 8. Payment Strip: Clean Minimal Pill Bar */
+.payment-strip-wrap{
+  width:min(1080px,calc(100% - 44px));
+  margin:0 auto 40px;
+  background:rgba(250,239,222,.85);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px;
+  box-shadow:var(--shadow-sm);
+}
+.payment-left{display:flex;align-items:center;gap:10px}
+.payment-title{font-size:12px;font-weight:700;color:var(--maroon);text-transform:uppercase;letter-spacing:.06em}
+.payment-badges{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.payment-pill{background:#fff;border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:11.5px;font-weight:700;color:var(--ink);display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(0,0,0,.04);transition:.3s}
+.payment-pill:hover{transform:translateY(-2px);border-color:var(--accent)}
+
+/* 9. About Team: Pinned Polaroids */
+.polaroid-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+  padding:20px 0 10px;
+}
+@media(max-width:960px){.polaroid-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.polaroid-grid{grid-template-columns:1fr}}
+
+.polaroid-card{
+  background:#fffdf7;
+  border:1px solid rgba(90,68,40,.12);
+  border-radius:14px;
+  padding:18px 16px 22px;
+  text-align:center;
+  box-shadow:0 12px 26px rgba(60,40,15,.10);
+  position:relative;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.polaroid-card.pol-1{transform:rotate(-3deg)}
+.polaroid-card.pol-2{transform:rotate(2deg) translateY(6px)}
+.polaroid-card.pol-3{transform:rotate(-2deg) translateY(-4px)}
+.polaroid-card.pol-4{transform:rotate(3deg) translateY(4px)}
+.polaroid-card:hover{transform:rotate(0deg) translateY(-10px) scale(1.04)!important;box-shadow:0 20px 40px rgba(60,40,15,.18);z-index:4}
+
+.polaroid-pin{
+  position:absolute;
+  top:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  width:14px;
+  height:16px;
+  background:linear-gradient(180deg,#c98a2d,#8a5a1e);
+  border-radius:3px;
+  box-shadow:0 2px 4px rgba(0,0,0,.25);
+  z-index:2;
+}
+.polaroid-photo-box{
+  width:100%;
+  height:110px;
+  background:linear-gradient(135deg,var(--warm),rgba(233,162,59,.3));
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  font-family:"Space Grotesk";
+  font-size:24px;
+  font-weight:700;
+  color:var(--maroon);
+  border:1px solid rgba(90,68,40,.08);
+  margin-bottom:14px;
+}
+.polaroid-card h4{font-size:14px;color:var(--ink);margin-bottom:3px}
+.polaroid-card span{font-size:11px;color:var(--muted);display:block;margin-bottom:8px}
+.polaroid-dept{font-size:10px;background:var(--bg);border-radius:10px;padding:3px 8px;display:inline-block;color:var(--maroon);font-weight:600}
+
+/* 10. FAQ: Full-Bleed Warm Band */
+.faq-band-full{
+  width:100vw;
+  position:relative;
+  left:50%;
+  right:50%;
+  margin-left:-50vw;
+  margin-right:-50vw;
+  background:var(--warm);
+  padding:70px 0;
+  margin-top:40px;
+  margin-bottom:0;
+  border-top:1px solid rgba(90,68,40,.1);
+  border-bottom:1px solid rgba(90,68,40,.1);
+}
+.faq-band-inner{
+  width:min(1080px,calc(100% - 44px));
+  margin:0 auto;
+}
+.faq-list{display:flex;flex-direction:column;gap:12px}
+.faq-item{background:#fffdf7;border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:.35s var(--ease)}
+.faq-item.active{border-color:var(--accent);box-shadow:var(--shadow-sm)}
+.faq-question{width:100%;background:none;border:none;padding:18px 22px;text-align:left;font-size:13.5px;font-weight:700;color:var(--ink);display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:inherit}
+.faq-icon{font-size:16px;color:var(--maroon);transition:transform .3s var(--ease);flex:0 0 auto}
+.faq-item.active .faq-icon{transform:rotate(45deg);color:var(--red)}
+.faq-answer{padding:0 22px 18px;font-size:12px;color:var(--muted);line-height:1.6;display:none}
+.faq-item.active .faq-answer{display:block;animation:fadeIn .3s var(--ease)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Dark Mode Adaptations */
+html.dark-mode .sticky-note-card,
+html.dark-mode .timeline-box,
+html.dark-mode .stair-step,
+html.dark-mode .perforated-ticket,
+html.dark-mode .polaroid-card,
+html.dark-mode .faq-item{background:#221a0e;border-color:rgba(255,255,255,.1);color:#f3e9d5}
+html.dark-mode .sticky-note-card b,
+html.dark-mode .timeline-box h3,
+html.dark-mode .stair-step h4,
+/* 11. Editorial Fine-Dining & Aesthetic 3D Showcase (User Reference Style) */
+.dining-editorial-wrap{
+  display:grid;
+  grid-template-columns:1.05fr 1.15fr;
+  gap:40px;
+  align-items:center;
+  margin:20px 0 40px;
+}
+@media(max-width:960px){
+  .dining-editorial-wrap{grid-template-columns:1fr;gap:30px}
+}
+
+/* Left side: Isometric / 3D floating pedestals */
+.floating-pedestals-stage{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+.pedestal-item{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  position:relative;
+  transition:transform .35s var(--ease);
+}
+.pedestal-item.ped-1{margin-left:0}
+.pedestal-item.ped-2{margin-left:45px}
+.pedestal-item.ped-3{margin-left:90px}
+@media(max-width:600px){
+  .pedestal-item.ped-2,.pedestal-item.ped-3{margin-left:0}
+}
+.pedestal-item:hover{transform:translateY(-6px) scale(1.03)}
+
+.pedestal-block{
+  width:130px;
+  height:44px;
+  background:linear-gradient(180deg,#fffdf7,#ebdcc4);
+  border:1px solid rgba(90,68,40,.15);
+  border-radius:12px;
+  position:relative;
+  box-shadow:0 18px 28px rgba(60,40,15,.15), inset 0 2px 0 #fff;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+.pedestal-block:before{
+  content:"";
+  position:absolute;
+  top:-22px;
+  width:85px;
+  height:24px;
+  background:rgba(0,0,0,.15);
+  border-radius:50%;
+  filter:blur(4px);
+}
+.pedestal-food-img{
+  position:absolute;
+  top:-42px;
+  width:88px;
+  height:88px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid #fff;
+  box-shadow:0 12px 24px rgba(60,40,15,.22);
+  transition:transform .4s var(--ease);
+}
+.pedestal-item:hover .pedestal-food-img{transform:scale(1.1) rotate(5deg)}
+
+.pedestal-info b{font-size:13.5px;color:var(--ink);display:block}
+.pedestal-info span{font-size:11.5px;color:var(--muted);display:block}
+.pedestal-info .ped-price{font-family:"Space Grotesk";font-size:13px;font-weight:700;color:var(--maroon);margin-top:2px}
+
+/* Right side: Editorial Chef & Kitchen Atmosphere Card */
+.chef-editorial-card{
+  background:linear-gradient(145deg,#2a1a0e,#1c1007);
+  border-radius:28px;
+  padding:26px;
+  color:#fff;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 22px 50px rgba(0,0,0,.35);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+  align-items:center;
+}
+@media(max-width:640px){
+  .chef-editorial-card{grid-template-columns:1fr;text-align:center}
+}
+.chef-editorial-card:before{
+  content:"";
+  position:absolute;
+  right:-60px;
+  top:-60px;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(233,162,59,.2),transparent 70%);
+  pointer-events:none;
+}
+.chef-photo-wrap{
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,.15);
+  box-shadow:0 14px 30px rgba(0,0,0,.4);
+  height:220px;
+}
+.chef-photo-wrap img{width:100%;height:100%;object-fit:cover}
+.chef-text-content h3{
+  font-family:"Space Grotesk";
+  font-size:22px;
+  color:var(--gold);
+  margin-bottom:8px;
+  line-height:1.2;
+}
+.chef-text-content p{
+  font-size:11.5px;
+  color:#c9b591;
+  line-height:1.6;
+  margin-bottom:14px;
+}
+.chef-badge-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.chef-mini-badge{
+  font-size:10px;
+  font-weight:700;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  padding:4px 10px;
+  border-radius:14px;
+  color:#fff;
+}
+
+/* 12. Visual Food Gallery Cards (Bottom strip like in reference) */
+.dining-gallery-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1.2fr 1fr;
+  gap:16px;
+  margin-top:30px;
+}
+@media(max-width:960px){
+  .dining-gallery-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:540px){
+  .dining-gallery-grid{grid-template-columns:1fr}
+}
+.gallery-card{
+  background:#fffdf7;
+  border:1px solid var(--line);
+  border-radius:22px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  display:flex;
+  flex-direction:column;
+}
+.gallery-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.gallery-img-box{
+  height:130px;
+  width:100%;
+  overflow:hidden;
+  position:relative;
+}
+.gallery-img-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .5s var(--ease);
+}
+.gallery-card:hover .gallery-img-box img{transform:scale(1.08)}
+.gallery-caption{
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.gallery-caption b{font-size:12.5px;color:var(--ink)}
+.gallery-caption span{font-size:11px;color:var(--muted)}
+
+/* 13. Credibility Strip */
+.credibility-strip{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:6px 20px 20px;
+  margin:0 auto 10px;
+}
+.credibility-capsule{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  background:rgba(184,84,47,.07);
+  border:1px solid rgba(184,84,47,.22);
+  border-radius:999px;
+  padding:8px 20px;
+  font-size:12.5px;
+  color:var(--ink);
+  box-shadow:var(--shadow-sm);
+  transition:transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.credibility-capsule:hover{
+  transform:translateY(-2px);
+  border-color:var(--accent);
+  box-shadow:var(--shadow-md);
+}
+.cred-shield{font-size:16px}
+.cred-text{color:var(--ink)}
+.cred-text strong{color:var(--maroon);font-weight:700}
+.cred-tag{
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.08em;
+  background:var(--maroon);
+  color:var(--cream);
+  padding:3px 10px;
+  border-radius:12px;
+  white-space:nowrap;
+}
+
+/* 14. Motivation Pull-Quote Section */
+.motivation-quote-section{
+  padding:44px 20px;
+  text-align:center;
+  max-width:980px;
+  margin:0 auto;
+}
+.quote-divider-line{
+  height:1px;
+  background:var(--line);
+  position:relative;
+  width:100%;
+  max-width:300px;
+  margin:0 auto 24px;
+}
+.quote-divider-line:last-child{
+  margin:24px auto 0;
+}
+.quote-divider-line .line-dot{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 0 4px var(--bg);
+}
+.pull-quote{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:clamp(22px, 3.4vw, 38px);
+  font-weight:700;
+  line-height:1.35;
+  letter-spacing:-.02em;
+  margin:0 auto;
+  max-width:840px;
+  background:linear-gradient(135deg, var(--maroon) 0%, var(--accent) 70%, var(--orange) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:inline-block;
+}
+
+/* 15. Why Different Comparison Cards Row */
+.comparison-cards-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+  gap:16px;
+  align-items:stretch;
+  margin-top:24px;
+}
+@media(min-width:1150px){
+  .comparison-cards-row{
+    grid-template-columns:1fr 1fr 1fr 1fr 1.35fr;
+  }
+}
+.comp-card{
+  border-radius:var(--radius);
+  padding:22px 18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+  position:relative;
+}
+.comp-card:hover{
+  transform:translateY(-4px);
+}
+.muted-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+  opacity:.95;
+}
+.muted-card:hover{
+  box-shadow:var(--shadow-md);
+  opacity:1;
+}
+.comp-card-badge{
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.comp-card h4{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:15px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:12px;
+  line-height:1.3;
+}
+.comp-row{
+  font-size:11.5px;
+  line-height:1.5;
+  margin-bottom:8px;
+  color:var(--ink);
+}
+.comp-label{
+  font-weight:700;
+  color:var(--muted);
+  display:block;
+  font-size:10px;
+  text-transform:uppercase;
+  margin-bottom:2px;
+}
+.comp-row.limitation{
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px dashed var(--line);
+  color:var(--red);
+}
+.comp-row.limitation .comp-label{
+  color:var(--red);
+}
+.winner-card{
+  background:linear-gradient(145deg, var(--maroon) 0%, var(--accent) 70%, var(--choc) 100%);
+  border:1px solid rgba(255,255,255,.2);
+  color:#fff;
+  box-shadow:0 14px 32px rgba(92,26,26,.3);
+}
+.winner-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 40px rgba(92,26,26,.45);
+}
+.winner-badge{
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.08em;
+  background:var(--gold);
+  color:var(--maroon);
+  padding:4px 10px;
+  border-radius:12px;
+  display:inline-block;
+  margin-bottom:10px;
+  align-self:flex-start;
+}
+.winner-card h4{
+  font-size:17px;
+  color:#fff;
+  font-family:"Space Grotesk", sans-serif;
+  margin-bottom:12px;
+}
+.winner-card .comp-row{
+  color:rgba(255,255,255,.92);
+  font-size:12px;
+}
+.winner-card .comp-label{
+  color:var(--gold);
+}
+.winner-card .winner-advantage{
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.2);
+}
+
+/* 16. Team Modal Overlay */
+.team-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(18,14,10,.8);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s var(--ease);
+}
+.team-modal-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+.team-showcase-box{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:28px;
+  max-width:960px;
+  width:100%;
+  max-height:90vh;
+  overflow-y:auto;
+  position:relative;
+  padding:36px 32px;
+  box-shadow:0 24px 60px rgba(0,0,0,.35);
+  transform:translateY(24px) scale(.98);
+  transition:transform .35s var(--ease);
+}
+.team-modal-overlay.active .team-showcase-box{
+  transform:translateY(0) scale(1);
+}
+.team-modal-head{
+  margin-bottom:24px;
+  padding-right:40px;
+}
+.team-modal-head h2{
+  font-family:"Space Grotesk", sans-serif;
+  font-size:26px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.team-modal-head p{
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.5;
+}
+.team-modal-content{
+  display:grid;
+  grid-template-columns:1.15fr 1fr;
+  gap:24px;
+  align-items:center;
+}
+@media(max-width:850px){
+  .team-modal-content{grid-template-columns:1fr;gap:20px}
+  .team-showcase-box{padding:24px 18px}
+}
+.pedestal-item{
+  transition:transform .3s var(--ease), filter .3s var(--ease);
+}
+.pedestal-item.active{
+  filter:drop-shadow(0 8px 18px rgba(184,84,47,.3));
+}
+.pedestal-item.active .pedestal-block{
+  border-color:var(--accent);
+  box-shadow:0 14px 28px rgba(184,84,47,.25);
+  transform:translateY(-4px);
+}
+.pedestal-item.active .pedestal-info b{
+  color:var(--accent);
+}
+.team-detail-card{
+  min-height:340px;
+  transition:all .35s var(--ease);
+}
+.team-kicker{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--gold);
+  font-weight:700;
+  display:block;
+  margin-bottom:4px;
+}
+.team-dept-tag{
+  font-size:11px;
+  font-weight:600;
+  color:var(--cream);
+  opacity:.88;
+  margin-bottom:10px;
+}
+
+/* Dark mode additions */
+html.dark-mode .credibility-capsule{
+  background:rgba(217,138,43,.1);
+  border-color:rgba(217,138,43,.3);
+}
+html.dark-mode .cred-text{color:#e6dccb}
+html.dark-mode .cred-text strong{color:var(--gold)}
+html.dark-mode .cred-tag{background:var(--gold);color:var(--dark)}
+html.dark-mode .pull-quote{
+  background:linear-gradient(135deg, #ffb088 0%, var(--gold) 70%, #fff 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+html.dark-mode .quote-divider-line{background:rgba(255,255,255,.1)}
+html.dark-mode .quote-divider-line .line-dot{box-shadow:0 0 0 4px #120e0a}
+html.dark-mode .muted-card{
+  background:#1a140d;
+  border-color:rgba(255,255,255,.08);
+}
+html.dark-mode .comp-card h4{color:#f3e9d5}
+html.dark-mode .comp-row{color:#d5cab6}
+html.dark-mode .comp-row.limitation{border-color:rgba(255,255,255,.1);color:#ff8a7a}
+html.dark-mode .comp-row.limitation .comp-label{color:#ff8a7a}
+html.dark-mode .team-showcase-box{
+  background:#1a130c;
+  border-color:rgba(255,255,255,.12);
+}
+html.dark-mode .team-modal-head h2{color:#f3e9d5}
+
+/* =========================================================
+   PHARMACY DEPARTMENT VERIFICATION SECTION (#pharmacy-collab)
+   ========================================================= */
+
+
+html.dark-mode 
+
+.pharmacy-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 52px;
+  align-items: center;
+}
+
+/* Left Side: Verification Stamp / Seal */
+.pharmacy-seal-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 24px 10px;
+}
+
+.verification-seal {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-6deg);
+  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  box-shadow: 0 16px 36px rgba(104, 35, 20, 0.16);
+  user-select: none;
+  cursor: default;
+}
+
+.verification-seal:hover {
+  transform: rotate(-2deg) scale(1.03);
+  box-shadow: 0 22px 48px rgba(104, 35, 20, 0.22);
+}
+
+.seal-svg-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.seal-outer-ring {
+  fill: var(--warm);
+  stroke: var(--maroon);
+  stroke-width: 4.5;
+}
+
+html.dark-mode .seal-outer-ring {
+  fill: #2d1a10;
+  stroke: var(--orange);
+}
+
+.seal-inner-dashed {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  animation: sealRingPulse 12s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes sealRingPulse {
+  0% { transform: rotate(0deg); stroke-opacity: 0.8; }
+  50% { stroke-opacity: 1; }
+  100% { transform: rotate(360deg); stroke-opacity: 0.8; }
+}
+
+.seal-inner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  width: 190px;
+  height: 190px;
+}
+
+.seal-dept-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--maroon);
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+html.dark-mode .seal-dept-text {
+  color: var(--orange);
+}
+
+.seal-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(104, 35, 20, 0.08);
+  border: 1.5px solid var(--maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--maroon);
+  margin: 4px 0;
+}
+
+html.dark-mode .seal-icon-wrap {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.seal-icon-wrap svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.seal-verified-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--maroon);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+html.dark-mode .seal-verified-text {
+  color: var(--orange);
+}
+
+.seal-code {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.seal-caption {
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Right Side: Sample Inspection Report Card */
+.pharmacy-report-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pharmacy-report-card {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px dashed var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 28px 32px;
+  box-shadow: var(--shadow-md);
+  transform: rotate(1.5deg);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.pharmacy-report-card:hover {
+  transform: rotate(0deg) scale(1.01);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Paperclip graphic */
+.report-paperclip {
+  position: absolute;
+  top: -14px;
+  right: 36px;
+  width: 24px;
+  height: 48px;
+  z-index: 5;
+  filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.25));
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.report-header-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-header-title h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
+
+.report-header-title span {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.report-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(184, 84, 47, 0.12);
+  color: var(--maroon);
+  border: 1px solid rgba(184, 84, 47, 0.3);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+html.dark-mode .report-status-badge {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.report-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 18px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.report-field label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+
+.report-field p {
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.report-inspector-note {
+  background: var(--warm);
+  border-left: 3px solid var(--accent);
+  padding: 12px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+html.dark-mode .report-inspector-note {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.report-inspector-note label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+
+.report-inspector-note p {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.report-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.report-sign {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .pharmacy-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .verification-seal {
+    width: 220px;
+    height: 220px;
+  }
+  .pharmacy-report-card {
+    transform: rotate(0deg);
+    padding: 22px;
+  }
+}
+
+
+
+
+/* Tightened FAQ & Seamless Footer Connection */
+.faq-band-full {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: var(--warm);
+  padding: 60px 0 40px;
+  margin-top: 30px;
+  margin-bottom: 0 !important;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.footer {
+  background: linear-gradient(160deg, #3a2416, #2a1a0e);
+  color: #e5d3b4;
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+}
+.clothesline {
+  position: relative;
+  margin-top: 0;
+  height: 175px;
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TRUE ASCENDING STAIRCASE (BRONZE -> SILVER -> GOLD PEAK)
+   ========================================================= */
+.staircase-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 40px;
+}
+
+.stair-step {
+  flex: 1;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 24px 24px 18px 18px;
+  padding: 26px 20px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all .35s var(--ease);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Bronze Card: Shortest, grounded at baseline */
+.stair-step.step-1 {
+  min-height: 250px;
+  height: 260px;
+  background: linear-gradient(180deg, var(--paper) 60%, rgba(184, 84, 47, 0.08));
+}
+
+/* Silver Card: Medium height, stepping up */
+.stair-step.step-2 {
+  min-height: 325px;
+  height: 335px;
+  background: linear-gradient(180deg, var(--paper) 50%, rgba(138, 122, 99, 0.14));
+}
+
+/* Gold Card: Tallest, peak tier with glow & gold accent */
+.stair-step.step-3 {
+  min-height: 400px;
+  height: 410px;
+  background: linear-gradient(180deg, var(--paper) 40%, rgba(240, 180, 90, 0.25));
+  border: 2px solid var(--gold);
+  box-shadow: 0 16px 40px rgba(217, 138, 43, 0.22), 0 0 24px rgba(233, 162, 59, 0.16);
+  position: relative;
+}
+
+.stair-step.step-3 .stair-badge-icon {
+  font-size: 48px;
+  animation: trophyBounce 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 4px 10px rgba(217, 138, 43, 0.4));
+}
+
+.stair-step:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 768px) {
+  .staircase-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .stair-step.step-1,
+  .stair-step.step-2,
+  .stair-step.step-3 {
+    min-height: auto;
+    height: auto;
+  }
+}
+
+
+/* Editorial-Style FAQ Accordion (Clean Dividers, No Boxes) */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 24px;
+}
+
+.faq-item {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible;
+  transition: border-color .3s var(--ease);
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--line) !important;
+}
+
+.faq-item.active {
+  border-color: var(--accent) !important;
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 4px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: color .2s var(--ease);
+}
+
+.faq-question:hover {
+  color: var(--accent);
+}
+
+.faq-icon {
+  font-size: 20px;
+  color: var(--accent);
+  font-weight: 400;
+  transition: transform .3s var(--ease);
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s var(--ease), padding .4s var(--ease);
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+  padding: 0 4px;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 240px;
+  padding: 0 4px 20px;
+}
+
+
+/* Asymmetrical Problem Section (2 Boxed Cards + 2 Plain Notes) */
+.sticky-note-card.plain-note {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-left: 3px solid var(--accent) !important;
+  border-radius: 0 !important;
+  padding: 16px 18px !important;
+  transform: none !important;
+}
+
+.sticky-note-card.plain-note .note-pin {
+  display: none !important;
+}
+
+.sticky-note-card.plain-note:hover {
+  transform: translateX(4px) !important;
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+html.dark-mode .sticky-note-card.plain-note:hover {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+
+/* Comparison Section: Clean Divider Columns + 1 Highlighted Winner Card */
+.comparison-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1.35fr;
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 28px;
+}
+
+.comp-card.muted-card {
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px solid var(--line) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 16px 18px !important;
+  transition: border-color .3s var(--ease), transform .3s var(--ease);
+}
+
+.comp-card.muted-card:first-child {
+  border-left: none !important;
+}
+
+.comp-card.muted-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--accent) !important;
+}
+
+.comp-card.winner-card {
+  background: linear-gradient(145deg, var(--paper) 0%, var(--warm) 100%) !important;
+  border: 2px solid var(--accent) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 16px 36px rgba(184, 84, 47, 0.18) !important;
+  padding: 24px 20px !important;
+}
+
+@media (max-width: 960px) {
+  .comparison-cards-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .comp-card.muted-card {
+    border-left: none !important;
+    border-bottom: 1px solid var(--line) !important;
+    padding: 14px 0 !important;
+  }
+}
+
+
+/* =========================================================
+   FULL-BLEED SECTION BACKGROUND ALTERNATION
+   ========================================================= */
+.full-bleed-warm {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: var(--warm);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 80px 0;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+html.dark-mode .full-bleed-warm {
+  background: #1b120c;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.full-bleed-inner {
+  width: min(1080px, calc(100% - 44px));
+  margin: 0 auto;
+}
+
+
+
+
+.seal-link-wrap, .report-card-link-wrap {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+.seal-link-wrap:hover .verification-seal {
+  transform: rotate(-2deg) scale(1.04);
+  box-shadow: 0 24px 50px rgba(104, 35, 20, 0.25);
+}
+.report-card-link-wrap:hover .pharmacy-report-card {
+  transform: rotate(0deg) translateY(-4px) scale(1.015);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+
+
+/* =========================================================
+   COMPACT PHARMACY DEPARTMENT VERIFICATION (#pharmacy-collab)
+   ========================================================= */
+.pharmacy-collab-section {
+  position: relative;
+  background: var(--cream);
+  background-image: radial-gradient(var(--line) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 52px 0 44px;
+  overflow: hidden;
+}
+
+html.dark-mode .pharmacy-collab-section {
+  background-color: var(--dark);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.2px, transparent 1.2px);
+}
+
+.pharmacy-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 36px;
+  align-items: center;
+}
+
+/* Compact Left Seal */
+.pharmacy-seal-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 10px;
+}
+
+.seal-link-wrap {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
+.verification-seal {
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-5deg);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  box-shadow: 0 12px 30px rgba(104, 35, 20, 0.14);
+  user-select: none;
+}
+
+.seal-link-wrap:hover .verification-seal {
+  transform: rotate(-2deg) scale(1.04);
+  box-shadow: 0 20px 44px rgba(104, 35, 20, 0.22);
+}
+
+.seal-svg-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.seal-outer-ring {
+  fill: var(--warm);
+  stroke: var(--maroon);
+  stroke-width: 4;
+}
+
+html.dark-mode .seal-outer-ring {
+  fill: #2d1a10;
+  stroke: var(--orange);
+}
+
+.seal-inner-dashed {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  animation: sealRingPulse 12s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes sealRingPulse {
+  0% { transform: rotate(0deg); stroke-opacity: 0.8; }
+  50% { stroke-opacity: 1; }
+  100% { transform: rotate(360deg); stroke-opacity: 0.8; }
+}
+
+.seal-inner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  width: 160px;
+  height: 160px;
+}
+
+.seal-dept-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--maroon);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+html.dark-mode .seal-dept-text {
+  color: var(--orange);
+}
+
+.seal-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(104, 35, 20, 0.08);
+  border: 1.5px solid var(--maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--maroon);
+  margin: 3px 0;
+}
+
+html.dark-mode .seal-icon-wrap {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.seal-icon-wrap svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.seal-verified-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--maroon);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+html.dark-mode .seal-verified-text {
+  color: var(--orange);
+}
+
+.seal-code {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.seal-caption {
+  margin-top: 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Compact Right Report Card */
+.pharmacy-report-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.report-card-link-wrap {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  cursor: pointer;
+}
+
+.pharmacy-report-card {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px dashed var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 20px 24px 18px;
+  box-shadow: var(--shadow-md);
+  transform: rotate(1.2deg);
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+
+.report-card-link-wrap:hover .pharmacy-report-card {
+  transform: rotate(0deg) translateY(-3px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+.report-paperclip {
+  position: absolute;
+  top: -12px;
+  right: 28px;
+  width: 20px;
+  height: 40px;
+  z-index: 5;
+  filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.25));
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.report-header-title h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
+
+.report-header-title span {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.report-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(184, 84, 47, 0.12);
+  color: var(--maroon);
+  border: 1px solid rgba(184, 84, 47, 0.3);
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+html.dark-mode .report-status-badge {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.report-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 12px;
+}
+
+.report-field label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-bottom: 1px;
+}
+
+.report-field p {
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+}
+
+.report-inspector-note {
+  background: var(--warm);
+  border-left: 3px solid var(--accent);
+  padding: 9px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+html.dark-mode .report-inspector-note {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.report-inspector-note label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.report-inspector-note p {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  margin: 0;
+  font-style: italic;
+}
+
+.report-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.report-sign {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .pharmacy-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .verification-seal {
+    width: 190px;
+    height: 190px;
+  }
+  .pharmacy-report-card {
+    transform: rotate(0deg);
+    padding: 18px 20px;
+  }
+}
+
+
+/* =========================================================
+   AUTH MODAL (Sign In / Sign Up)
+   ========================================================= */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 19, 13, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.auth-modal-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.auth-modal-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s var(--ease);
+  padding: 32px 28px 28px;
+}
+
+.auth-modal-overlay.open .auth-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+.auth-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-close-btn:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.auth-header .auth-logo {
+  height: 48px;
+  width: auto;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 10px;
+}
+
+.auth-header h3 {
+  font-family: "Space Grotesk", "Noto Serif Bengali", sans-serif;
+  font-size: 20px;
+  color: var(--maroon);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.auth-header p {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+}
+
+.auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+}
+
+.auth-tab.active {
+  background: var(--paper);
+  color: var(--maroon);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Role Selector */
+.auth-roles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.role-pill {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.role-pill.active {
+  background: rgba(184, 84, 47, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Input Fields */
+.auth-form-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.auth-form-group label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.auth-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-wrap input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.auth-input-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(184, 84, 47, 0.15);
+}
+
+.auth-pw-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.auth-helper-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.auth-helper-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.auth-helper-row a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-helper-row a:hover {
+  text-decoration: underline;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--maroon), var(--accent));
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 8px 20px rgba(110, 50, 24, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(110, 50, 24, 0.35);
+}
+
+/* Quick Demo Login */
+.auth-demo-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  text-align: center;
+}
+
+.auth-demo-section p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.auth-demo-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.demo-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.demo-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+
+
+
+/* ===== Top Nav (Authentic Homepage styling) ===== */
+.nav{
+  width:min(1200px,calc(100% - 32px));margin:12px auto 0;height:74px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:12px;z-index:50;
+  padding:0 16px;
+  background:rgba(250,239,222,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+  border:1px solid rgba(90,68,40,.10);border-radius:20px;
+  box-shadow:0 6px 18px rgba(60,40,15,.06);
+  transition:box-shadow .4s var(--ease),background .4s ease;
+}
+.nav.scrolled{background:rgba(250,239,222,.92);box-shadow:0 14px 34px rgba(60,40,15,.16)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.04em}
+.brand img{transition:transform .4s var(--ease)}
+.brand:hover img{transform:scale(1.05)}
+.navlinks{display:flex;gap:22px;font-size:13px;color:#676861;font-weight:600;align-items:center}
+.navlinks a, .navlinks button{position:relative;transition:color .3s;background:none;border:none;font:inherit;cursor:pointer;color:#676861;padding:0;text-decoration:none}
+.navlinks a:after, .navlinks button:after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--accent);border-radius:2px;transition:width .35s var(--ease)}
+.navlinks a:hover, .navlinks button:hover, .navlinks a.active, .navlinks button.active{color:var(--ink)}
+.navlinks a:hover:after, .navlinks button:hover:after, .navlinks a.active:after, .navlinks button.active:after{width:100%}
+.nav-actions{display:flex;gap:9px;align-items:center}
+.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:50%;display:grid;place-items:center;transition:.3s var(--ease);font-size:18px;color:var(--ink);cursor:pointer}
+.iconbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);background:#fff}
+.login{padding:10px 18px;border:1px solid var(--ink);border-radius:22px;background:transparent;font-size:13px;font-weight:600;transition:.3s var(--ease);position:relative;overflow:hidden;cursor:pointer}
+.login:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+.menu-toggle{display:none}
+
+.nav-btn-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 4px 12px rgba(184, 84, 47, 0.25);
+}
+.nav-btn-cart:hover {
+  background: #a04523;
+  transform: translateY(-2px);
+}
+.nav-btn-cart span {
+  background: #ffffff;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+/* Authentic Bulb Mode Toggle */
+.bulb-toggle{position:relative;width:40px;height:66px;background:transparent;border:0;padding:0;margin-top:-8px;display:flex;flex-direction:column;align-items:center;transform-origin:top center;transition:transform .3s var(--ease);cursor:pointer}
+.bulb-toggle:hover{transform:scale(1.08)}
+.bulb-toggle:active{transform:scale(.96)}
+.bulb-wire{width:2px;height:18px;background:#c9a96e;border-radius:1px;position:relative}
+.bulb-cap{width:10px;height:6px;background:#7a5a3a;border-radius:2px 2px 0 0;margin-top:-1px}
+.bulb-glass{width:22px;height:24px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:rgba(255,248,220,.25);border:1px solid rgba(200,160,80,.4);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bulb-shade{width:22px;height:24px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:rgba(255,248,220,.25);border:1px solid rgba(200,160,80,.4);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bulb-glow{position:absolute;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,107,.85) 0%,rgba(233,162,59,.45) 45%,transparent 70%);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.6);top:50%;left:50%;transition:opacity .4s ease,transform .4s ease}
+.bulb-halo{position:absolute;top:50%;left:50%;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,80,.28) 0%,transparent 65%);transform:translate(-50%,-50%);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.bulb-toggle.on .bulb-shade, .bulb-toggle.on .bulb-glass{background:radial-gradient(circle at 40% 30%,#fff3c4,#f0b45a 55%,#d98a2b);box-shadow:0 0 22px 5px rgba(255,215,107,.65),inset 0 1px 3px rgba(255,255,255,.7)}
+.bulb-toggle.on .bulb-glow{opacity:1;transform:translate(-50%,-50%) scale(1);animation:bulbFlicker 4.5s ease-in-out infinite}
+.bulb-toggle.on .bulb-halo{opacity:1;animation:haloPulse 2.2s ease-out infinite}
+.bulb-toggle.on .bulb-wire{background:#ffd76b;box-shadow:0 0 8px rgba(255,215,107,.8)}
+
+/* Mobile Menu */
+.mobile-menu{position:fixed;left:16px;right:16px;top:96px;z-index:49;
+  background:rgba(250,239,222,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(90,68,40,.12);border-radius:20px;box-shadow:var(--shadow-lg);
+  padding:14px;display:flex;flex-direction:column;gap:4px;
+  opacity:0;transform:translateY(-14px) scale(.98);pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.mobile-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.mobile-menu a, .mobile-menu button{padding:12px 16px;border-radius:13px;font-size:14px;font-weight:600;color:var(--ink);transition:.25s;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;width:100%;text-decoration:none}
+.mobile-menu a:hover, .mobile-menu button:hover{background:var(--warm);color:var(--maroon)}
+.mobile-menu .m-btn{margin-top:8px;padding:12px;text-align:center;justify-content:center;border-radius:999px;background:var(--accent);color:#ffffff;font-weight:700;border:none}
+
+/* Dark mode overrides for Nav */
+html.dark-mode .nav{background:rgba(26,18,8,.72);border-color:rgba(255,255,255,.1)}
+html.dark-mode .nav.scrolled{background:rgba(26,18,8,.92);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+html.dark-mode .navlinks{color:#b3a898}
+html.dark-mode .navlinks a, html.dark-mode .navlinks button{color:#b3a898}
+html.dark-mode .navlinks a:hover, html.dark-mode .navlinks button:hover, html.dark-mode .navlinks a.active, html.dark-mode .navlinks button.active{color:#fff}
+html.dark-mode .iconbtn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#e5d3b4}
+html.dark-mode .login{border-color:rgba(255,255,255,.3);color:#e5d3b4}
+html.dark-mode .login:hover{background:#e5d3b4;color:#20130d}
+html.dark-mode .mobile-menu{background:rgba(26,18,8,.98);border-color:rgba(255,255,255,.12)}
+html.dark-mode .mobile-menu a, html.dark-mode .mobile-menu button{color:#e5d3b4}
+
+@media(max-width:900px){
+  .menu-toggle{display:grid}
+  .navlinks{display:none}
+}
+
+
+/* ===== AUTH POPUP MODAL STYLES ===== */
+.auth-user-wrap { position: relative; display: flex; align-items: center; }
+.user-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--paper); border: 1px solid var(--line); padding: 5px 14px 5px 8px; border-radius: 999px; cursor: pointer; transition: all 0.2s; font-size: 13px; font-weight: 700; color: var(--ink); }
+html.dark-mode .user-badge { background: rgba(45,30,18,0.9); }
+.user-badge:hover { border-color: var(--accent); }
+.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--ochre, #e9a23b)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.user-name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; }
+.user-dropdown-menu { position: absolute; top: calc(100% + 10px); right: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 16px 36px rgba(0,0,0,0.2); width: 220px; padding: 10px; display: none; flex-direction: column; gap: 6px; z-index: 1000; }
+.user-dropdown-menu.open { display: flex; }
+.user-menu-header { padding: 8px 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.user-menu-header strong { display: block; font-size: 12.5px; color: var(--maroon, #6e3218); }
+.user-menu-header small { font-size: 11px; color: var(--muted, #8b8c84); word-break: break-all; }
+.user-dropdown-menu a, .user-dropdown-menu button { padding: 8px 10px; border-radius: 8px; font-size: 12.5px; color: var(--ink); text-decoration: none; background: none; border: none; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; width: 100%; font-family: inherit; }
+.user-dropdown-menu a:hover, .user-dropdown-menu button:hover { background: var(--warm, #f8efe1); color: var(--accent); }
+.user-dropdown-menu .btn-signout { color: #d93829; font-weight: 600; border-top: 1px solid var(--line); margin-top: 4px; padding-top: 10px; }
+
+.auth-modal-overlay { position: fixed; inset: 0; background: rgba(32, 19, 13, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+.auth-modal-overlay.open { display: flex !important; opacity: 1; }
+.auth-modal-box { background: var(--paper); border: 1px solid var(--line); border-radius: 28px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(20px) scale(0.97); transition: transform 0.3s ease; padding: 32px 28px 28px; }
+.auth-modal-overlay.open .auth-modal-box { transform: translateY(0) scale(1); }
+.auth-close-btn { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); color: var(--muted); font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+.auth-close-btn:hover { background: var(--line); color: var(--ink); }
+.auth-header { text-align: center; margin-bottom: 22px; }
+.auth-header .auth-logo { height: 48px; width: auto; margin: 0 auto 10px; display: block; border-radius: 10px; }
+.auth-header h3 { font-family: "Space Grotesk", "Noto Serif Bengali", sans-serif; font-size: 20px; color: var(--maroon, #6e3218); font-weight: 700; margin-bottom: 4px; }
+.auth-header p { font-size: 12px; color: var(--muted, #8b8c84); }
+.auth-tabs { display: flex; background: var(--bg); border-radius: 999px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--line); }
+.auth-tab { flex: 1; text-align: center; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); background: transparent; border: none; cursor: pointer; transition: all 0.25s ease; }
+.auth-tab.active { background: var(--paper); color: var(--maroon, #6e3218); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.auth-roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+.role-pill { border: 1px solid var(--line); background: var(--bg); padding: 7px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 600; color: var(--ink); cursor: pointer; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.role-pill.active { background: rgba(184, 84, 47, 0.12); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.auth-form-group { margin-bottom: 14px; text-align: left; }
+.auth-form-group label { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.auth-input-wrap { position: relative; display: flex; align-items: center; }
+.auth-input-wrap input { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 13px; outline: none; transition: border-color 0.2s; font-family: inherit; }
+.auth-input-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184, 84, 47, 0.15); }
+.auth-pw-toggle { position: absolute; right: 12px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 0; }
+.auth-helper-row { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted); margin-bottom: 16px; }
+.auth-helper-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.auth-helper-row a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.auth-helper-row a:hover { text-decoration: underline; }
+.auth-submit-btn { width: 100%; padding: 12px; border-radius: 999px; background: linear-gradient(135deg, var(--maroon, #6e3218), var(--accent, #b8542f)); color: #ffffff; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(110, 50, 24, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; }
+.auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(110, 50, 24, 0.35); }
+.auth-demo-section { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line); text-align: center; }
+.auth-demo-section p { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.auth-demo-buttons { display: flex; gap: 8px; justify-content: center; }
+.demo-btn { background: var(--bg); border: 1px solid var(--line); padding: 5px 10px; border-radius: 8px; font-size: 11px; color: var(--ink); cursor: pointer; transition: all 0.2s; font-weight: 600; }
+.demo-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+<div class="shell">
+              <!-- ===== NAVBAR ===== -->
+  <nav class="nav" id="nav">
+    <a class="brand" href="homepage.html">
+      <img id="mainLogo" src="logo-light.png" alt="আহার বিলাস" style="height:58px;width:auto;display:block;border-radius:12px">
+    </a>
+    <div class="navlinks">
+      <a href="homepage.html" class="active">Home</a>
+      <a href="menu.html" class="nav-menu-link">মেনু ও অফার</a>
+      <a href="javascript:void(0)" onclick="openTeamModal()">About Team</a>
+      <a href="#problem">Problem</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#complaint-demo">Report Issue</a>
+      <a href="#trust-score">Trust Score</a>
+      <a href="inspection-details.html" >Lab Inspection</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-actions">
+
+      <button class="bulb-toggle" id="modeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="bulb-wire"></span>
+        <span class="bulb-halo"></span>
+        <span class="bulb-shade"><span class="bulb-glow"></span></span>
+      </button>
+      <button class="iconbtn" aria-label="Search" onclick="showToast('Search coming soon')">⌕</button>
+      
+      <!-- User Auth Area -->
+      <div class="auth-user-wrap" id="authUserWrap"><button class="login" id="loginBtn" onclick="openAuthModal('signin')">Sign in</button></div>
+
+      <button class="iconbtn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="homepage.html" onclick="closeMenu()">🏠 Home</a>
+    <a href="menu.html" onclick="closeMenu()">🍛 মেনু ও অফার</a>
+    <a href="javascript:void(0)" onclick="closeMenu();openTeamModal()">👥 About Team</a>
+    <a href="#problem" onclick="closeMenu()">⚠️ Problem Statement</a>
+    <a href="#how-it-works" onclick="closeMenu()">⚙️ How It Works</a>
+    <a href="#complaint-demo" onclick="closeMenu()">📝 Report Issue</a>
+    <a href="#trust-score" onclick="closeMenu()">⭐ Trust Score</a>
+    <a href="inspection-details.html" onclick="closeMenu()">🧪 Lab Inspection</a>
+    <a href="#faq" onclick="closeMenu()">❓ FAQs</a>
+    <div id="mobileAuthContainer" style="margin-top:6px;"><button class="primary m-btn" onclick="closeMenu();openAuthModal('signin')">Sign in / একাউন্ট খুলুন</button></div>
+  </div>
+
+  <!-- ===== HERO (ORIGINAL 4 DISH ITEMS & HERO PLATE IMAGES RESTORED) ===== -->
+    <!-- ===== HERO ===== -->
+    <!-- ===== HERO ===== -->
+  <main class="hero">
+    <section class="hero-main">
+      <div class="vertical-line"></div><div class="side-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="hero-badge reveal"><span class="live"></span> LIVE SAFETY SCORE 4.8 / 5.0</div>
+      <h1 class="reveal" data-delay="1">Eat with <em>confidence.</em><br>Report with <strong>trust.</strong></h1>
+      <p class="reveal" data-delay="2">Canteen Watch connects students, vendors, inspectors and administration in one transparent system — making food safety visible, actionable and data-driven.</p>
+      <div class="dish-tag reveal" data-delay="2" id="dishTag">#1 Most-ordered today</div>
+      
+      <div class="cta-row reveal" data-delay="3">
+        <button class="primary" onclick="window.location.href='menu.html'">Explore today's menu →</button>
+        <button class="secondary" onclick="showToast('Complaint form will open in the app version')">Report an issue</button>
+      </div>
+
+      <div class="dishes reveal" data-delay="4" id="dishList">
+        <button class="arrow" onclick="prevDish()">‹</button>
+        <div class="dish active"
+             data-img="https://i.pinimg.com/736x/05/1a/f7/051af72187551745d61c1e79e972d0e3.jpg"
+             data-fallback="murgi_cutout.png"
+             data-name="কিং মুরগির ঝোল" data-tag="#1 Most-ordered today"
+             data-score="4.8" data-badge="LOW RISK • MONITORED">
+          <img class="thumb" src="https://i.pinimg.com/736x/05/1a/f7/051af72187551745d61c1e79e972d0e3.jpg" onerror="this.onerror=null;this.src='murgi_cutout.png';" alt="মুরগির ঝোল"><span>মুরগির ঝোল</span>
+        </div>
+        <div class="dish"
+             data-img="https://i.pinimg.com/736x/85/5e/41/855e410f61b6aca589552ec8e96a33eb.jpg"
+             data-fallback="sandwich_cutout.png"
+             data-name="ক্রাঞ্চ মুরগি স্যান্ডউইচ" data-tag="#2 Most-ordered today"
+             data-score="4.6" data-badge="LOW RISK">
+          <img class="thumb" src="https://i.pinimg.com/736x/85/5e/41/855e410f61b6aca589552ec8e96a33eb.jpg" onerror="this.onerror=null;this.src='sandwich_cutout.png';" alt="ক্রাঞ্চ স্যান্ডউইচ"><span>ক্রাঞ্চ স্যান্ডউইচ</span>
+        </div>
+        <div class="dish"
+             data-img="https://i.pinimg.com/736x/cb/33/32/cb3332f1b9a91a6fbf1cedc11a914764.jpg"
+             data-fallback="shobji_cutout.png"
+             data-name="ফ্রেশ সবজির বাটি" data-tag="#3 Most-ordered today"
+             data-score="4.5" data-badge="MODERATE WATCH">
+          <img class="thumb" src="https://i.pinimg.com/736x/cb/33/32/cb3332f1b9a91a6fbf1cedc11a914764.jpg" onerror="this.onerror=null;this.src='shobji_cutout.png';" alt="সবজির বাটি"><span>সবজির বাটি</span>
+        </div>
+        <div class="dish"
+             data-img="https://i.pinimg.com/736x/d6/2e/97/d62e97740b0ac6f3f89b09e2539aabd2.jpg"
+             data-fallback="biriyani_cutout.png"
+             data-name="শাহী তেহারি স্পেশাল" data-tag="Today's special"
+             data-score="4.9" data-badge="LOW RISK • MONITORED">
+          <img class="thumb" src="https://i.pinimg.com/736x/d6/2e/97/d62e97740b0ac6f3f89b09e2539aabd2.jpg" onerror="this.onerror=null;this.src='biriyani_cutout.png';" alt="শাহী তেহারি"><span>শাহী তেহারি</span>
+        </div>
+        <button class="arrow" onclick="nextDish()">›</button>
+      </div>
+
+      <div class="quick-actions reveal" data-delay="5">
+        <button class="qa-btn" aria-label="Menu categories" onclick="window.location.href='menu.html'">
+          <svg viewBox="0 0 24 24"><path d="M6 2v8M4 2v4a2 2 0 0 0 4 0V2M6 10v12M17 2c-2 0-3 2-3 4s1 4 3 4v10M17 2v18" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <button class="qa-btn" aria-label="Beverages" onclick="window.location.href='menu.html'">
+          <svg viewBox="0 0 24 24"><path d="M7 3h10l-1 6a4 4 0 0 1-8 0L7 3zM12 13v6M8 21h8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="qa-btn" aria-label="Feedback" onclick="showToast('Feedback form')">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-4 4V5z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="qa-btn" aria-label="Profile" onclick="showToast('Student Profile')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 20c1.5-4 4-6 7-6s5.5 2 7 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <button class="qa-btn mic" aria-label="Voice search" onclick="showToast('Voice search coming soon')">
+          <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== PROMINENT LARGE CIRCULAR HERO PLATE ===== -->
+    <aside class="hero-visual reveal" data-delay="3">
+      <div class="hero-plate-wrap">
+        <div class="ambient"></div>
+        <div class="plate">
+          <img id="heroFood" class="food" src="https://i.pinimg.com/736x/05/1a/f7/051af72187551745d61c1e79e972d0e3.jpg" onerror="this.onerror=null;this.src='murgi_cutout.png';" alt="Campus meal">
+        </div>
+        <div class="plate-dish-info" id="plateDishInfo">
+          <span id="heroDishName">কিং মুরগির ঝোল</span>
+          <span class="score-pill" id="heroDishScore">4.8 ★</span>
+        </div>
+        <div class="plate-float-badge">
+          <span class="dot"></span>
+          <span id="heroDishBadge">LOW RISK • MONITORED</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ===== TRUST & SAFETY STRIP ===== -->
+  <section class="trust-strip" id="trust">
+    <div class="trust-card reveal"><div class="trust-icon">⌁</div><div><b>AI Risk Scoring</b><p>Complaint frequency + severity helps surface high-risk food items.</p></div></div>
+    <div class="trust-card reveal" data-delay="1"><div class="trust-icon">✓</div><div><b>Verified Reports</b><p>Evidence-backed complaints build a more reliable campus food record.</p></div></div>
+    <div class="trust-card reveal" data-delay="2"><div class="trust-icon">◷</div><div><b>Pre-order Ahead</b><p>Reserve tomorrow's meal early and reduce queue pressure.</p></div></div>
+  </section>
+
+  <!-- ===== RESEARCH CREDIBILITY STRIP ===== -->
+  <div class="credibility-strip reveal" id="credibility">
+    <div class="credibility-capsule">
+      <span class="cred-shield">🛡️</span>
+      <span class="cred-text">Grounded in <strong>WHO food safety principles</strong> and <strong>peer-reviewed food-safety ML research</strong></span>
+      <span class="cred-tag">RESEARCH BACKED</span>
+    </div>
+  </div>
+
+  <!-- ===== 1. PROBLEM STATEMENT (STICKY NOTES / TORN PAPER STYLE) ===== -->
+    <!-- ===== 2. THE PROBLEM (FULL-BLEED WARM BAND) ===== -->
+  <section class="full-bleed-warm" id="problem">
+    <div class="full-bleed-inner">
+      <div class="section-head reveal">
+      <div><h2>ক্যাম্পাস খাবারের অস্বস্তি ও সমাধান</h2></div>
+      <p>The real-world challenges facing campus canteens today — and why a transparent, evidence-based platform is essential.</p>
+    </div>
+    <div class="problem-notes-wrap">
+      <div class="sticky-note-card rot-1 reveal">
+        <span class="note-pin"></span>
+        <span class="note-icon">⚠️</span>
+        <b>Unhygienic Food Quality</b>
+        <p>অস্বাস্থ্যকর পরিবেশ ও তেলের মান নিয়ে প্রায়ই ক্ষোভ থাকলেও প্রমাণ বা রেকর্ড থাকে না।</p>
+      </div>
+      <div class="sticky-note-card plain-note rot-2 reveal" data-delay="1">
+        <span class="note-pin"></span>
+        <span class="note-icon">৳</span>
+        <b>Unfair & Fluctuating Pricing</b>
+        <p>পূর্ব নোটিশ ছাড়াই আকস্মিক দাম বৃদ্ধি ও খাবারের সঠিক পরিমাণ না পাওয়ার অনিশ্চয়তা।</p>
+      </div>
+      <div class="sticky-note-card rot-3 reveal" data-delay="2">
+        <span class="note-pin"></span>
+        <span class="note-icon">☹</span>
+        <b>Taste & Staff Behavior</b>
+        <p>স্বাদের তারতম্য ও কর্মীদের অপেশাদার ব্যবহারে শিক্ষার্থীদের সময় এবং বিরক্তি নষ্ট হয়।</p>
+      </div>
+      <div class="sticky-note-card plain-note rot-4 reveal" data-delay="3">
+        <span class="note-pin"></span>
+        <span class="note-icon">✖</span>
+        <b>No Resolution Tracking</b>
+        <p>কোনো ডিজিটাল কমপ্লেন ট্র্যাকিং না থাকায় পুনরাবৃত্তিমূলক অভিযোগের সুরাহা হতো না।</p>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== MOTIVATION PULL-QUOTE MOMENT ===== -->
+  <section class="motivation-quote-section reveal" id="motivation-quote">
+    <div class="quote-divider-line"><span class="line-dot"></span></div>
+    <blockquote class="pull-quote">
+      “Despite high prices, food quality remains poor — foreign objects, expired items, and no one to report it to.”
+    </blockquote>
+    <div class="quote-divider-line"><span class="line-dot"></span></div>
+  </section>
+
+  <!-- ===== 2. HOW IT WORKS (CONNECTED TIMELINE / ZIG-ZAG TRACK) ===== -->
+  <section class="section" id="how-it-works">
+    <div class="section-head reveal">
+      <div><h2>How each stakeholder connects.</h2></div>
+      <p>A closed-loop governance system linking students, canteen vendors, pharmacy inspectors, and campus authority.</p>
+    </div>
+    <div class="timeline-track-wrap reveal">
+      <div class="timeline-axis"></div>
+      <div class="timeline-nodes">
+        <div class="timeline-item pos-top reveal" data-delay="1">
+          <div class="timeline-box">
+            <span class="role-badge">ROLE 01</span>
+            <h3>Student / Teacher</h3>
+            <p>Submits evidence-backed complaints with photos, pre-orders daily meals to skip lines, and earns community trust points.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item pos-bottom reveal" data-delay="2">
+          <div class="timeline-dot"></div>
+          <div class="timeline-box">
+            <span class="role-badge">ROLE 02</span>
+            <h3>Canteen Vendor</h3>
+            <p>Receives real-time feedback, views AI demand forecast, rectifies flagged issues, and maintains high food hygiene standards.</p>
+          </div>
+        </div>
+        <div class="timeline-item pos-top reveal" data-delay="3">
+          <div class="timeline-box">
+            <span class="role-badge">ROLE 03</span>
+            <h3>Pharmacy Inspector</h3>
+            <p>Conducts scheduled and AI-triggered laboratory checks, files inspection audit logs, and validates high-risk reports.</p>
+          </div>
+          <div class="timeline-dot"></div>
+        </div>
+        <div class="timeline-item pos-bottom reveal" data-delay="4">
+          <div class="timeline-dot"></div>
+          <div class="timeline-box">
+            <span class="role-badge">ROLE 04</span>
+            <h3>Campus Admin</h3>
+            <p>Oversees live safety analytics, monitors vendor performance scorecards, and enforces administrative compliance actions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. COMPLAINT / REVIEW PREVIEW (PHONE MOCKUP FRAME) ===== -->
+    <!-- ===== 4. INTERACTIVE COMPLAINT SUBMISSION (FULL-BLEED WARM BAND) ===== -->
+  <section class="full-bleed-warm" id="complaint-demo">
+    <div class="full-bleed-inner">
+      <div class="section-head reveal">
+      <div><h2>Evidence-based reporting in action.</h2></div>
+      <p>Submit structured complaints in under 30 seconds. Every report is cryptographically timestamped and processed by AI.</p>
+    </div>
+    <div class="complaint-demo-wrap reveal">
+      <div class="complaint-pitch">
+        <h3>অভিযোগ জানান সহজে ও প্রমাণের সাথে</h3>
+        <p>হাইজিন, খাবার মান, মাত্রাতিরিক্ত দাম বা কর্মীদের ব্যবহার সংক্রান্ত যেকোনো ইস্যু সরাসরি উপযুক্ত প্রমাণের সাথে সাবমিট করুন।</p>
+        <div class="pitch-pill">
+          <span style="font-size:20px">🛡</span>
+          <div>
+            <b style="font-size:12px;color:var(--ink);display:block">Anonymous & Protected</b>
+            <span style="font-size:11px;color:var(--muted)">Your personal identity is safeguarded; only verified audit data reaches vendors.</span>
+          </div>
+        </div>
+      </div>
+      <div class="phone-mockup-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="screen-title">Report Canteen Incident</div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:5px">Select Category</label>
+            <div class="cat-chips">
+              <button type="button" class="cat-chip active" onclick="selectCatChip(this)">🧼 Hygiene</button>
+              <button type="button" class="cat-chip" onclick="selectCatChip(this)">🍛 Quality</button>
+              <button type="button" class="cat-chip" onclick="selectCatChip(this)">৳ Price</button>
+              <button type="button" class="cat-chip" onclick="selectCatChip(this)">👥 Behavior</button>
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:5px">Description</label>
+            <textarea class="form-textarea" rows="2" placeholder="e.g. Cold chicken gravy served with missing salad..."></textarea>
+          </div>
+          <div class="photo-upload-stub" onclick="showToast('Photo upload enabled in mobile app')">
+            <span>📷</span> <span>Attach meal photo or receipt</span>
+          </div>
+          <button class="primary" style="width:100%;padding:10px;font-size:12px;margin-top:2px" onclick="showToast('Complaint form will open in the app version')">Submit Verified Report →</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ===== 4. TRUST SCORE SYSTEM (ASCENDING STAIRCASE TIERS) ===== -->
+  <section class="section" id="trust-score">
+    <div class="section-head reveal">
+      <div><h2>The Trust Score System.</h2></div>
+      <p>How verified reports and positive participation reward genuine contributors across the campus ecosystem.</p>
+    </div>
+    <div class="staircase-wrap">
+      <div class="stair-step step-1 reveal">
+        <div>
+          <div class="stair-badge-icon">🥉</div>
+          <span style="display:inline-block;font-size:10px;font-weight:700;color:var(--red);background:rgba(184,84,47,.14);padding:3px 10px;border-radius:12px;margin-bottom:8px">BRONZE</span>
+          <h4>Standard Access</h4>
+          <p>Initial tier for all students. Full access to daily menus, live ratings, and standard ordering.</p>
+        </div>
+        <div class="stair-perk">★ Standard ordering & complaints</div>
+      </div>
+      <div class="stair-step step-2 reveal" data-delay="1">
+        <div>
+          <div class="stair-badge-icon">🥈</div>
+          <span style="display:inline-block;font-size:10px;font-weight:700;color:var(--dark);background:rgba(138,122,99,.2);padding:3px 10px;border-radius:12px;margin-bottom:8px">SILVER</span>
+          <h4>Verified Reporter</h4>
+          <p>Earned after 3+ verified and confirmed food reports. Boosts report priority in AI triage.</p>
+        </div>
+        <div class="stair-perk">★ 15-min early pre-order window</div>
+      </div>
+      <div class="stair-step step-3 reveal" data-delay="2">
+        <div>
+          <div class="stair-badge-icon">🏆</div>
+          <span style="display:inline-block;font-size:10px;font-weight:700;color:var(--maroon);background:var(--gold);padding:3px 10px;border-radius:12px;margin-bottom:8px">GOLD GUARDIAN</span>
+          <h4>Food Ambassador</h4>
+          <p>Highest trust tier with priority pickup tokens, direct admin feedback channel, and meal vouchers.</p>
+        </div>
+        <div class="stair-perk">★ Zero-wait queue pickup + vouchers</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PHARMACY DEPARTMENT VERIFICATION SECTION (#pharmacy-collab) ===== -->
+    <!-- ===== PHARMACY DEPARTMENT VERIFICATION SECTION (#pharmacy-collab) ===== -->
+    <!-- ===== COMPACT PHARMACY DEPARTMENT VERIFICATION (#pharmacy-collab) ===== -->
+  <section class="section pharmacy-collab-section" id="pharmacy-collab">
+    <div class="section-head reveal" style="margin-bottom:20px;">
+      <div>
+        <span class="section-tag" style="background:var(--caramel);color:var(--maroon);border:1px dashed var(--ochre);padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;margin-bottom:6px">🧪 ACADEMIC LAB AUDIT</span>
+        <h2>Backed by Real Inspection.</h2>
+      </div>
+      <p>When AI flags a high-risk item, the Pharmacy Department steps in to inspect, confirm, and verify the outcome.</p>
+    </div>
+
+    <div class="pharmacy-grid">
+      
+      <!-- Left: Verification Seal Visual (Clickable -> inspection-details.html) -->
+      <div class="pharmacy-seal-wrapper reveal" data-delay="1">
+        <a href="inspection-details.html" class="seal-link-wrap" title="ক্লিক করে সম্পূর্ণ ইন্সপেকশন বিস্তারিত দেখুন">
+          <div class="verification-seal">
+            <!-- Double-Ring SVG Frame -->
+            <svg class="seal-svg-ring" viewBox="0 0 210 210">
+              <!-- Outer Solid Ring -->
+              <circle class="seal-outer-ring" cx="105" cy="105" r="99" />
+              <circle cx="105" cy="105" r="95" fill="none" stroke="var(--maroon)" stroke-width="1.5" opacity="0.4" />
+              <!-- Inner Dashed Ring with Pulse Animation -->
+              <circle class="seal-inner-dashed" cx="105" cy="105" r="85" />
+            </svg>
+
+            <!-- Seal Content Center -->
+            <div class="seal-inner-content">
+              <span class="seal-dept-text">Dept. of Pharmacy</span>
+              
+              <div class="seal-icon-wrap">
+                <!-- Mortar and Pestle / Lab Flask SVG Icon -->
+                <svg viewBox="0 0 24 24">
+                  <path d="M4.5 10.5C3.67 10.5 3 11.17 3 12c0 4.41 3.59 8 8 8s8-3.59 8-8c0-.83-.67-1.5-1.5-1.5h-13zm15.8-5.32l-2.07-2.07a1 1 0 0 0-1.41 0l-4.73 4.73a8.97 8.97 0 0 1 2.83 2.83l4.73-4.73a1 1 0 0 0 .65-.76zM9 14h4v2H9v-2z"/>
+                </svg>
+              </div>
+
+              <span class="seal-verified-text">VERIFIED</span>
+              <span class="seal-code">EST. IIUC • 2026</span>
+            </div>
+          </div>
+        </a>
+
+        <div class="seal-caption">
+          <span>🛡️</span>
+          <span>Official Food Safety & Hygiene Certification (Click to View)</span>
+        </div>
+      </div>
+
+      <!-- Right: Sample Inspection Report Slip (Clickable -> inspection-details.html) -->
+      <div class="pharmacy-report-wrapper reveal" data-delay="2">
+        <a href="inspection-details.html" class="report-card-link-wrap" title="ক্লিক করে সম্পূর্ণ ইন্সপেকশন লগ ও হিস্টোরি দেখুন">
+          <div class="pharmacy-report-card">
+            <!-- Paperclip Graphic -->
+            <svg class="report-paperclip" viewBox="0 0 24 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 8v28a5 5 0 0 1-10 0V12a3 3 0 0 1 6 0v24a1 1 0 0 1-2 0V12" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>
+            </svg>
+
+            <div class="report-header">
+              <div class="report-header-title">
+                <h4>LABORATORY INSPECTION LOG</h4>
+                <span>AUDIT REF: #PH-2026-084 • COUNTER #02</span>
+              </div>
+              <span class="report-status-badge">⚠️ Under Review</span>
+            </div>
+
+            <div class="report-body-grid">
+              <div class="report-field">
+                <label>Target Food Item</label>
+                <p>Chicken Curry (চিকেন কারি)</p>
+              </div>
+              <div class="report-field">
+                <label>AI Alert Trigger</label>
+                <p>5 hygiene reports this week</p>
+              </div>
+              <div class="report-field">
+                <label>Sampling Time</label>
+                <p>Today, 11:45 AM (Surprise Audit)</p>
+              </div>
+              <div class="report-field">
+                <label>Action Taken</label>
+                <p>Batch Quarantined & Replaced</p>
+              </div>
+            </div>
+
+            <div class="report-inspector-note">
+              <label>Inspector Field Observation</label>
+              <p>"Physical inspection confirmed improper holding temperature (52°C). Swab collected for culture test; fresh batch prepared under supervision."</p>
+            </div>
+
+            <div class="report-footer">
+              <div class="report-sign">
+                <span>✍️</span>
+                <span>Dr. M. Rahman — Faculty QA Cell</span>
+              </div>
+              <span style="color:var(--accent);font-weight:700;">Click for Details →</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ===== 5. WHY CANTEEN WATCH IS DIFFERENT (RESEARCH-BACKED COMPARISON) ===== -->
+  <section class="section" id="why-different">
+    <div class="section-head reveal">
+      <div><h2>Why Canteen Watch is Different</h2></div>
+      <p>A research-grounded comparison against existing food safety guidelines, supply chain traceability, and general inspection systems.</p>
+    </div>
+    <div class="comparison-cards-row reveal">
+      <!-- Card 1: Food Safety Guidelines -->
+      <div class="comp-card muted-card">
+        <div class="comp-card-badge">EXISTING APPROACH 01</div>
+        <h4>Food Safety Guidelines</h4>
+        <div class="comp-row"><span class="comp-label">Main Contribution:</span> <span class="comp-val">Sets standard hygiene principles</span></div>
+        <div class="comp-row limitation"><span class="comp-label">Limitation in Campus:</span> <span class="comp-val">No digital way to submit/track student complaints</span></div>
+      </div>
+      <!-- Card 2: Digital Traceability Systems -->
+      <div class="comp-card muted-card">
+        <div class="comp-card-badge">EXISTING APPROACH 02</div>
+        <h4>Digital Traceability Systems</h4>
+        <div class="comp-row"><span class="comp-label">Main Contribution:</span> <span class="comp-val">Improves transparency & tracking</span></div>
+        <div class="comp-row limitation"><span class="comp-label">Limitation in Campus:</span> <span class="comp-val">Built for large agrifood supply chains, not daily student use</span></div>
+      </div>
+      <!-- Card 3: ML-based Food Safety Research -->
+      <div class="comp-card muted-card">
+        <div class="comp-card-badge">EXISTING APPROACH 03</div>
+        <h4>ML-based Food Safety Research</h4>
+        <div class="comp-row"><span class="comp-label">Main Contribution:</span> <span class="comp-val">Predicts & assesses contamination risk</span></div>
+        <div class="comp-row limitation"><span class="comp-label">Limitation in Campus:</span> <span class="comp-val">Focuses on large-scale data, not campus-level complaints</span></div>
+      </div>
+      <!-- Card 4: Digital Food Inspection Systems -->
+      <div class="comp-card muted-card">
+        <div class="comp-card-badge">EXISTING APPROACH 04</div>
+        <h4>Digital Food Inspection Systems</h4>
+        <div class="comp-row"><span class="comp-label">Main Contribution:</span> <span class="comp-val">Supports monitoring & data collection</span></div>
+        <div class="comp-row limitation"><span class="comp-label">Limitation in Campus:</span> <span class="comp-val">Doesn't connect student complaints to inspection workflows</span></div>
+      </div>
+      <!-- Winning Card: Canteen Watch -->
+      <div class="comp-card winner-card">
+        <div class="winner-badge">★ OUR APPROACH • THE UNIFIED SOLUTION</div>
+        <h4>আহার বিলাস / Canteen Watch</h4>
+        <div class="comp-row"><span class="comp-label">Main Contribution:</span> <span class="comp-val">Combines complaints, evidence, AI risk scoring, inspection & ordering in one unified platform</span></div>
+        <div class="comp-row winner-advantage"><span class="comp-label">Campus Impact:</span> <span class="comp-val">Purpose-built for the university canteen with closed-loop student-to-admin accountability</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 10. FAQ ACCORDION (FULL-BLEED WARM BAND) ===== -->
+  <section class="faq-band-full" id="faq">
+    <div class="faq-band-inner">
+      <div class="section-head reveal">
+        <div><h2>Frequently Asked Questions</h2></div>
+        <p>Common questions about complaint anonymity, trust rewards, pre-ordering, and safety inspections.</p>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button type="button" class="faq-question" onclick="toggleFaq(this)">
+            <span>Is my complaint kept anonymous from the canteen vendor?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes. All individual student identities are encrypted and anonymized. The canteen vendor only receives the category, meal timestamp, photo evidence, and AI suggestions to fix the issue.
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="1">
+          <button type="button" class="faq-question" onclick="toggleFaq(this)">
+            <span>How does the AI flag high-risk food items?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            The system analyzes complaint velocity (multiple reports in a short window), severity metrics (e.g. food poisoning or foreign object tags), and inspection histories to assign a real-time risk index.
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="2">
+          <button type="button" class="faq-question" onclick="toggleFaq(this)">
+            <span>How do I redeem Trust Score points?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Trust Score points automatically unlock priority pre-order slots, zero-wait pickup passes, and monthly meal discount vouchers on your profile.
+          </div>
+        </div>
+        <div class="faq-item reveal" data-delay="3">
+          <button type="button" class="faq-question" onclick="toggleFaq(this)">
+            <span>What payment methods are accepted for pre-orders?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            You can pay using bKash, Nagad, Student ID card balance, or choose "Cash on Pickup" at the designated express counter.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+        <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="clothesline" aria-hidden="true">
+      <span class="post l"></span><span class="post r"></span>
+      <span class="rope"></span>
+      <div class="hang-wrap">
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="murgi_cutout.png" onerror="this.onerror=null;this.src='murgi_cutout.png';" alt="মুরগির ঝোল">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">মুরগির ঝোল</div>
+            <div class="slip-price">৳80</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip plain" onclick="window.location.href='menu.html'" style="cursor:pointer">
+            <div class="slip-tag">MENU</div>
+            <div class="slip-name">কম্বো মেনু দেখতে চান?</div>
+            <div class="slip-price">Click Here</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="biriyani_cutout.png" onerror="this.onerror=null;this.src='biriyani_cutout.png';" alt="শাহী বিরিয়ানি">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">শাহী বিরিয়ানি</div>
+            <div class="slip-price">৳120</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">COUPON</div>
+            <div class="coupon-code">AHAR20</div>
+            <div class="coupon-off">20% OFF</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="sandwich_cutout.png" onerror="this.onerror=null;this.src='sandwich_cutout.png';" alt="ক্রাঞ্চ স্যান্ডউইচ">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">ক্রাঞ্চ স্যান্ডউইচ</div>
+            <div class="slip-price">৳60</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">DEAL</div>
+            <div class="coupon-code">BILAS10</div>
+            <div class="coupon-off">৳10 OFF</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="shobji_cutout.png" onerror="this.onerror=null;this.src='shobji_cutout.png';" alt="সবজির বাটি">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">সবজির বাটি</div>
+            <div class="slip-price">৳55</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip plain" onclick="window.location.href='menu.html'" style="cursor:pointer">
+            <div class="slip-tag">TODAY</div>
+            <div class="slip-name">আজকের খাবার মেনু</div>
+            <div class="slip-price">View Menu</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="icecream_cutout.png" onerror="this.onerror=null;this.src='icecream_cutout.png';" alt="আম আইসক্রিম">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">আম আইসক্রিম</div>
+            <div class="slip-price">৳45</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">OFFER</div>
+            <div class="coupon-code">STUDENT</div>
+            <div class="coupon-off">15% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-inner">
+      <div>
+        <div class="fbrand">
+          <img id="footerLogo" src="logo-light.png" alt="আহার বিলাস" style="height:80px;width:auto;display:block;border-radius:14px">
+        </div>
+        <p class="fabout">আহার বিলাস connects students, vendors, inspectors and administration in one transparent system — making campus food safe, visible and trustworthy for everyone.</p>
+        <div class="fsocial">
+          <a href="https://www.facebook.com/warisa.ahmed.10/" onclick="showToast('Facebook')" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/warisa_ahmed_/" onclick="showToast('Instagram')" aria-label="Instagram">◎</a>
+          <a href="https://x.com/AhmedWarisa" onclick="showToast('Twitter')" aria-label="Twitter">✕</a>
+          <a href="https://youtube.com/@warisaahmed?si=PWl0OSR8epbAc7k-" onclick="showToast('YouTube')" aria-label="YouTube">▶</a>
+          <a href="https://web.whatsapp.com/" onclick="showToast('WhatsApp')" aria-label="WhatsApp">✆</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="flist">
+          <li><a href="menu.html">🎁 Combo Bilash Packs</a></li>
+          <li><a href="menu.html">🍛 Today's Full Menu</a></li>
+          <li><a href="inspection-details.html">🧪 Lab Inspection Process</a></li>
+          <li><a href="homepage.html#why-different">★ Why We Are Different</a></li>
+          <li><a href="homepage.html#trust-score">⭐ Food Safety & Trust Score</a></li>
+          <li><a href="proposal.pdf" target="_blank">📄 View Full Project Proposal (PDF)</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get in Touch</h4>
+        <ul class="flist contact">
+          <li><span>📍</span> IIUC, Kumira, Chattogram 4318, Bangladesh</li>
+          <li><span>✉</span> afw@aharbilas.edu</li>
+          <li><span>☎</span> +880 1700 000 000</li>
+          <li><span>🕘</span> Sun – Thu, 8:00 AM – 8:00 PM</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© ২০২৬ <strong>আহার বিলাস (Canteen Watch)</strong> • Department of Pharmacy & AI Research Team</p>
+    </div>
+  </footer>
+
+<script>
+/* =========================================================
+   ===== DATASETS: 1. COMBO BILASH & 2. TODAY'S MENU =====
+   ========================================================= */
+const comboItems = [
+  {
+    no: "COMBO-01",
+    title: "বাজেট বিলাস",
+    img: "COMBO1_cutout.png",
+    items: "ভাত + মুরগির ঝোল • ফ্রেশ সালাদ • সফট ড্রিংক",
+    price: "৳90",
+    oldPrice: "৳115",
+    rating: "★ 4.8 Rating",
+    tag: "বাজেট ফ্রেন্ডলি",
+    bgText: "COMBO-1",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #b8542f 45%, #3a1e0e 100%)"
+  },
+  {
+    no: "COMBO-02",
+    title: "পেটপুজো স্পেশাল",
+    img: "COMBO2_cutout.png",
+    items: "শাহী বিরিয়ানি • ডিম + সালাদ • সফট ড্রিংক",
+    price: "৳130",
+    oldPrice: "৳160",
+    rating: "★ 4.9 Rating",
+    tag: "মোস্ট পপুলার",
+    bgText: "COMBO-2",
+    bg: "linear-gradient(150deg, #c98a2d 0%, #8a4a16 45%, #2a1408 100%)"
+  },
+  {
+    no: "COMBO-03",
+    title: "হালকা নাস্তা",
+    img: "COMBO3_cutout.png",
+    items: "ক্রাঞ্জ স্যান্ডউইচ • গোল্ডেন ফ্রাইজ • গরম চা / কফি",
+    price: "৳70",
+    oldPrice: "৳90",
+    rating: "★ 4.6 Rating",
+    tag: "ইভনিং স্নাক্স",
+    bgText: "COMBO-3",
+    bg: "linear-gradient(150deg, #e9a23b 0%, #9e5b22 45%, #3a1a08 100%)"
+  },
+  {
+    no: "COMBO-04",
+    title: "স্ট্রিট শর্মা",
+    img: "COMBO4_cutout.png",
+    items: "চিকেন শর্মা রোল • ক্রিস্পি ফ্রাইজ • সফট ড্রিংক",
+    price: "৳110",
+    oldPrice: "৳135",
+    rating: "★ 4.7 Rating",
+    tag: "স্ট্রিট ফুড ফেভারিট",
+    bgText: "COMBO-4",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #a85822 45%, #3a200e 100%)"
+  },
+  {
+    no: "COMBO-05",
+    title: "লোডেড ফ্রাইড রাইস",
+    img: "COMBO5_cutout.png",
+    items: "চিকেন ফ্রাইড রাইস • ফ্রাইড এগ • চিলড সফট ড্রিংক",
+    price: "৳140",
+    oldPrice: "৳170",
+    rating: "★ 4.8 Rating",
+    tag: "শেফ স্পেশাল",
+    bgText: "COMBO-5",
+    bg: "linear-gradient(150deg, #c98a2d 0%, #6e3218 45%, #2a1006 100%)"
+  },
+  {
+    no: "COMBO-06",
+    title: "স্টুডেন্ট স্পেশাল কম্বো",
+    img: "COMBO6_cutout.png",
+    items: "🥟 মোমো (৬ পিস) • 🍝 স্পাইসি পাস্তা • 🍔 বার্গার",
+    price: "৳65",
+    oldPrice: "৳85",
+    rating: "★ 4.9 Rating",
+    tag: "স্টুডেন্ট সেভার",
+    bgText: "COMBO-6",
+    bg: "linear-gradient(150deg, #b8542f 0%, #6e3218 45%, #24140a 100%)"
+  },
+  {
+    no: "COMBO-07",
+    title: "নুডলস ক্রেজ",
+    img: "COMBO7_cutout.png",
+    items: "হাক্কা নুডলস • চিকেন ফ্রাইজ • স্পেশাল ড্রিংক",
+    price: "৳120",
+    oldPrice: "৳145",
+    rating: "★ 4.7 Rating",
+    tag: "স্পাইসি ক্রাঞ্চ",
+    bgText: "COMBO-7",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #8a4a16 45%, #2c160a 100%)"
+  },
+  {
+    no: "COMBO-08",
+    title: "মিষ্টি খুশি",
+    img: "COMBO8_cutout.png",
+    items: "আম আইসক্রিম • ফ্রুট কাস্টার্ড • কোল্ড কফি",
+    price: "৳90",
+    oldPrice: "৳110",
+    rating: "★ 4.9 Rating",
+    tag: "ডেজার্ট কম্বো",
+    bgText: "COMBO-8",
+    bg: "linear-gradient(150deg, #e9a23b 0%, #a85822 45%, #3a1e0e 100%)"
+  },
+  {
+    no: "COMBO-09",
+    title: "হেলদি ফিট",
+    img: "COMBO9_cutout.png",
+    items: "মিক্সড ড্রাই ফ্রুটস • সিদ্ধ ডিম • রিফ্রেশিং গ্রিন টি",
+    price: "৳95",
+    oldPrice: "৳120",
+    rating: "★ 4.8 Rating",
+    tag: "ডায়েট ও হেলদি",
+    bgText: "COMBO-9",
+    bg: "linear-gradient(150deg, #9a8a70 0%, #5a4528 45%, #24180c 100%)"
+  }
+];
+
+const todaysMenuItems = [
+  {
+    no: "MENU-01",
+    title: "কিং মুরগির ঝোল",
+    img: "murgi_cutout.png",
+    items: "স্লো-কুকড স্পাইসি চিকেন কারি ও সুগন্ধি গরম ভাত",
+    price: "৳80",
+    oldPrice: "৳100",
+    rating: "★ 4.8 Rating",
+    tag: "মেইন কোর্স",
+    bgText: "CHICKEN",
+    bg: "linear-gradient(150deg, #b8542f 0%, #6e3218 45%, #2a1408 100%)"
+  },
+  {
+    no: "MENU-02",
+    title: "ক্রাঞ্জ মুরগি স্যান্ডউইচ",
+    img: "sandwich_cutout.png",
+    items: "গ্রিল্ড চিকেন পেটি, চিজ ও টাটকা মেয়োনিজ সস",
+    price: "৳60",
+    oldPrice: "৳75",
+    rating: "★ 4.6 Rating",
+    tag: "ছোট খাবার",
+    bgText: "SANDWICH",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #8a4a16 45%, #24140a 100%)"
+  },
+  {
+    no: "MENU-03",
+    title: "ফ্রেশ সবজির বাটি",
+    img: "shobji_cutout.png",
+    items: "মৌসুমি তাজা সবজি, কম মশলা ও পুষ্টিকর স্বাস্থ্যকর মিল",
+    price: "৳55",
+    oldPrice: "৳70",
+    rating: "★ 4.5 Rating",
+    tag: "নিরামিষ",
+    bgText: "VEG BOWL",
+    bg: "linear-gradient(150deg, #5c6e32 0%, #3a4a18 45%, #18200a 100%)"
+  },
+  {
+    no: "MENU-04",
+    title: "শাহী বিরিয়ানি",
+    img: "biriyani_cutout.png",
+    items: "সুগন্ধি বাসমতী চাল, নরম চিকেন ও শাহী মশলা",
+    price: "৳120",
+    oldPrice: "৳150",
+    rating: "★ 4.9 Rating",
+    tag: "স্পেশাল",
+    bgText: "BIRIYANI",
+    bg: "linear-gradient(150deg, #c98a2d 0%, #6e3218 45%, #2a1006 100%)"
+  },
+  {
+    no: "MENU-05",
+    title: "কুর কুর ফ্রাইজ",
+    img: "fries_cutout.png",
+    items: "গোল্ডেন ক্রিস্পি ফ্রেঞ্চ ফ্রাইজ সাথে স্পেশাল ডিপিং সস",
+    price: "৳40",
+    oldPrice: "৳50",
+    rating: "★ 4.7 Rating",
+    tag: "সাইড স্ন্যাক্স",
+    bgText: "FRIES",
+    bg: "linear-gradient(150deg, #e9a23b 0%, #a85822 45%, #3a1e0e 100%)"
+  },
+  {
+    no: "MENU-06",
+    title: "মিষ্টি প্যানকেক",
+    img: "pancake_cutout.png",
+    items: "ফ্লাফি প্যানকেক উইথ হানি ড্রিপ ও ফ্রেশ ফ্রুটস",
+    price: "৳70",
+    oldPrice: "৳85",
+    rating: "★ 4.6 Rating",
+    tag: "ব্রেকফাস্ট",
+    bgText: "PANCAKE",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #7a3a14 45%, #2a1206 100%)"
+  },
+  {
+    no: "MENU-07",
+    title: "রাজশাহী কাচ্চি",
+    img: "kacchi_cutout.png",
+    items: "জাফরানি পোলাও, খাসির নরম মাংস ও স্পেশাল চাটনি",
+    price: "৳150",
+    oldPrice: "৳180",
+    rating: "★ 4.9 Rating",
+    tag: "ফেস্টিভাল মিল",
+    bgText: "KACCHI",
+    bg: "linear-gradient(150deg, #8a3a16 0%, #4a1e0a 45%, #1c0a04 100%)"
+  },
+  {
+    no: "MENU-08",
+    title: "ডিটক্স সালাদ",
+    img: "salad_cutout.png",
+    items: "তাজা শসা, লেটুস, চেরি টমেটো ও অলিভ অয়েল ড্রেসিং",
+    price: "৳50",
+    oldPrice: "৳60",
+    rating: "★ 4.8 Rating",
+    tag: "হেলদি চয়েস",
+    bgText: "SALAD",
+    bg: "linear-gradient(150deg, #4a6e30 0%, #2a4418 45%, #122008 100%)"
+  },
+  {
+    no: "MENU-09",
+    title: "হাক্কা নুডলস",
+    img: "noodles_cutout.png",
+    items: "স্টিয়ার ফ্রাইড এগ-ভেজি নুডলস ও হট অ্যান্ড সাওয়ার সস",
+    price: "৳70",
+    oldPrice: "৳85",
+    rating: "★ 4.7 Rating",
+    tag: "নুডলস স্পেশাল",
+    bgText: "NOODLES",
+    bg: "linear-gradient(150deg, #d98a2b 0%, #8a4a16 45%, #2c160a 100%)"
+  },
+  {
+    no: "MENU-10",
+    title: "আম সুন্দরী আইসক্রিম",
+    img: "icecream_cutout.png",
+    items: "চিলড ম্যাঙ্গো আইসক্রিম স্কুপ ও সুইট টপিং",
+    price: "৳45",
+    oldPrice: "৳55",
+    rating: "★ 4.9 Rating",
+    tag: "ডেজার্ট",
+    bgText: "ICECREAM",
+    bg: "linear-gradient(150deg, #e9a23b 0%, #c97018 45%, #4a2006 100%)"
+  },
+  {
+    no: "MENU-11",
+    title: "স্টিমড চিকেন মোমো",
+    img: "momo_cutout.png",
+    items: "জুসি চিকেন ডাম্পলিং ও ঝাল রসুন চাটনি",
+    price: "৳60",
+    oldPrice: "৳75",
+    rating: "★ 4.8 Rating",
+    tag: "স্টার্টার",
+    bgText: "MOMO",
+    bg: "linear-gradient(150deg, #b8542f 0%, #6e3218 45%, #2a1206 100%)"
+  },
+  {
+    no: "MENU-12",
+    title: "গরম চা",
+    img: "tea_cutout.png",
+    items: "এলাচ ও আদা দিয়ে তৈরি স্পেশাল রিফ্রেশিং দুধ চা",
+    price: "৳15",
+    oldPrice: "৳30",
+    rating: "★ 4.9 Rating",
+    tag: "ড্রিংকস",
+    bgText: "HOT TEA",
+    bg: "linear-gradient(150deg, #8a5a2a 0%, #4a2e12 45%, #201206 100%)"
+  }
+];
+
+let activeCategory = 'combo'; // 'combo' or 'daily'
+let activeSlideIndex = 0;
+
+function getCurrentList() {
+  return activeCategory === 'combo' ? comboItems : todaysMenuItems;
+}
+
+function setMenuCategory(cat) {
+  activeCategory = cat;
+  activeSlideIndex = 0;
+
+  const tabCombo = document.getElementById('tabCombo');
+  const tabDaily = document.getElementById('tabDaily');
+  const shelfTitle = document.getElementById('modalShelfTitle');
+
+  if (tabCombo) tabCombo.classList.toggle('active', cat === 'combo');
+  if (tabDaily) tabDaily.classList.toggle('active', cat === 'daily');
+  if (shelfTitle) shelfTitle.textContent = cat === 'combo' ? 'কম্বো মেনু সমূহ (৯টি কম্বো)' : 'আজকের ফ্রেশ খাবার পদসমূহ (১২টি পদ)';
+
+  renderModalDishesGrid();
+  selectModalDish(0);
+}
+
+function renderModalDishesGrid() {
+  const grid = document.getElementById('modalDishesGrid');
+  if (!grid) return;
+  const items = getCurrentList();
+
+  grid.innerHTML = items.map((item, idx) => `
+    <div class="modal-dish-card ${idx === activeSlideIndex ? 'active' : ''}" id="modalCard-${idx}" onclick="selectModalDish(${idx})">
+      <div class="modal-card-img-wrap">
+        <img class="modal-card-img" src="${item.img}" alt="${item.title}">
+      </div>
+      <div class="modal-card-title">${item.title}</div>
+      <div class="modal-card-desc">${item.items}</div>
+      <div class="modal-card-foot">
+        <span class="modal-card-price">${item.price}</span>
+        <button class="modal-card-btn">দেখুন</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectModalDish(idx) {
+  activeSlideIndex = idx;
+  const items = getCurrentList();
+  const item = items[idx];
+  if (!item) return;
+
+  // Toggle active card in grid
+  items.forEach((_, i) => {
+    const card = document.getElementById('modalCard-' + i);
+    if (card) card.classList.toggle('active', i === idx);
+  });
+
+  // Update top featured showcase smoothly
+  const imgEl = document.getElementById('modalHeroDishImg');
+  const titleEl = document.getElementById('modalHeroDishTitle');
+  const descEl = document.getElementById('modalHeroDishDesc');
+  const priceEl = document.getElementById('modalHeroDishPrice');
+  const oldPriceEl = document.getElementById('modalHeroDishOldPrice');
+  const tagNoEl = document.getElementById('modalTagNo');
+  const tagBadgeEl = document.getElementById('modalTagBadge');
+  const ratingEl = document.getElementById('modalRating');
+
+  if (imgEl) {
+    imgEl.style.opacity = '0';
+    imgEl.style.transform = 'scale(0.9) translateY(8px)';
+    setTimeout(() => {
+      imgEl.src = item.img;
+      imgEl.style.opacity = '1';
+      imgEl.style.transform = 'scale(1) translateY(0)';
+    }, 180);
+  }
+
+  if (titleEl) titleEl.textContent = item.title;
+  if (descEl) descEl.textContent = item.items;
+  if (priceEl) priceEl.textContent = item.price;
+  if (oldPriceEl) oldPriceEl.textContent = item.oldPrice;
+  if (tagNoEl) tagNoEl.textContent = item.no;
+  if (tagBadgeEl) tagBadgeEl.textContent = item.tag;
+  if (ratingEl) ratingEl.textContent = item.rating;
+}
+
+function handleOverlayClick(e) {
+  
+}
+
+function orderCurrentItem() {
+  const list = getCurrentList();
+  const item = list[activeSlideIndex];
+  showToast(`🎉 Order Placed: ${item.title} (${item.price})! Express token ready.`);
+}
+
+/* =========================================================
+   ===== HERO DISH SWITCHER (ORIGINAL 4 DISH ITEMS) =====
+   ========================================================= */
+const dishes = [...document.querySelectorAll('.dish')];
+const heroFood = document.getElementById('heroFood');
+const dishTag = document.getElementById('dishTag');
+const heroDishName = document.getElementById('heroDishName');
+const heroDishScore = document.getElementById('heroDishScore');
+const heroDishBadge = document.getElementById('heroDishBadge');
+const FADE_MS = 350;
+let current = 0;
+let autoTimer = null;
+let dishTimeout = null;
+
+dishes.forEach((d, i) => d.addEventListener('click', () => { setDish(i); restartAuto(); }));
+
+function setDish(i) {
+  if (i === current) return;
+  current = i;
+  const d = dishes[i].dataset;
+  if (dishTimeout) clearTimeout(dishTimeout);
+  dishes.forEach((el, n) => el.classList.toggle('active', n === i));
+  
+  if (heroFood) heroFood.classList.add('is-hidden');
+  if (dishTag) dishTag.classList.add('is-hidden');
+
+  dishTimeout = setTimeout(() => {
+    if (heroFood) {
+      heroFood.onerror = () => { heroFood.onerror = null; heroFood.src = d.fallback || 'murgi_cutout.png'; };
+      heroFood.src = d.img;
+    }
+    if (dishTag) dishTag.textContent = d.tag;
+    if (heroDishName) heroDishName.textContent = d.name;
+    if (heroDishScore) heroDishScore.textContent = d.score + ' ★';
+    if (heroDishBadge) heroDishBadge.textContent = d.badge || 'LOW RISK';
+
+    requestAnimationFrame(() => {
+      if (heroFood) heroFood.classList.remove('is-hidden');
+      if (dishTag) dishTag.classList.remove('is-hidden');
+    });
+    dishTimeout = null;
+  }, FADE_MS);
+}
+
+function nextDish() { setDish((current + 1) % dishes.length); }
+function prevDish() { setDish((current - 1 + dishes.length) % dishes.length); }
+
+function restartAuto() {
+  clearInterval(autoTimer);
+  autoTimer = setInterval(nextDish, 4500);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function closeMenu() {
+  const m = document.getElementById('mobileMenu');
+  if (m) m.classList.remove('open');
+  const toggle = document.getElementById('menuToggle');
+  if (toggle) toggle.setAttribute('aria-expanded', 'false');
+}
+
+
+
+// ===== Sticky nav =====
+const nav = document.getElementById('nav');
+const toTop = document.getElementById('toTop');
+if (toTop) {
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+const onScroll = () => {
+  if (nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+  if (toTop) toTop.classList.toggle('show', window.scrollY > 500);
+};
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// ===== Mobile menu =====
+const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+if (menuToggle && mobileMenu) {
+  menuToggle.addEventListener('click', () => {
+    const open = mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', !open);
+  });
+  mobileMenu.querySelectorAll('a, button').forEach(a => a.addEventListener('click', closeMenu));
+  window.addEventListener('click', e => {
+    if (!mobileMenu.contains(e.target) && !menuToggle.contains(e.target) && mobileMenu.classList.contains('open')) {
+      closeMenu();
+    }
+  });
+}
+
+// ===== Interactive helpers for new sections =====
+function selectCatChip(btn) {
+  const container = btn.parentElement;
+  if (container) {
+    container.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  if (item) {
+    const isActive = item.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+    if (!isActive) item.classList.add('active');
+  }
+}
+
+/* =========================================================
+   ===== CORE RESEARCH TEAM MODAL & DYNAMIC DETAILS =====
+   ========================================================= */
+const teamMembers = [
+  {
+    name: "Warisa Ahmed",
+    roleTag: "PROJECT LEAD & SYSTEM ARCHITECT",
+    dept: "Dept. of Computer Science & Engineering (IIUC)",
+    bio: "Leading system architecture, AI complaint triage pipeline, distributed food monitoring engine, database schema, and cryptographic security protocol design for Canteen Watch.",
+    img: "COMBO1_cutout.png",
+    badges: ["✓ System Architect", "★ AI Pipeline Lead", "💻 IIUC CSE"]
+  },
+  {
+    name: "Adita Mutsuddi",
+    roleTag: "SAFETY INSPECTION & PHARMACEUTICAL QUALITY LEAD",
+    dept: "Dept. of Pharmacy (IIUC)",
+    bio: "Formulating food hygiene safety audit parameters, bacterial risk factors, pharmacological contamination limits, and vendor audit compliance checklists grounded in WHO/FAO food standards.",
+    img: "COMBO2_cutout.png",
+    badges: ["★ Safety Lead", "🔬 Lab Audit & Pharmacist", "💊 IIUC Pharmacy"]
+  },
+  {
+    name: "Afia Tasnim Anisa",
+    roleTag: "AI RISK SCORING & OPERATIONS RESEARCH LEAD",
+    dept: "Machine Learning & Canteen Operations Research",
+    bio: "Developing multi-factor risk scoring algorithms, complaint velocity analysis, stakeholder closed-loop workflow optimization, and verified reporter incentive tokenomics.",
+    img: "COMBO8_cutout.png",
+    badges: ["🛡 AI Risk Modeler", "⚡ ML Algorithms", "📊 Research Lead"]
+  }
+];
+
+function openTeamModal() {
+  const modal = document.getElementById('teamModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    selectTeamMember(0);
+  }
+}
+
+function closeTeamModal() {
+  const modal = document.getElementById('teamModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleTeamOverlayClick(e) {
+  if (e.target.id === 'teamModalOverlay') {
+    closeTeamModal();
+  }
+}
+
+function selectTeamMember(idx) {
+  const m = teamMembers[idx];
+  if (!m) return;
+  for (let i = 0; i < teamMembers.length; i++) {
+    const el = document.getElementById('pedItem-' + i);
+    if (el) el.classList.toggle('active', i === idx);
+  }
+  const nameEl = document.getElementById('teamDetailName');
+  const roleEl = document.getElementById('teamDetailRoleTag');
+  const deptEl = document.getElementById('teamDetailDept');
+  const bioEl = document.getElementById('teamDetailBio');
+  const imgEl = document.getElementById('teamDetailImg');
+  const badgesEl = document.getElementById('teamDetailBadges');
+  
+  if (nameEl) nameEl.textContent = m.name;
+  if (roleEl) roleEl.textContent = m.roleTag;
+  if (deptEl) deptEl.textContent = m.dept;
+  if (bioEl) bioEl.textContent = m.bio;
+  if (imgEl) imgEl.src = m.img;
+  if (badgesEl) {
+    badgesEl.innerHTML = m.badges.map(b => `<span class="chef-mini-badge">${b}</span>`).join('');
+  }
+}
+
+// Global key handler for ESC to close modals
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeMenuModal();
+    closeTeamModal();
+  }
+});
+
+restartAuto();
+
+// ===== Scroll reveal =====
+const revealEls = [...document.querySelectorAll('.reveal')];
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+
+// ===== UNIFIED DARK MODE & AUTH SYSTEM =====
+function initThemeMode() {
+  const modeToggle = document.getElementById('modeToggle');
+  const mainLogo = document.getElementById('mainLogo');
+  const footerLogo = document.getElementById('footerLogo');
+  const brandLogo = document.getElementById('brandLogo');
+  const authLogo = document.getElementById('authLogo');
+
+  function applyTheme(isDark) {
+    document.documentElement.classList.toggle('dark-mode', isDark);
+    if (modeToggle) modeToggle.classList.toggle('on', isDark);
+    const logoSrc = isDark ? 'logo-dark.png' : 'logo-light.png';
+    [mainLogo, footerLogo, brandLogo, authLogo].forEach(lg => {
+      if (lg) lg.src = logoSrc;
+    });
+  }
+
+  const savedTheme = localStorage.getItem('canteen_theme');
+  if (savedTheme === 'dark') {
+    applyTheme(true);
+  }
+
+  if (modeToggle) {
+    modeToggle.onclick = function() {
+      const isDark = !document.documentElement.classList.contains('dark-mode');
+      localStorage.setItem('canteen_theme', isDark ? 'dark' : 'light');
+      applyTheme(isDark);
+      showToast(isDark ? 'Dark mode on' : 'Dark mode off');
+    };
+  }
+}
+
+// ===== AUTH MODAL & PROFILE SYSTEM =====
+let currentSelectedRole = 'student';
+
+function openAuthModal(mode = 'signin') {
+  const overlay = document.getElementById('authModalOverlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    setTimeout(() => overlay.classList.add('open'), 10);
+    switchAuthTab(mode);
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeAuthModal() {
+  const overlay = document.getElementById('authModalOverlay');
+  if (overlay) {
+    overlay.classList.remove('open');
+    setTimeout(() => { overlay.style.display = 'none'; }, 250);
+    document.body.style.overflow = '';
+  }
+}
+
+function handleAuthOverlayClick(e) {
+  if (e.target.id === 'authModalOverlay') {
+    closeAuthModal();
+  }
+}
+
+function switchAuthTab(mode) {
+  const tabSignIn = document.getElementById('tabSignIn');
+  const tabSignUp = document.getElementById('tabSignUp');
+  const formSignIn = document.getElementById('signInForm');
+  const formSignUp = document.getElementById('signUpForm');
+  const title = document.getElementById('authModalTitle');
+  const subtitle = document.getElementById('authModalSubtitle');
+
+  if (mode === 'signin') {
+    if (tabSignIn) tabSignIn.classList.add('active');
+    if (tabSignUp) tabSignUp.classList.remove('active');
+    if (formSignIn) formSignIn.style.display = 'block';
+    if (formSignUp) formSignUp.style.display = 'none';
+    if (title) title.innerText = 'আহার বিলাস অ্যাকাউন্টে প্রবেশ';
+    if (subtitle) subtitle.innerText = 'ক্যাম্পাস স্মার্ট ক্যাফেটেরিয়া সিস্টেমে আপনাকে স্বাগতম';
+  } else {
+    if (tabSignUp) tabSignUp.classList.add('active');
+    if (tabSignIn) tabSignIn.classList.remove('active');
+    if (formSignUp) formSignUp.style.display = 'block';
+    if (formSignIn) formSignIn.style.display = 'none';
+    if (title) title.innerText = 'নতুন অ্যাকাউন্ট খুলুন';
+    if (subtitle) subtitle.innerText = 'নিরাপদ খাবার অর্ডার ও ট্র্যাকিংয়ের অংশ হোন';
+  }
+}
+
+function selectAuthRole(role, el) {
+  currentSelectedRole = role;
+  document.querySelectorAll('.auth-modal-overlay .role-pill').forEach(btn => btn.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function togglePasswordVisibility(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerText = '🙈';
+  } else {
+    input.type = 'password';
+    btn.innerText = '👁️';
+  }
+}
+
+function handleAuthSubmit(mode, e) {
+  if (e) e.preventDefault();
+  const roleNames = {
+    student: '🎓 শিক্ষার্থী',
+    faculty: '👨‍🏫 শিক্ষক / কর্মকর্তা',
+    vendor: '👨‍🍳 ক্যান্টিন ভেন্ডর',
+    inspector: '🧪 ফুড ইন্সপেক্টর',
+    admin: '🛡️ অ্যাডমিন'
+  };
+
+  let userName = 'ব্যবহারকারী';
+  let userEmail = 'user@aharbilas.edu';
+
+  if (mode === 'signup') {
+    const regNameEl = document.getElementById('authRegName');
+    const regEmailEl = document.getElementById('authRegEmail');
+    if (regNameEl && regNameEl.value.trim()) userName = regNameEl.value.trim();
+    if (regEmailEl && regEmailEl.value.trim()) userEmail = regEmailEl.value.trim();
+  } else {
+    const loginEmailEl = document.getElementById('authLoginEmail');
+    if (loginEmailEl && loginEmailEl.value.trim()) {
+      userEmail = loginEmailEl.value.trim();
+      userName = userEmail.split('@')[0];
+    }
+  }
+
+  loginUser({
+    name: userName,
+    email: userEmail,
+    role: roleNames[currentSelectedRole] || '🎓 শিক্ষার্থী'
+  });
+
+  closeAuthModal();
+  if (typeof showToast === 'function') {
+    showToast(mode === 'signup' ? '🎉 অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!' : '✅ লগইন সফল হয়েছে!');
+  }
+}
+
+function quickDemoLogin(role) {
+  const demoUsers = {
+    student: { name: 'আহমেদ ওয়ারিসা', email: 'warisa.student@aharbilas.edu', role: '🎓 শিক্ষার্থী' },
+    faculty: { name: 'ড. মাহমুদুর রহমান', email: 'm.rahman@dept.edu', role: '👨‍🏫 শিক্ষক / কর্মকর্তা' },
+    vendor: { name: 'কাদের ভাই (ক্যান্টিন-১)', email: 'kader.canteen@aharbilas.edu', role: '👨‍🍳 ক্যান্টিন ভেন্ডর' },
+    inspector: { name: 'ল্যাব অ্যানালিস্ট সাবরিনা', email: 'sabrina.lab@safety.gov.bd', role: '🧪 ফুড ইন্সপেক্টর' },
+    admin: { name: 'অ্যাডমিন ডেস্ক', email: 'admin@aharbilas.edu', role: '🛡️ অ্যাডমিন' }
+  };
+
+  const user = demoUsers[role] || demoUsers.student;
+  loginUser(user);
+  closeAuthModal();
+  if (typeof showToast === 'function') {
+    showToast(`✅ ${user.role} হিসেবে ডেমো লগইন সফল!`);
+  }
+}
+
+function loginUser(userData) {
+  localStorage.setItem('canteen_user', JSON.stringify(userData));
+  renderAuthState();
+}
+
+function handleSignOut() {
+  localStorage.removeItem('canteen_user');
+  renderAuthState();
+  closeUserDropdown();
+  if (typeof showToast === 'function') {
+    showToast('🚪 সফলভাবে লগআউট করা হয়েছে');
+  }
+}
+
+function toggleUserDropdown() {
+  const menu = document.getElementById('userDropdownMenu');
+  if (menu) menu.classList.toggle('open');
+}
+
+function closeUserDropdown() {
+  const menu = document.getElementById('userDropdownMenu');
+  if (menu) menu.classList.remove('open');
+}
+
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('authUserWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    closeUserDropdown();
+  }
+});
+
+function renderAuthState() {
+  const userJson = localStorage.getItem('canteen_user');
+  const userWrap = document.getElementById('authUserWrap');
+  const mobAuth = document.getElementById('mobileAuthContainer');
+
+  if (userJson) {
+    try {
+      const user = JSON.parse(userJson);
+      if (userWrap) {
+        userWrap.innerHTML = `
+          <div class="user-badge" onclick="toggleUserDropdown()" title="User Profile">
+            <span class="user-avatar">${user.name ? user.name.charAt(0) : '👤'}</span>
+            <span class="user-name">${user.name}</span>
+            <span style="font-size:10px;margin-left:2px;color:var(--muted)">▾</span>
+          </div>
+          <div class="user-dropdown-menu" id="userDropdownMenu">
+            <div class="user-menu-header">
+              <strong>${user.role || '🎓 শিক্ষার্থী'}</strong>
+              <small>${user.email || ''}</small>
+            </div>
+            <a href="javascript:void(0)" onclick="showToast('প্রোফাইল সেটিংস শীঘ্রই আসছে')">⚙️ প্রোফাইল সেটিংস</a>
+            <a href="javascript:void(0)" onclick="showToast('আপনার কোন সক্রিয় অর্ডার নেই')">📋 আমার অর্ডারসমূহ</a>
+            <button type="button" class="btn-signout" onclick="handleSignOut()">🚪 লগআউট (Sign Out)</button>
+          </div>
+        `;
+      }
+      if (mobAuth) {
+        mobAuth.innerHTML = `
+          <div style="padding:10px 0;border-top:1px solid var(--line);margin-top:6px;">
+            <div style="font-size:13.5px;font-weight:700;color:var(--maroon);margin-bottom:6px;">👤 ${user.name} (${user.role})</div>
+            <button class="btn-signout" style="padding:8px 14px;border-radius:999px;background:rgba(217,56,41,0.1);color:#d93829;border:1px solid #d93829;font-weight:700;cursor:pointer;width:100%;text-align:center;" onclick="closeMenu();handleSignOut()">লগআউট (Sign Out)</button>
+          </div>
+        `;
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  } else {
+    if (userWrap) {
+      userWrap.innerHTML = `<button class="login" id="loginBtn" onclick="openAuthModal('signin')">Sign in</button>`;
+    }
+    if (mobAuth) {
+      mobAuth.innerHTML = `<button class="primary m-btn" onclick="closeMenu();openAuthModal('signin')">Sign in / একাউন্ট খুলুন</button>`;
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof initThemeMode === 'function') initThemeMode();
+  renderAuthState();
+  if (window.location.hash === '#about-team' || window.location.hash === '#team') {
+    setTimeout(() => { if (typeof openTeamModal === 'function') openTeamModal(); }, 250);
+  }
+});
+</script>
+  <!-- ===== AUTH POPUP MODAL (Hidden by default, opens only on Sign in click) ===== -->
+  <!-- =========================================================
+     ===== CORE TEAM SHOWCASE MODAL =====
+     ========================================================= -->
+<div class="team-modal-overlay" id="teamModalOverlay" onclick="handleTeamOverlayClick(event)">
+  <div class="team-showcase-box" id="teamShowcaseBox">
+    <!-- Close Button -->
+    <button class="modal-close-btn" onclick="closeTeamModal()" aria-label="Close team modal">✕</button>
+
+    <div class="team-modal-head">
+      <div class="hero-badge" style="margin-bottom:6px;display:inline-flex"><span class="live"></span> RESEARCH & DEVELOPMENT INITIATIVE</div>
+      <h2>কোর টিম ও ইনিশিয়েটিভ</h2>
+      <p>Initiative by International Islamic University Chittagong (IIUC) — combining computer engineering, pharmaceutical food safety, and master culinary standards.</p>
+    </div>
+
+    <div class="team-modal-content">
+      <!-- Left side: 3D Isometric Floating Block Pedestals for 3 Core Team Members -->
+      <div class="floating-pedestals-stage">
+        <div class="pedestal-item ped-1 active" id="pedItem-0" onclick="selectTeamMember(0)" style="cursor:pointer">
+          <div class="pedestal-block">
+            <img class="pedestal-food-img" src="https://i.pinimg.com/736x/05/1a/f7/051af72187551745d61c1e79e972d0e3.jpg" alt="Warisa Ahmed">
+          </div>
+          <div class="pedestal-info">
+            <b>Warisa Ahmed</b>
+            <span>Project Lead & Architecture</span>
+            <div class="ped-price">IIUC CSE • Lead Architect</div>
+          </div>
+        </div>
+        <div class="pedestal-item ped-2" id="pedItem-1" onclick="selectTeamMember(1)" style="cursor:pointer">
+          <div class="pedestal-block">
+            <img class="pedestal-food-img" src="https://i.pinimg.com/736x/d6/2e/97/d62e97740b0ac6f3f89b09e2539aabd2.jpg" alt="Adita Mutsuddi">
+          </div>
+          <div class="pedestal-info">
+            <b>Adita Mutsuddi</b>
+            <span>Safety Inspection & Audit</span>
+            <div class="ped-price">IIUC Pharmacy • Safety Lead</div>
+          </div>
+        </div>
+        <div class="pedestal-item ped-3" id="pedItem-2" onclick="selectTeamMember(2)" style="cursor:pointer">
+          <div class="pedestal-block">
+            <img class="pedestal-food-img" src="COMBO8_cutout.png" alt="Afia Tasnim Anisa">
+          </div>
+          <div class="pedestal-info">
+            <b>Afia Tasnim Anisa</b>
+            <span>AI Risk Scoring & Operations</span>
+            <div class="ped-price">Research Team • AI Engine</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right side: Dynamic Editorial Member Card -->
+      <div class="chef-editorial-card team-detail-card" id="teamDetailCard">
+        <div class="chef-photo-wrap">
+          <img id="teamDetailImg" src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=600&q=80" alt="Team Lead">
+        </div>
+        <div class="chef-text-content">
+          <span class="team-kicker" id="teamDetailRoleTag">PROJECT LEAD & SYSTEM ARCHITECT</span>
+          <h3 id="teamDetailName">Warisa Ahmed</h3>
+          <div class="team-dept-tag" id="teamDetailDept">Dept. of Computer Science & Engineering, IIUC</div>
+          <p id="teamDetailBio">Leading the system architecture, AI complaint triage pipeline, distributed food monitoring engine, database schema, and cryptographic security protocol design for Canteen Watch.</p>
+          <div class="chef-badge-row" id="teamDetailBadges">
+            <span class="chef-mini-badge">✓ System Architect</span>
+            <span class="chef-mini-badge">★ AI Pipeline Lead</span>
+            <span class="chef-mini-badge">💻 IIUC CSE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="auth-modal-overlay" id="authModalOverlay" onclick="handleAuthOverlayClick(event)" style="display:none;">
+    <div class="auth-modal-box">
+      <button type="button" class="auth-close-btn" onclick="closeAuthModal()" aria-label="Close">✕</button>
+      
+      <div class="auth-header">
+        <img src="logo-light.png" alt="আহার বিলাস" id="authLogo" class="auth-logo">
+        <h3 id="authModalTitle">অ্যাকাউন্টে প্রবেশ করুন</h3>
+        <p id="authModalSubtitle">ক্যাফেটেরিয়া স্মার্ট অর্ডার ও ট্রাস্ট ওয়াচ সিস্টেমে স্বাগতম</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">লগইন (Sign In)</button>
+        <button type="button" class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">রেজিস্ট্রেশন (Sign Up)</button>
+      </div>
+
+      <!-- Role Selector -->
+      <div class="auth-form-group">
+        <label>আপনার ভূমিকা নির্বাচন করুন:</label>
+        <div class="auth-roles">
+          <div class="role-pill active" onclick="selectAuthRole(this, 'student')">🎓 শিক্ষার্থী</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'faculty')">👨‍🏫 শিক্ষক / স্টাফ</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'vendor')">🍳 ক্যান্টিন ভেন্ডর</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'inspector')">🔬 ল্যাব ইন্সপেক্টর</div>
+        </div>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" onsubmit="handleAuthSubmit(event, 'signin')">
+        <div class="auth-form-group">
+          <label for="authLoginEmail">স্টুডেন্ট আইডি / ইমেইল</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authLoginEmail" placeholder="e.g. C213000 or email@iiuc.ac.bd" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authLoginPass">পাসওয়ার্ড</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="authLoginPass" placeholder="••••••••" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('authLoginPass', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-helper-row">
+          <label>
+            <input type="checkbox" id="authRemember" checked> মনে রাখুন
+          </label>
+          <a href="javascript:void(0)" onclick="showToast('পাসওয়ার্ড রিকভারি লিংক ইমেইলে পাঠানো হয়েছে')">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">
+          <span>লগইন করুন</span> →
+        </button>
+      </form>
+
+      <!-- Sign Up Form (Hidden by default) -->
+      <form id="signUpForm" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
+        <div class="auth-form-group">
+          <label for="authRegName">সম্পূর্ণ নাম</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authRegName" placeholder="e.g. আহমেদ রাফি" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegId">আইডি নম্বর / ডিপার্টমেন্ট</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authRegId" placeholder="e.g. C213045 (CSE)" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegEmail">বিশ্ববিদ্যালয় ইমেইল</label>
+          <div class="auth-input-wrap">
+            <input type="email" id="authRegEmail" placeholder="name@iiuc.ac.bd" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegPass">নতুন পাসওয়ার্ড</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="authRegPass" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড" required minlength="6">
+            <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('authRegPass', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-helper-row">
+          <label>
+            <input type="checkbox" required checked> নিয়ম ও শর্তাবলীতে সম্মত আছি
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">
+          <span>অ্যাকাউন্ট তৈরি করুন</span> →
+        </button>
+      </form>
+
+      <!-- Quick Demo Access -->
+      <div class="auth-demo-section">
+        <p>⚡ দ্রুত টেস্ট করার জন্য ডেমো লগইন:</p>
+        <div class="auth-demo-buttons">
+          <button type="button" class="demo-btn" onclick="quickDemoLogin('শিক্ষার্থী (CSE)', 'আহমেদ রাফি', 'rafi@iiuc.ac.bd')">👨‍🎓 Student Demo</button>
+          <button type="button" class="demo-btn" onclick="quickDemoLogin('ল্যাব গবেষক', 'ফার্মেসি QA সেল', 'pharmacy.qa@iiuc.ac.bd')">🔬 Inspector Demo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

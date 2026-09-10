@@ -1,0 +1,3478 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>আহার বিলাস মেনু | Canteen Watch Menu & Combos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Noto+Serif+Bengali:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fbf7ee;
+      --bg-alt: #f4ecdf;
+      --card-bg: #ffffff;
+      --paper: #ffffff;
+      --ink: #20130d;
+      --ink-soft: #4a382e;
+      --muted: #79665a;
+      --line: #ebdccf;
+      --line-subtle: #f0e6dd;
+      --orange: #d97706;
+      --accent: #c85a17;
+      --accent-glow: rgba(200, 90, 23, 0.16);
+      --caramel: #f2e2cf;
+      --ochre: #bb6d28;
+      --maroon: #682314;
+      --dark-coffee: #22130c;
+      --green: #15803d;
+      --green-bg: #dcfce7;
+      --shadow-sm: 0 4px 12px rgba(44, 24, 16, 0.05);
+      --shadow-md: 0 10px 30px rgba(44, 24, 16, 0.08);
+      --shadow-lg: 0 20px 48px rgba(44, 24, 16, 0.12);
+      --shadow-hero: 0 24px 60px rgba(104, 35, 20, 0.14);
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 36px;
+      --radius-full: 9999px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html.dark-mode {
+      --bg: #140d09;
+      --bg-alt: #1d130d;
+      --card-bg: #241912;
+      --paper: #221710;
+      --ink: #f8ede3;
+      --ink-soft: #d6c4b6;
+      --muted: #9e8a7c;
+      --line: #3b281d;
+      --line-subtle: #2d1e15;
+      --caramel: #3a2215;
+      --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 24px 50px rgba(0, 0, 0, 0.65);
+      --shadow-hero: 0 24px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(var(--line) 1px, transparent 1px),
+        radial-gradient(var(--caramel) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      width: min(1340px, calc(100% - 48px));
+      margin: 0 auto;
+      padding-bottom: 70px;
+    }
+
+    /* Top Navbar */
+    .desktop-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .brand-logo {
+      height: 52px;
+      width: auto;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-text h1 {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+    }
+
+    .nav-links-wrap {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links-wrap a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.25s var(--ease);
+    }
+
+    .nav-links-wrap a:hover,
+    .nav-links-wrap a.active {
+      color: var(--ink);
+    }
+
+    .nav-links-wrap a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .cart-btn {
+      background: var(--accent);
+      color: #ffffff !important;
+      border: 1px solid var(--accent);
+      position: relative;
+    }
+
+    .cart-btn:hover {
+      background: #b54a0f;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .cart-count {
+      background: #ffffff;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    .bulb-toggle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s var(--ease);
+    }
+
+    .bulb-toggle:hover {
+      transform: rotate(15deg) scale(1.05);
+      border-color: var(--accent);
+    }
+
+    /* HERO SHOWCASE (Organic Window) */
+    .hero-showcase {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      background: linear-gradient(135deg, var(--paper) 0%, var(--bg-alt) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 46px 52px;
+      margin-top: 14px;
+      margin-bottom: 36px;
+      box-shadow: var(--shadow-hero);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-decor-stamp {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: "Caveat", cursive;
+      font-size: 24px;
+      color: var(--ochre);
+      transform: rotate(-3deg);
+      user-select: none;
+      z-index: 2;
+    }
+
+    .hero-decor-stamp span {
+      background: var(--caramel);
+      padding: 4px 14px;
+      border-radius: var(--radius-full);
+      border: 1px dashed var(--ochre);
+      font-weight: 700;
+    }
+
+    /* Hero Left Window */
+    .hero-left-window {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .organic-blob-frame {
+      position: relative;
+      width: 100%;
+      max-width: 470px;
+      aspect-ratio: 1.1 / 1;
+      background: radial-gradient(circle at 40% 30%, #fceed9 0%, #ecd6bf 70%, #dfc3a7 100%);
+      border-radius: 46% 54% 63% 37% / 40% 45% 55% 60%;
+      border: 2px solid rgba(217, 119, 6, 0.35);
+      box-shadow: 
+        inset 0 0 40px rgba(104, 35, 20, 0.08),
+        0 20px 45px rgba(60, 25, 12, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.6s var(--ease);
+      animation: organicMorph 12s ease-in-out infinite alternate;
+    }
+
+    html.dark-mode .organic-blob-frame {
+      background: radial-gradient(circle at 40% 30%, #3e2617 0%, #29180d 70%, #1c1009 100%);
+      border-color: rgba(217, 119, 6, 0.25);
+    }
+
+    @keyframes organicMorph {
+      0% {
+        border-radius: 46% 54% 63% 37% / 40% 45% 55% 60%;
+        transform: rotate(0deg);
+      }
+      50% {
+        border-radius: 58% 42% 45% 55% / 54% 38% 62% 46%;
+        transform: rotate(2deg) scale(1.02);
+      }
+      100% {
+        border-radius: 42% 58% 70% 30% / 45% 55% 45% 55%;
+        transform: rotate(-1deg);
+      }
+    }
+
+    .hero-dish-image-wrap {
+      position: relative;
+      width: 88%;
+      height: 88%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+    }
+
+    .hero-dish-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 24px rgba(32, 18, 13, 0.28));
+      transition: all 0.5s var(--ease);
+      animation: dishFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes dishFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.03); }
+    }
+
+    .floating-badge {
+      position: absolute;
+      background: var(--paper);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 4;
+      animation: badgeBob 4s ease-in-out infinite;
+    }
+
+    .badge-top-left {
+      top: 10px;
+      left: 10px;
+      color: var(--maroon);
+    }
+
+    .badge-bottom-right {
+      bottom: 15px;
+      right: 20px;
+      color: var(--green);
+      animation-delay: 1.5s;
+    }
+
+    @keyframes badgeBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Hero Navigation Arrows */
+    .hero-nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 5;
+      transition: all 0.25s var(--ease);
+    }
+
+    .hero-nav-arrow:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      transform: translateY(-50%) scale(1.12);
+    }
+
+    .arrow-prev { left: -14px; }
+    .arrow-next { right: -14px; }
+
+    /* Right Side: Dish Details */
+    .hero-right-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .hero-script-tag {
+      font-family: "Caveat", cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--ochre);
+      line-height: 1;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-dish-title {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .hero-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .hero-price {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .hero-old-price {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .hero-discount-badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    html.dark-mode .hero-discount-badge {
+      background: #451a1a;
+      color: #fca5a5;
+    }
+
+    .hero-score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-bg);
+      color: var(--green);
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    html.dark-mode .hero-score-badge {
+      background: #14371f;
+      color: #86efac;
+    }
+
+    .hero-description {
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.65;
+      margin-bottom: 24px;
+      background: var(--caramel);
+      padding: 18px 22px;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--accent);
+    }
+
+    .hero-action-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .qty-counter {
+      display: inline-flex;
+      align-items: center;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .qty-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-alt);
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .qty-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .qty-num {
+      width: 38px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .btn-order-main {
+      flex: 1;
+      min-width: 200px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--ochre) 100%);
+      color: #ffffff;
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(200, 90, 23, 0.35);
+      transition: all 0.3s var(--ease);
+    }
+
+    .btn-order-main:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(200, 90, 23, 0.45);
+      background: linear-gradient(135deg, #b54a0f 0%, #a05a1e 100%);
+    }
+
+    /* HORIZONTAL SHELF CAROUSEL */
+    .carousel-section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 30px 36px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+
+    .carousel-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .carousel-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .carousel-title-group h3 {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .autoplay-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--caramel);
+      color: var(--ochre);
+    }
+
+    .category-pills-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+    }
+
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      background: var(--bg-alt);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+      white-space: nowrap;
+    }
+
+    .filter-pill:hover {
+      border-color: var(--accent);
+      color: var(--ink);
+    }
+
+    .filter-pill.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    /* Carousel Horizontal Track */
+    .carousel-container-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 4px 18px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .carousel-track::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 10px;
+    }
+
+    .carousel-item-card {
+      flex: 0 0 240px;
+      background: var(--bg-alt);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .carousel-item-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+      background: var(--paper);
+    }
+
+    .carousel-item-card.active {
+      border-color: var(--accent);
+      background: var(--paper);
+      box-shadow: 0 8px 24px rgba(200, 90, 23, 0.25);
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .carousel-item-card.active::before {
+      content: "✓ সক্রিয়";
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+    }
+
+    .carousel-card-img-wrap {
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .carousel-card-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+      transition: transform 0.3s;
+    }
+
+    .carousel-item-card:hover .carousel-card-img {
+      transform: scale(1.1) rotate(3deg);
+    }
+
+    .carousel-card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ochre);
+      background: var(--caramel);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      margin-bottom: 6px;
+    }
+
+    .carousel-card-title {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+      margin-bottom: 6px;
+      height: 38px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .carousel-card-price {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .track-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+      transition: all 0.25s var(--ease);
+    }
+
+    .track-nav-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .track-prev { left: -16px; }
+    .track-next { right: -16px; }
+
+    /* SLIDING CART DRAWER */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 8, 5, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s var(--ease);
+    }
+
+    .cart-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(440px, 100vw);
+      height: 100vh;
+      background: var(--paper);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.25);
+      z-index: 1001;
+      transform: translateX(100%);
+      transition: transform 0.4s var(--ease);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-overlay.open .cart-drawer {
+      transform: translateX(0);
+    }
+
+    .cart-drawer-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-drawer-header h3 {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-close-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .cart-close-btn:hover {
+      color: var(--ink);
+    }
+
+    .cart-items-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cart-empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .cart-empty-state span {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      background: var(--bg-alt);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+    }
+
+    .cart-item-img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+    }
+
+    .cart-item-details {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-family: "Noto Serif Bengali", serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .cart-item-unit-price {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-item-qty-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-drawer-footer {
+      padding: 24px;
+      border-top: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .cart-summary-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .cart-summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed var(--line);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .cart-summary-total span:last-child {
+      color: var(--accent);
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: var(--radius-full);
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s var(--ease);
+    }
+
+    .btn-checkout:hover {
+      background: #b54a0f;
+    }
+
+    /* TOAST */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--dark-coffee);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 2000;
+      transition: transform 0.35s var(--ease);
+    }
+
+    .toast-box.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* FOOTER */
+    .menu-footer {
+      border-top: 1px solid var(--line);
+      padding: 32px 0 0;
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .menu-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-showcase {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+        gap: 30px;
+      }
+      .nav-links-wrap {
+        display: none;
+      }
+      .hero-left-window {
+        min-height: 320px;
+      }
+      .hero-nav-arrow {
+        display: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .page-wrapper {
+        width: calc(100% - 24px);
+      }
+      .hero-dish-title {
+        font-size: 26px;
+      }
+      .hero-price {
+        font-size: 28px;
+      }
+      .carousel-item-card {
+        flex: 0 0 190px;
+      }
+    }
+  
+/* =========================================================
+   CLEAN UNIFIED NAVBAR, FOOTER & AUTH MODAL
+   ========================================================= */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 100;
+  width: min(1180px, calc(100% - 44px));
+  margin:  12px auto 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.navlinks {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navlinks a, .navlinks button {
+  position: relative;
+  transition: color .25s var(--ease);
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px 0;
+  text-decoration: none;
+}
+
+.navlinks a:after, .navlinks button:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width .3s var(--ease);
+}
+
+.navlinks a:hover, .navlinks button:hover,
+.navlinks a.active, .navlinks button.active {
+  color: var(--ink);
+}
+
+.navlinks a:hover:after, .navlinks button:hover:after,
+.navlinks a.active:after, .navlinks button.active:after {
+  width: 100%;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.nav-btn-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 4px 12px rgba(184, 84, 47, 0.25);
+}
+
+.nav-btn-cart:hover {
+  background: #a04523;
+  transform: translateY(-2px);
+}
+
+.nav-btn-cart span {
+  background: #ffffff;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.iconbtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.iconbtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.login {
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.login:hover {
+  background: var(--ink);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* User Auth Badge & Dropdown */
+.auth-user-wrap {
+  position: relative;
+}
+
+.user-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 5px 14px 5px 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-badge:hover {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--ochre));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+  width: 220px;
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1000;
+}
+
+.user-dropdown-menu.open {
+  display: flex;
+}
+
+.user-menu-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.user-menu-header strong {
+  display: block;
+  font-size: 12.5px;
+  color: var(--maroon);
+}
+
+.user-menu-header small {
+  font-size: 11px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.user-dropdown-menu a, .user-dropdown-menu button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.user-dropdown-menu a:hover, .user-dropdown-menu button:hover {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+.user-dropdown-menu .btn-signout {
+  color: #d93829;
+  font-weight: 600;
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.user-dropdown-menu .btn-signout:hover {
+  background: rgba(217, 56, 41, 0.08);
+  color: #b32619;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+/* Bulb Mode Toggle */
+.bulb-toggle {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.bulb-toggle:hover {
+  border-color: var(--accent);
+  transform: rotate(12deg);
+}
+
+.bulb-wire {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 8px;
+  background: #8a6a45;
+}
+
+.bulb-shade {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd782, #e9a23b);
+  box-shadow: 0 0 10px rgba(233, 162, 59, 0.6);
+  display: block;
+}
+
+html.dark-mode .bulb-shade {
+  background: linear-gradient(135deg, #4a3828, #2a1a0e);
+  box-shadow: none;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  right: 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.15);
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+}
+
+.mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu a, .mobile-menu button {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-menu .m-btn {
+  margin-top: 8px;
+  padding: 12px;
+  text-align: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+}
+
+/* =========================================================
+   AUTH MODAL (Sign In / Sign Up)
+   ========================================================= */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 19, 13, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.auth-modal-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+.auth-modal-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s var(--ease);
+  padding: 32px 28px 28px;
+}
+
+.auth-modal-overlay.open .auth-modal-box {
+  transform: translateY(0) scale(1);
+}
+
+.auth-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.auth-close-btn:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.auth-header .auth-logo {
+  height: 48px;
+  width: auto;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 10px;
+}
+
+.auth-header h3 {
+  font-family: "Space Grotesk", "Noto Serif Bengali", sans-serif;
+  font-size: 20px;
+  color: var(--maroon);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.auth-header p {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 4px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+}
+
+.auth-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+}
+
+.auth-tab.active {
+  background: var(--paper);
+  color: var(--maroon);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Role Selector */
+.auth-roles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.role-pill {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.role-pill.active {
+  background: rgba(184, 84, 47, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Input Fields */
+.auth-form-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.auth-form-group label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.auth-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-wrap input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.auth-input-wrap input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(184, 84, 47, 0.15);
+}
+
+.auth-pw-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+}
+
+.auth-helper-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.auth-helper-row label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.auth-helper-row a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-helper-row a:hover {
+  text-decoration: underline;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--maroon), var(--accent));
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 8px 20px rgba(110, 50, 24, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(110, 50, 24, 0.35);
+}
+
+/* Quick Demo Login */
+.auth-demo-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  text-align: center;
+}
+
+.auth-demo-section p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.auth-demo-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.demo-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+
+.demo-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* FOOTER STYLES */
+.footer {
+  background: linear-gradient(160deg, #3a2416, #2a1a0e);
+  color: #e5d3b4;
+  margin-top: 0 !important;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+}
+
+.footer:before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.18), transparent 70%);
+  right: -80px;
+  top: -60px;
+  pointer-events: none;
+}
+
+.footer:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent) 30%, var(--accent) 70%, transparent);
+}
+
+.clothesline {
+  position: relative;
+  margin-top: 0;
+  height: 175px;
+  overflow: hidden;
+}
+
+.clothesline .rope {
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  top: 34px;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, transparent, rgba(240, 180, 90, 0.9) 8%, rgba(240, 180, 90, 0.55) 50%, rgba(240, 180, 90, 0.9) 92%, transparent);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.clothesline .post {
+  position: absolute;
+  top: 0;
+  width: 7px;
+  height: 74px;
+  background: linear-gradient(#6b4a22, #3a2416);
+  border-radius: 4px;
+}
+
+.clothesline .post.l { left: 8px; }
+.clothesline .post.r { right: 8px; }
+
+.hang-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  transform-origin: top center;
+}
+
+.hang-item {
+  position: absolute;
+  transform-origin: top center;
+}
+
+.hang-item:nth-child(1) { left: 3%; }
+.hang-item:nth-child(2) { left: 13%; }
+.hang-item:nth-child(3) { left: 23%; }
+.hang-item:nth-child(4) { left: 33%; }
+.hang-item:nth-child(5) { left: 43%; }
+.hang-item:nth-child(6) { left: 53%; }
+.hang-item:nth-child(7) { left: 63%; }
+.hang-item:nth-child(8) { left: 73%; }
+.hang-item:nth-child(9) { left: 83%; }
+.hang-item:nth-child(10) { left: 93%; }
+
+.hang-wrap .pin {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 26px;
+  background: linear-gradient(180deg, #c98a2d, #a8701f);
+  border-radius: 5px;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+  z-index: 3;
+}
+
+.hang-wrap .string {
+  position: absolute;
+  left: 50%;
+  top: 40px;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 34px;
+  background: rgba(233, 162, 59, 0.7);
+}
+
+.order-slip {
+  position: absolute;
+  left: 50%;
+  top: 74px;
+  transform: translateX(-50%);
+  width: 118px;
+  background: linear-gradient(145deg, #fffdf7, #f4e8d4);
+  border: 1px solid rgba(90,60,30,0.15);
+  border-radius: 14px;
+  padding: 10px 10px 9px;
+  text-align: center;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+}
+
+.order-slip .slip-photo {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+  margin: 0 auto 6px;
+  display: block;
+}
+
+.order-slip .slip-tag {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: #b8542f;
+  font-weight: 700;
+}
+
+.order-slip .slip-name {
+  font-family: "Noto Serif Bengali", serif;
+  font-size: 12px;
+  color: #3a2416;
+  margin: 2px 0;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.order-slip .slip-price {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 12px;
+  color: #6e3218;
+  font-weight: 700;
+}
+
+.order-slip.plain {
+  background: linear-gradient(145deg, #5c2d18, #3a2416);
+  border-color: transparent;
+}
+
+.order-slip.plain .slip-tag { color: #f0b45a; font-size: 10px; }
+.order-slip.plain .slip-name { color: #fff6e9; font-size: 12px; }
+.order-slip.plain .slip-price { color: #f0b45a; }
+
+.order-slip.coupon {
+  width: 124px;
+  background: linear-gradient(145deg, #fdf6e9, #f4e8d4);
+  border: 1px dashed #c98a2d;
+}
+
+.order-slip.coupon .slip-tag { color: #6e3218; }
+.order-slip.coupon .coupon-code {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a2416;
+  margin: 2px 0;
+}
+.order-slip.coupon .coupon-off {
+  display: inline-block;
+  background: #e9a23b;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 2;
+  width: min(1080px, calc(100% - 44px));
+  margin: 0 auto;
+  padding: 40px 0 40px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr;
+  gap: 36px;
+}
+
+.footer h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 16px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer h4:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 26px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+.fabout {
+  font-size: 12.5px;
+  color: #c9b591;
+  line-height: 1.6;
+  margin: 12px 0 16px;
+}
+
+.fsocial {
+  display: flex;
+  gap: 10px;
+}
+
+.fsocial a {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e5d3b4;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.fsocial a:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.flist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flist li {
+  margin-bottom: 8px;
+}
+
+.flist a {
+  color: #e5d3b4;
+  text-decoration: none;
+  font-size: 12.5px;
+  transition: color 0.2s;
+}
+
+.flist a:hover {
+  color: #fff;
+}
+
+.flist.contact li {
+  font-size: 12.5px;
+  color: #c9b591;
+  display: flex;
+  gap: 8px;
+}
+
+.news-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.news-note {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: #c9b591;
+  margin-bottom: 12px;
+}
+
+.news-input {
+  display: flex;
+  gap: 8px;
+}
+
+.news-input input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 8px 14px;
+  color: #fff;
+  font-size: 12px;
+}
+
+.news-input button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.news-trust {
+  font-size: 10.5px;
+  color: #9e8a7c;
+  margin-top: 8px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 0;
+  text-align: center;
+  font-size: 11.5px;
+  color: #9e8a7c;
+}
+
+@media (max-width: 900px) {
+  .navlinks { display: none; }
+  .menu-toggle { display: flex; }
+  .footer-inner { grid-template-columns: 1.5fr 1fr 1.2fr; gap: 28px; }
+}
+
+@media (max-width: 600px) {
+  .footer-inner { grid-template-columns: 1.5fr 1fr 1.2fr; }
+}
+/* ===== Top Nav (Authentic Homepage styling) ===== */
+.nav{
+  width:min(1200px,calc(100% - 32px));margin: 12px auto 0;height:74px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:12px;z-index:50;
+  padding:0 16px;
+  background:rgba(250,239,222,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+  border:1px solid rgba(90,68,40,.10);border-radius:20px;
+  box-shadow:0 6px 18px rgba(60,40,15,.06);
+  transition:box-shadow .4s var(--ease),background .4s ease;
+}
+.nav.scrolled{background:rgba(250,239,222,.92);box-shadow:0 14px 34px rgba(60,40,15,.16)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.04em}
+.brand img{transition:transform .4s var(--ease)}
+.brand:hover img{transform:scale(1.05)}
+.navlinks{display:flex;gap:22px;font-size:13px;color:#676861;font-weight:600;align-items:center}
+.navlinks a, .navlinks button{position:relative;transition:color .3s;background:none;border:none;font:inherit;cursor:pointer;color:#676861;padding:0;text-decoration:none}
+.navlinks a:after, .navlinks button:after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--accent);border-radius:2px;transition:width .35s var(--ease)}
+.navlinks a:hover, .navlinks button:hover, .navlinks a.active, .navlinks button.active{color:var(--ink)}
+.navlinks a:hover:after, .navlinks button:hover:after, .navlinks a.active:after, .navlinks button.active:after{width:100%}
+.nav-actions{display:flex;gap:9px;align-items:center}
+.iconbtn{width:40px;height:40px;border:1px solid var(--line);background:rgba(255,255,255,.75);border-radius:50%;display:grid;place-items:center;transition:.3s var(--ease);font-size:18px;color:var(--ink);cursor:pointer}
+.iconbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);background:#fff}
+.login{padding:10px 18px;border:1px solid var(--ink);border-radius:22px;background:transparent;font-size:13px;font-weight:600;transition:.3s var(--ease);position:relative;overflow:hidden;cursor:pointer}
+.login:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+.menu-toggle{display:none}
+
+.nav-btn-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  color: #ffffff;
+  border: 1px solid var(--accent);
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 4px 12px rgba(184, 84, 47, 0.25);
+}
+.nav-btn-cart:hover {
+  background: #a04523;
+  transform: translateY(-2px);
+}
+.nav-btn-cart span {
+  background: #ffffff;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+/* Authentic Bulb Mode Toggle */
+.bulb-toggle{position:relative;width:40px;height:66px;background:transparent;border:0;padding:0;margin-top:-8px;display:flex;flex-direction:column;align-items:center;transform-origin:top center;transition:transform .3s var(--ease);cursor:pointer}
+.bulb-toggle:hover{transform:scale(1.08)}
+.bulb-toggle:active{transform:scale(.96)}
+.bulb-wire{width:2px;height:18px;background:#c9a96e;border-radius:1px;position:relative}
+.bulb-cap{width:10px;height:6px;background:#7a5a3a;border-radius:2px 2px 0 0;margin-top:-1px}
+.bulb-glass{width:22px;height:24px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:rgba(255,248,220,.25);border:1px solid rgba(200,160,80,.4);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bulb-shade{width:22px;height:24px;border-radius:50% 50% 45% 45%/60% 60% 40% 40%;background:rgba(255,248,220,.25);border:1px solid rgba(200,160,80,.4);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.bulb-glow{position:absolute;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,107,.85) 0%,rgba(233,162,59,.45) 45%,transparent 70%);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.6);top:50%;left:50%;transition:opacity .4s ease,transform .4s ease}
+.bulb-halo{position:absolute;top:50%;left:50%;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(255,200,80,.28) 0%,transparent 65%);transform:translate(-50%,-50%);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.bulb-toggle.on .bulb-shade, .bulb-toggle.on .bulb-glass{background:radial-gradient(circle at 40% 30%,#fff3c4,#f0b45a 55%,#d98a2b);box-shadow:0 0 22px 5px rgba(255,215,107,.65),inset 0 1px 3px rgba(255,255,255,.7)}
+.bulb-toggle.on .bulb-glow{opacity:1;transform:translate(-50%,-50%) scale(1);animation:bulbFlicker 4.5s ease-in-out infinite}
+.bulb-toggle.on .bulb-halo{opacity:1;animation:haloPulse 2.2s ease-out infinite}
+.bulb-toggle.on .bulb-wire{background:#ffd76b;box-shadow:0 0 8px rgba(255,215,107,.8)}
+
+/* Mobile Menu */
+.mobile-menu{position:fixed;left:16px;right:16px;top:96px;z-index:49;
+  background:rgba(250,239,222,.98);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(90,68,40,.12);border-radius:20px;box-shadow:var(--shadow-lg);
+  padding:14px;display:flex;flex-direction:column;gap:4px;
+  opacity:0;transform:translateY(-14px) scale(.98);pointer-events:none;
+  transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.mobile-menu.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.mobile-menu a, .mobile-menu button{padding:12px 16px;border-radius:13px;font-size:14px;font-weight:600;color:var(--ink);transition:.25s;display:flex;align-items:center;gap:10px;text-align:left;background:none;border:none;width:100%;text-decoration:none}
+.mobile-menu a:hover, .mobile-menu button:hover{background:var(--warm);color:var(--maroon)}
+.mobile-menu .m-btn{margin-top:8px;padding:12px;text-align:center;justify-content:center;border-radius:999px;background:var(--accent);color:#ffffff;font-weight:700;border:none}
+
+/* Dark mode overrides for Nav */
+html.dark-mode .nav{background:rgba(26,18,8,.72);border-color:rgba(255,255,255,.1)}
+html.dark-mode .nav.scrolled{background:rgba(26,18,8,.92);box-shadow:0 14px 34px rgba(0,0,0,.4)}
+html.dark-mode .navlinks{color:#b3a898}
+html.dark-mode .navlinks a, html.dark-mode .navlinks button{color:#b3a898}
+html.dark-mode .navlinks a:hover, html.dark-mode .navlinks button:hover, html.dark-mode .navlinks a.active, html.dark-mode .navlinks button.active{color:#fff}
+html.dark-mode .iconbtn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#e5d3b4}
+html.dark-mode .login{border-color:rgba(255,255,255,.3);color:#e5d3b4}
+html.dark-mode .login:hover{background:#e5d3b4;color:#20130d}
+html.dark-mode .mobile-menu{background:rgba(26,18,8,.98);border-color:rgba(255,255,255,.12)}
+html.dark-mode .mobile-menu a, html.dark-mode .mobile-menu button{color:#e5d3b4}
+
+@media(max-width:900px){
+  .menu-toggle{display:grid}
+  .navlinks{display:none}
+}
+
+
+/* ===== AUTH POPUP MODAL STYLES ===== */
+.auth-user-wrap { position: relative; display: flex; align-items: center; }
+.user-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--paper); border: 1px solid var(--line); padding: 5px 14px 5px 8px; border-radius: 999px; cursor: pointer; transition: all 0.2s; font-size: 13px; font-weight: 700; color: var(--ink); }
+html.dark-mode .user-badge { background: rgba(45,30,18,0.9); }
+.user-badge:hover { border-color: var(--accent); }
+.user-avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--ochre, #e9a23b)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.user-name { max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; }
+.user-dropdown-menu { position: absolute; top: calc(100% + 10px); right: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 16px 36px rgba(0,0,0,0.2); width: 220px; padding: 10px; display: none; flex-direction: column; gap: 6px; z-index: 1000; }
+.user-dropdown-menu.open { display: flex; }
+.user-menu-header { padding: 8px 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.user-menu-header strong { display: block; font-size: 12.5px; color: var(--maroon, #6e3218); }
+.user-menu-header small { font-size: 11px; color: var(--muted, #8b8c84); word-break: break-all; }
+.user-dropdown-menu a, .user-dropdown-menu button { padding: 8px 10px; border-radius: 8px; font-size: 12.5px; color: var(--ink); text-decoration: none; background: none; border: none; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; width: 100%; font-family: inherit; }
+.user-dropdown-menu a:hover, .user-dropdown-menu button:hover { background: var(--warm, #f8efe1); color: var(--accent); }
+.user-dropdown-menu .btn-signout { color: #d93829; font-weight: 600; border-top: 1px solid var(--line); margin-top: 4px; padding-top: 10px; }
+
+.auth-modal-overlay { position: fixed; inset: 0; background: rgba(32, 19, 13, 0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+.auth-modal-overlay.open { display: flex !important; opacity: 1; }
+.auth-modal-box { background: var(--paper); border: 1px solid var(--line); border-radius: 28px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(20px) scale(0.97); transition: transform 0.3s ease; padding: 32px 28px 28px; }
+.auth-modal-overlay.open .auth-modal-box { transform: translateY(0) scale(1); }
+.auth-close-btn { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); color: var(--muted); font-size: 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+.auth-close-btn:hover { background: var(--line); color: var(--ink); }
+.auth-header { text-align: center; margin-bottom: 22px; }
+.auth-header .auth-logo { height: 48px; width: auto; margin: 0 auto 10px; display: block; border-radius: 10px; }
+.auth-header h3 { font-family: "Space Grotesk", "Noto Serif Bengali", sans-serif; font-size: 20px; color: var(--maroon, #6e3218); font-weight: 700; margin-bottom: 4px; }
+.auth-header p { font-size: 12px; color: var(--muted, #8b8c84); }
+.auth-tabs { display: flex; background: var(--bg); border-radius: 999px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--line); }
+.auth-tab { flex: 1; text-align: center; padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); background: transparent; border: none; cursor: pointer; transition: all 0.25s ease; }
+.auth-tab.active { background: var(--paper); color: var(--maroon, #6e3218); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.auth-roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+.role-pill { border: 1px solid var(--line); background: var(--bg); padding: 7px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 600; color: var(--ink); cursor: pointer; text-align: center; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.role-pill.active { background: rgba(184, 84, 47, 0.12); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+.auth-form-group { margin-bottom: 14px; text-align: left; }
+.auth-form-group label { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.auth-input-wrap { position: relative; display: flex; align-items: center; }
+.auth-input-wrap input { width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 13px; outline: none; transition: border-color 0.2s; font-family: inherit; }
+.auth-input-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184, 84, 47, 0.15); }
+.auth-pw-toggle { position: absolute; right: 12px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 0; }
+.auth-helper-row { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted); margin-bottom: 16px; }
+.auth-helper-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.auth-helper-row a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.auth-helper-row a:hover { text-decoration: underline; }
+.auth-submit-btn { width: 100%; padding: 12px; border-radius: 999px; background: linear-gradient(135deg, var(--maroon, #6e3218), var(--accent, #b8542f)); color: #ffffff; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 8px 20px rgba(110, 50, 24, 0.25); display: flex; align-items: center; justify-content: center; gap: 8px; }
+.auth-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(110, 50, 24, 0.35); }
+.auth-demo-section { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--line); text-align: center; }
+.auth-demo-section p { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.auth-demo-buttons { display: flex; gap: 8px; justify-content: center; }
+.demo-btn { background: var(--bg); border: 1px solid var(--line); padding: 5px 10px; border-radius: 8px; font-size: 11px; color: var(--ink); cursor: pointer; transition: all 0.2s; font-weight: 600; }
+.demo-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+</style>
+</head>
+<body>
+
+  <!-- CART OVERLAY & DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCartDrawer(event)">
+    <div class="cart-drawer" onclick="event.stopPropagation()">
+      <div class="cart-drawer-header">
+        <h3>🛍️ আপনার আহার বিলাস কার্ট</h3>
+        <button class="cart-close-btn" onclick="toggleCartDrawer()">✕</button>
+      </div>
+      <div class="cart-items-list" id="cartItemsList">
+        <div class="cart-empty-state">
+          <span>🍽️</span>
+          <p>কার্ট এখনও খালি!</p>
+          <small>নিচের মেনু থেকে আপনার পছন্দের খাবার যোগ করুন।</small>
+        </div>
+      </div>
+      <div class="cart-drawer-footer" id="cartFooter" style="display:none;">
+        <div class="cart-summary-line">
+          <span>মোট খাবার মূল্য</span>
+          <span id="cartSubtotal">৳ ০</span>
+        </div>
+        <div class="cart-summary-line">
+          <span>ক্যাম্পাস স্টুডেন্ট ডিসকাউন্ট (৫%)</span>
+          <span id="cartDiscount" style="color:var(--green)">- ৳ ০</span>
+        </div>
+        <div class="cart-summary-total">
+          <span>সর্বমোট পরিশোধযোগ্য</span>
+          <span id="cartTotal">৳ ০</span>
+        </div>
+        <button class="btn-checkout" onclick="confirmOrder()">অর্ডার কনফার্ম করুন (ক্যাশ / বিকাশ) →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-box" id="toastBox">
+    <span id="toastMsg">আইটেম কার্ট-এ যুক্ত হয়েছে!</span>
+  </div>
+
+  <div class="page-wrapper">
+    
+    <!-- DESKTOP NAVBAR -->
+              <!-- ===== NAVBAR ===== -->
+  <nav class="nav" id="nav">
+    <a class="brand" href="homepage.html">
+      <img id="mainLogo" src="logo-light.png" alt="আহার বিলাস" style="height:58px;width:auto;display:block;border-radius:12px">
+    </a>
+    <div class="navlinks">
+      <a href="homepage.html" >Home</a>
+      <a href="menu.html" class="active">মেনু ও অফার</a>
+      <a href="homepage.html#about-team">About Team</a>
+      <a href="homepage.html#problem">Problem</a>
+      <a href="homepage.html#how-it-works">How It Works</a>
+      <a href="homepage.html#complaint-demo">Report Issue</a>
+      <a href="homepage.html#trust-score">Trust Score</a>
+      <a href="inspection-details.html" >Lab Inspection</a>
+      <a href="homepage.html#faq">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn-cart" onclick="toggleCartDrawer()" title="View Cart">
+        🛍️ Cart (<span id="navCartCount">০</span>)
+      </button>
+      <button class="bulb-toggle" id="modeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="bulb-wire"></span>
+        <span class="bulb-halo"></span>
+        <span class="bulb-shade"><span class="bulb-glow"></span></span>
+      </button>
+      <button class="iconbtn" aria-label="Search" onclick="showToast('Search coming soon')">⌕</button>
+      
+      <!-- User Auth Area -->
+      <div class="auth-user-wrap" id="authUserWrap"><button class="login" id="loginBtn" onclick="openAuthModal('signin')">Sign in</button></div>
+
+      <button class="iconbtn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="homepage.html" onclick="closeMenu()">🏠 Home</a>
+    <a href="menu.html" onclick="closeMenu()">🍛 মেনু ও অফার</a>
+    <a href="homepage.html#about-team" onclick="closeMenu()">👥 About Team</a>
+    <a href="homepage.html#problem" onclick="closeMenu()">⚠️ Problem Statement</a>
+    <a href="homepage.html#how-it-works" onclick="closeMenu()">⚙️ How It Works</a>
+    <a href="homepage.html#complaint-demo" onclick="closeMenu()">📝 Report Issue</a>
+    <a href="homepage.html#trust-score" onclick="closeMenu()">⭐ Trust Score</a>
+    <a href="inspection-details.html" onclick="closeMenu()">🧪 Lab Inspection</a>
+    <a href="homepage.html#faq" onclick="closeMenu()">❓ FAQs</a>
+    <div id="mobileAuthContainer" style="margin-top:6px;"><button class="primary m-btn" onclick="closeMenu();openAuthModal('signin')">Sign in / একাউন্ট খুলুন</button></div>
+  </div>
+
+    <!-- TOP FEATURED HERO SHOWCASE WINDOW -->
+    <section class="hero-showcase" id="heroShowcase">
+      <div class="hero-decor-stamp">
+        <span>✨ Caanles Cozy Bilash</span>
+      </div>
+
+      <!-- Left: Organic Window Frame with Previous/Next Arrows -->
+      <div class="hero-left-window">
+        <button class="hero-nav-arrow arrow-prev" title="পূর্ববর্তী ডিশ" onclick="prevHeroDish()">‹</button>
+        <button class="hero-nav-arrow arrow-next" title="পরবর্তী ডিশ" onclick="nextHeroDish()">›</button>
+
+        <div class="floating-badge badge-top-left">
+          <span>🔥</span> ১০০% ফ্রেশ ও সুস্বাদু
+        </div>
+
+        <div class="organic-blob-frame">
+          <div class="hero-dish-image-wrap">
+            <img src="COMBO1_cutout.png" alt="Featured Dish" id="heroDishImg" class="hero-dish-image">
+          </div>
+        </div>
+
+        <div class="floating-badge badge-bottom-right" id="heroTrustBadge">
+          <span>🛡️</span> ট্রাস্ট স্কোর: ৯৮/১০০
+        </div>
+      </div>
+
+      <!-- Right: Dish Details -->
+      <div class="hero-right-info">
+        <div class="hero-script-tag" id="heroScriptTag">
+          Chef's Special Combo 🦋
+        </div>
+        <h2 class="hero-dish-title" id="heroDishTitle">
+          বাজেট বিলাস কম্বো
+        </h2>
+
+        <div class="hero-meta-strip">
+          <div class="hero-price-wrap">
+            <span class="hero-price" id="heroPrice">৳ ৯০</span>
+            <span class="hero-old-price" id="heroOldPrice">৳ ১১৫</span>
+            <span class="hero-discount-badge" id="heroDiscount">-২২% অফ</span>
+          </div>
+          <div class="hero-score-badge" id="heroScoreTag">
+            🌿 হেলদি চয়েস
+          </div>
+        </div>
+
+        <p class="hero-description" id="heroDesc">
+          গরম সাদা ভাত, নরম দেশি মুরগির ঝোল কারি, ফ্রেশ গ্রিন সালাদ ও সফট ড্রিংক। ক্যাম্পাসের শিক্ষার্থীদের সবচেয়ে প্রিয় বাজেট ফ্রেন্ডলি ভরপেট কম্বো।
+        </p>
+
+        <div class="hero-action-bar">
+          <div class="qty-counter">
+            <button class="qty-btn" onclick="updateHeroQty(-1)">−</button>
+            <span class="qty-num" id="heroQtyDisplay">1</span>
+            <button class="qty-btn" onclick="updateHeroQty(1)">+</button>
+          </div>
+          <button class="btn-order-main" onclick="addHeroToCart()">
+            <span>অর্ডার করুন (ORDER NOW)</span> 🛍️
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HORIZONTAL SHELF CAROUSEL -->
+    <section class="carousel-section">
+      <div class="carousel-top-bar">
+        <div class="carousel-title-group">
+          <h3>🍽️ লাইভ মেনু কালেকশন</h3>
+          <span class="autoplay-pill">⚡ অটো-স্ক্রোল চলছে</span>
+        </div>
+
+        <div class="category-pills-wrap">
+          <button class="filter-pill active" onclick="filterCategory('all', this)">
+            ✨ সব আইটেম (২১টি)
+          </button>
+          <button class="filter-pill" onclick="filterCategory('combo', this)">
+            🎁 কম্বো বিলাস (৯টি)
+          </button>
+          <button class="filter-pill" onclick="filterCategory('regular', this)">
+            🍛 আজকের মেনু (১২টি)
+          </button>
+        </div>
+      </div>
+
+      <div class="carousel-container-wrap" onmouseenter="pauseAutoScroll()" onmouseleave="resumeAutoScroll()">
+        <button class="track-nav-btn track-prev" onclick="scrollTrack(-1)">‹</button>
+        <button class="track-nav-btn track-next" onclick="scrollTrack(1)">›</button>
+
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Injected dynamically via JS -->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+          <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="clothesline" aria-hidden="true">
+      <span class="post l"></span><span class="post r"></span>
+      <span class="rope"></span>
+      <div class="hang-wrap">
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="murgi_cutout.png" onerror="this.onerror=null;this.src='murgi_cutout.png';" alt="মুরগির ঝোল">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">মুরগির ঝোল</div>
+            <div class="slip-price">৳80</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip plain" onclick="window.location.href='menu.html'" style="cursor:pointer">
+            <div class="slip-tag">MENU</div>
+            <div class="slip-name">কম্বো মেনু দেখতে চান?</div>
+            <div class="slip-price">Click Here</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="biriyani_cutout.png" onerror="this.onerror=null;this.src='biriyani_cutout.png';" alt="শাহী বিরিয়ানি">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">শাহী বিরিয়ানি</div>
+            <div class="slip-price">৳120</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">COUPON</div>
+            <div class="coupon-code">AHAR20</div>
+            <div class="coupon-off">20% OFF</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="sandwich_cutout.png" onerror="this.onerror=null;this.src='sandwich_cutout.png';" alt="ক্রাঞ্চ স্যান্ডউইচ">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">ক্রাঞ্চ স্যান্ডউইচ</div>
+            <div class="slip-price">৳60</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">DEAL</div>
+            <div class="coupon-code">BILAS10</div>
+            <div class="coupon-off">৳10 OFF</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="shobji_cutout.png" onerror="this.onerror=null;this.src='shobji_cutout.png';" alt="সবজির বাটি">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">সবজির বাটি</div>
+            <div class="slip-price">৳55</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip plain" onclick="window.location.href='menu.html'" style="cursor:pointer">
+            <div class="slip-tag">TODAY</div>
+            <div class="slip-name">আজকের খাবার মেনু</div>
+            <div class="slip-price">View Menu</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip">
+            <img class="slip-photo" src="icecream_cutout.png" onerror="this.onerror=null;this.src='icecream_cutout.png';" alt="আম আইসক্রিম">
+            <div class="slip-tag">ORDER</div>
+            <div class="slip-name">আম আইসক্রিম</div>
+            <div class="slip-price">৳45</div>
+          </div>
+        </div>
+        <div class="hang-item">
+          <span class="pin"></span><span class="string"></span>
+          <div class="order-slip coupon">
+            <div class="slip-tag">OFFER</div>
+            <div class="coupon-code">STUDENT</div>
+            <div class="coupon-off">15% OFF</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-inner">
+      <div>
+        <div class="fbrand">
+          <img id="footerLogo" src="logo-light.png" alt="আহার বিলাস" style="height:80px;width:auto;display:block;border-radius:14px">
+        </div>
+        <p class="fabout">আহার বিলাস connects students, vendors, inspectors and administration in one transparent system — making campus food safe, visible and trustworthy for everyone.</p>
+        <div class="fsocial">
+          <a href="https://www.facebook.com/warisa.ahmed.10/" onclick="showToast('Facebook')" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/warisa_ahmed_/" onclick="showToast('Instagram')" aria-label="Instagram">◎</a>
+          <a href="https://x.com/AhmedWarisa" onclick="showToast('Twitter')" aria-label="Twitter">✕</a>
+          <a href="https://youtube.com/@warisaahmed?si=PWl0OSR8epbAc7k-" onclick="showToast('YouTube')" aria-label="YouTube">▶</a>
+          <a href="https://web.whatsapp.com/" onclick="showToast('WhatsApp')" aria-label="WhatsApp">✆</a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="flist">
+          <li><a href="menu.html">🎁 Combo Bilash Packs</a></li>
+          <li><a href="menu.html">🍛 Today's Full Menu</a></li>
+          <li><a href="inspection-details.html">🧪 Lab Inspection Process</a></li>
+          <li><a href="homepage.html#why-different">★ Why We Are Different</a></li>
+          <li><a href="homepage.html#trust-score">⭐ Food Safety & Trust Score</a></li>
+          <li><a href="proposal.pdf" target="_blank">📄 View Full Project Proposal (PDF)</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Get in Touch</h4>
+        <ul class="flist contact">
+          <li><span>📍</span> IIUC, Kumira, Chattogram 4318, Bangladesh</li>
+          <li><span>✉</span> afw@aharbilas.edu</li>
+          <li><span>☎</span> +880 1700 000 000</li>
+          <li><span>🕘</span> Sun – Thu, 8:00 AM – 8:00 PM</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© ২০২৬ <strong>আহার বিলাস (Canteen Watch)</strong> • Department of Pharmacy & AI Research Team</p>
+    </div>
+  </footer>
+
+<script>
+    // DISH DATA WITH ACCURATE TITLES MATCHING IMAGES
+    const dishesData = [
+      // 9 COMBOS
+      {
+        id: "combo-1",
+        category: "combo",
+        tag: "🎁 কম্বো ১",
+        script: "Budget Friendly Bilash 🌾",
+        title: "বাজেট বিলাস কম্বো",
+        price: 90,
+        oldPrice: 115,
+        score: 98,
+        image: "COMBO1_cutout.png",
+        desc: "গরম সাদা ভাত, নরম দেশি মুরগির ঝোল কারি, ফ্রেশ গ্রিন সালাদ ও সফট ড্রিংক। ক্যাম্পাসের শিক্ষার্থীদের সবচেয়ে প্রিয় বাজেট ফ্রেন্ডলি ভরপেট খাবার।"
+      },
+      {
+        id: "combo-2",
+        category: "combo",
+        tag: "🎁 কম্বো ২",
+        script: "Most Popular Feast 👑",
+        title: "পেটপুজো স্পেশাল কম্বো",
+        price: 130,
+        oldPrice: 160,
+        score: 99,
+        image: "COMBO2_cutout.png",
+        desc: "সুবাসিত শাহী চিকেন বিরিয়ানি, সেদ্ধ ডিম, ফ্রেশ শসা সালাদ ও চিলড সফট ড্রিংক। পেটপুজোর জন্য সেরা আয়োজন।"
+      },
+      {
+        id: "combo-3",
+        category: "combo",
+        tag: "🎁 কম্বো ৩",
+        script: "Evening Snacks Delight 🥪",
+        title: "হালকা নাস্তা কম্বো",
+        price: 70,
+        oldPrice: 90,
+        score: 96,
+        image: "COMBO3_cutout.png",
+        desc: "ক্রাঞ্চি গ্রিল স্যান্ডউইচ, গোল্ডেন ফ্রেঞ্চ ফ্রাইজ ও এক কাপ গরম মসলা দুধ চা বা কফি। ক্লাসের ফাঁকে পারফেক্ট রিফ্রেশমেন্ট।"
+      },
+      {
+        id: "combo-4",
+        category: "combo",
+        tag: "🎁 কম্বো ৪",
+        script: "Street Food Favorite 🌯",
+        title: "স্ট্রিট শর্মা কম্বো",
+        price: 110,
+        oldPrice: 135,
+        score: 95,
+        image: "COMBO4_cutout.png",
+        desc: "জুসি চিকেন শর্মা রোল, ক্রিস্পি পটেটো ফ্রাইজ ও চিলড সফট ড্রিংক বেভারেজ।"
+      },
+      {
+        id: "combo-5",
+        category: "combo",
+        tag: "🎁 কম্বো ৫",
+        script: "Chef's Special Wok 🍛",
+        title: "লোডেড ফ্রাইড রাইস কম্বো",
+        price: 140,
+        oldPrice: 170,
+        score: 97,
+        image: "COMBO5_cutout.png",
+        desc: "চিকেন ফ্রাইড রাইস, ফ্রাইড এগ টপিং, ক্রিস্পি চিকেন পিস ও চিলড সফট ড্রিংক।"
+      },
+      {
+        id: "combo-6",
+        category: "combo",
+        tag: "🎁 কম্বো ৬",
+        script: "Student Saver Treat 🥟",
+        title: "স্টুডেন্ট স্পেশাল কম্বো",
+        price: 65,
+        oldPrice: 85,
+        score: 98,
+        image: "COMBO6_cutout.png",
+        desc: "স্টিমড জুসি মোমো (৬ পিস), সাথে স্পাইসি চিলি সস, ক্রিস্পি পাস্তা এবং মিনি চিকেন বার্গার সেট।"
+      },
+      {
+        id: "combo-7",
+        category: "combo",
+        tag: "🎁 কম্বো ৭",
+        script: "Spicy Crunch Noodles 🥢",
+        title: "নুডলস ক্রেজ কম্বো",
+        price: 120,
+        oldPrice: 145,
+        score: 96,
+        image: "COMBO7_cutout.png",
+        desc: "স্পাইসি হাক্কা চাউমিন নুডলস, গোল্ডেন চিকেন ফ্রাইজ ও স্পেশাল কোল্ড বেভারেজ।"
+      },
+      {
+        id: "combo-8",
+        category: "combo",
+        tag: "🎁 কম্বো ৮",
+        script: "Sweet Joy Dessert 🍨",
+        title: "মিষ্টি খুশি ডেজার্ট কম্বো",
+        price: 90,
+        oldPrice: 110,
+        score: 99,
+        image: "COMBO8_cutout.png",
+        desc: "রিচ আম আইসক্রিম স্কুপ, ফ্রুট কাস্টার্ড বাটি ও কোল্ড ব্লেন্ডেড কফি।"
+      },
+      {
+        id: "combo-9",
+        category: "combo",
+        tag: "🎁 কম্বো ৯",
+        script: "Healthy Diet Choice 🥗",
+        title: "হেলদি ফিট ডায়েট কম্বো",
+        price: 95,
+        oldPrice: 120,
+        score: 100,
+        image: "COMBO9_cutout.png",
+        desc: "মিক্সড ড্রাই ফ্রুটস ও বাদাম বাটি, প্রোটিন রিচ সিদ্ধ ডিম এবং রিফ্রেশিং গ্রিন টি কাপ।"
+      },
+
+      // 12 REGULAR ITEMS
+      {
+        id: "reg-1",
+        category: "regular",
+        tag: "🍗 লাঞ্চ স্পেশাল",
+        script: "Charcoal Oven Roast 🍗",
+        title: "গ্রিল চিকেন উইথ স্পেশাল নান",
+        price: 160,
+        oldPrice: 180,
+        score: 95,
+        image: "murgi_cutout.png",
+        desc: "স্পাইসি রোস্টেড চিকেন কোয়ার্টার, খাঁটি ওভেনে সেঁকা নরম নান রুটি ও স্পেশাল পুদিনা চাটনি।"
+      },
+      {
+        id: "reg-2",
+        category: "regular",
+        tag: "🍛 ট্র্যাডিশনাল",
+        script: "Heritage Morog Polao 🌾",
+        title: "সুবাসিত মোরগ পোলাও ও ডিম",
+        price: 180,
+        oldPrice: 200,
+        score: 97,
+        image: "biriyani_cutout.png",
+        desc: "খাঁটি ঘিয়ে তৈরি সুবাসিত চিনিগুঁড়া চালের মোরগ পোলাও, সাথে রোস্টেড চিকেন পিস, সেদ্ধ ডিম ও বেরেস্তা।"
+      },
+      {
+        id: "reg-3",
+        category: "regular",
+        tag: "👑 প্রিমিয়াম ডিশ",
+        script: "Royal Mutton Kacchi 🍖",
+        title: "প্রিমিয়াম কাচ্চি বিরিয়ানি ও বোরহানি",
+        price: 220,
+        oldPrice: 240,
+        score: 98,
+        image: "kacchi_cutout.png",
+        desc: "জাফরানি বাসমতী চালে রান্না করা তুলতুলে নরম মাংস ও আলুর কাচ্চি, সাথে রিফ্রেশিং বোরহানি গ্লাস।"
+      },
+      {
+        id: "reg-4",
+        category: "regular",
+        tag: "🥪 স্ন্যাক্স ও ক্যাফে",
+        script: "Triple Decker Club 🥪",
+        title: "ক্লাব স্যান্ডউইচ ও ফ্রেশ ওয়েজেস",
+        price: 85,
+        oldPrice: 100,
+        score: 94,
+        image: "sandwich_cutout.png",
+        desc: "চিকেন ব্রেস্ট, ফ্রেশ লেটুস, চিজ ও মেয়োনেজ সহযোগে ট্রিপল লেয়ার স্যান্ডউইচ ও ফ্রেশ পটেটো ওয়েজেস।"
+      },
+      {
+        id: "reg-5",
+        category: "regular",
+        tag: "🥬 স্বাস্থ্যকর আহার",
+        script: "Pure Ghee & Veg Khichuri 🍲",
+        title: "খাঁটি ঘি-সবজি ও ডাল খিচুড়ি",
+        price: 90,
+        oldPrice: 110,
+        score: 99,
+        image: "shobji_cutout.png",
+        desc: "তাজা মৌসুমী সবজি, খাঁটি গাওয়া ঘি ও মুগ ডালের সুস্বাদু স্বাস্থ্যসম্মত খিচুড়ি বাটি।"
+      },
+      {
+        id: "reg-6",
+        category: "regular",
+        tag: "🍟 ক্রিস্পি ফ্রাই",
+        script: "Golden Peri-Peri Fries 🍟",
+        title: "ক্রিস্পি পেরি-পেরি ফ্রেঞ্চ ফ্রাই",
+        price: 65,
+        oldPrice: 80,
+        score: 93,
+        image: "fries_cutout.png",
+        desc: "মুচমুচে সোনালি আলু ভাজা, স্পাইসি পেরি-পেরি মশলার কোটিং এবং ঘরে তৈরি টমেটো চাটনি।"
+      },
+      {
+        id: "reg-7",
+        category: "regular",
+        tag: "🥞 ডেজার্ট",
+        script: "Fluffy Honey Butter Pancake 🥞",
+        title: "হানি বাটার গোল্ডেন প্যানকেক",
+        price: 110,
+        oldPrice: 130,
+        score: 96,
+        image: "pancake_cutout.png",
+        desc: "নরম ও স্পঞ্জি ফ্রেশ প্যানকেক উইথ অর্গানিক সুন্দরবন হানি এবং গলিত বাটার ড্রপ।"
+      },
+      {
+        id: "reg-8",
+        category: "regular",
+        tag: "🥗 ফ্রেশ গার্ডেন",
+        script: "Farm Fresh Green Bowl 🥗",
+        title: "ফ্রেশ গ্রিন গার্ডেন সালাদ বাটি",
+        price: 55,
+        oldPrice: 70,
+        score: 100,
+        image: "salad_cutout.png",
+        desc: "তাজা শসা, টমেটো, ক্রিস্পি লেটুস, বেল পেপার ও এক্সট্রা ভার্জিন অলিভ অয়েল-লেমন ড্রেসিং।"
+      },
+      {
+        id: "reg-9",
+        category: "regular",
+        tag: "🥢 ওক চাউমিন",
+        script: "Wok Tossed Egg Chowmein 🥢",
+        title: "স্পাইসি চিকেন এগ চাউমিন নুডলস",
+        price: 130,
+        oldPrice: 150,
+        score: 95,
+        image: "noodles_cutout.png",
+        desc: "চিকেন কিউব, ডিম ও ক্রাঞ্চি সবজি দিয়ে ওক-টসে তৈরি মশলাদার চাউমিন নুডলস বাটি।"
+      },
+      {
+        id: "reg-10",
+        category: "regular",
+        tag: "🍨 মিষ্টি মুখ",
+        script: "Choco Vanilla Scoop 🍨",
+        title: "ভ্যানিলা আইসক্রিম উইথ চকো সিরাপ",
+        price: 75,
+        oldPrice: 90,
+        score: 97,
+        image: "icecream_cutout.png",
+        desc: "রিচ ও ক্রিমি ভ্যানিলা আইসক্রিম স্কুপ, ডার্ক চকোলেট সস ও ক্রিস্পি কাজুবাদাম কুচি।"
+      },
+      {
+        id: "reg-11",
+        category: "regular",
+        tag: "🥟 স্টিমড স্পেশাল",
+        script: "Juicy Chicken Momos 🥟",
+        title: "স্টিমড চিকেন মোমো ও চিলি ডিপ",
+        price: 120,
+        oldPrice: 140,
+        score: 98,
+        image: "momo_cutout.png",
+        desc: "পাতলা খামিরে জুসি চিকেন কিমার পুর দিয়ে তৈরি স্টিমড মোমো (৬ পিস) ও ঝাল চিলি গার্লিক সস।"
+      },
+      {
+        id: "reg-12",
+        category: "regular",
+        tag: "☕ চা বিলাস",
+        script: "Aromatic Spiced Milk Tea ☕",
+        title: "স্পেশাল মসলা দুধ চা ও বিস্কুট সেট",
+        price: 25,
+        oldPrice: 30,
+        score: 99,
+        image: "tea_cutout.png",
+        desc: "এলাচ, দারুচিনি ও আদার মেলবন্ধনে খাঁটি দুধের কড়া লিকারের স্পেশাল মালাই চা সাথে বেকারি বিস্কুট।"
+      }
+    ];
+
+    let currentCategory = 'all';
+    let currentIndex = 0;
+    let heroQty = 1;
+    let cart = [];
+    let autoScrollInterval = null;
+    let isPaused = false;
+
+    function getFilteredDishes() {
+      return currentCategory === 'all' 
+        ? dishesData 
+        : dishesData.filter(d => d.category === currentCategory);
+    }
+
+    // RENDER HORIZONTAL TRACK
+    function renderTrack() {
+      const track = document.getElementById('carouselTrack');
+      track.innerHTML = '';
+      const list = getFilteredDishes();
+
+      list.forEach((dish, index) => {
+        const isActive = index === currentIndex;
+        const card = document.createElement('div');
+        card.className = `carousel-item-card ${isActive ? 'active' : ''}`;
+        card.id = `card-${dish.id}`;
+        card.onclick = () => {
+          currentIndex = index;
+          updateHeroDisplay(true);
+        };
+
+        card.innerHTML = `
+          <span class="carousel-card-tag">${dish.tag}</span>
+          <div class="carousel-card-img-wrap">
+            <img src="${dish.image}" alt="${dish.title}" class="carousel-card-img">
+          </div>
+          <h4 class="carousel-card-title">${dish.title}</h4>
+          <span class="carousel-card-price">৳ ${dish.price}</span>
+        `;
+        track.appendChild(card);
+      });
+    }
+
+    // UPDATE HERO DISPLAY (WITHOUT ANY PAGE/WINDOW JUMP)
+    function updateHeroDisplay(animate = true) {
+      const list = getFilteredDishes();
+      if (!list.length) return;
+      if (currentIndex >= list.length) currentIndex = 0;
+      if (currentIndex < 0) currentIndex = list.length - 1;
+
+      const dish = list[currentIndex];
+      heroQty = 1;
+      document.getElementById('heroQtyDisplay').innerText = heroQty;
+
+      const heroDishImg = document.getElementById('heroDishImg');
+      
+      if (animate) {
+        heroDishImg.style.transform = 'scale(0.85) rotate(-6deg)';
+        heroDishImg.style.opacity = '0.3';
+      }
+
+      setTimeout(() => {
+        heroDishImg.src = dish.image;
+        heroDishImg.alt = dish.title;
+        document.getElementById('heroScriptTag').innerText = dish.script;
+        document.getElementById('heroDishTitle').innerText = dish.title;
+        document.getElementById('heroPrice').innerText = `৳ ${dish.price}`;
+        document.getElementById('heroOldPrice').innerText = `৳ ${dish.oldPrice}`;
+        const disc = Math.round(((dish.oldPrice - dish.price) / dish.oldPrice) * 100);
+        document.getElementById('heroDiscount').innerText = `-${disc}% অফ`;
+        document.getElementById('heroTrustBadge').innerHTML = `<span>🛡️</span> ট্রাস্ট স্কোর: ${dish.score}/১০০`;
+        document.getElementById('heroDesc').innerText = dish.desc;
+
+        if (animate) {
+          heroDishImg.style.transform = 'scale(1) rotate(0deg)';
+          heroDishImg.style.opacity = '1';
+        }
+      }, animate ? 180 : 0);
+
+      // ONLY SCROLL THE HORIZONTAL TRACK CONTAINER INTERNALLY (NEVER TOUCH THE WINDOW SCROLL)
+      const track = document.getElementById('carouselTrack');
+      document.querySelectorAll('.carousel-item-card').forEach((card, idx) => {
+        if (idx === currentIndex) {
+          card.classList.add('active');
+          if (track) {
+            const scrollLeft = card.offsetLeft - (track.clientWidth / 2) + (card.clientWidth / 2);
+            track.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+          }
+        } else {
+          card.classList.remove('active');
+        }
+      });
+    }
+
+    function nextHeroDish() {
+      const list = getFilteredDishes();
+      currentIndex = (currentIndex + 1) % list.length;
+      updateHeroDisplay(true);
+    }
+
+    function prevHeroDish() {
+      const list = getFilteredDishes();
+      currentIndex = (currentIndex - 1 + list.length) % list.length;
+      updateHeroDisplay(true);
+    }
+
+    // CATEGORY FILTER
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = cat;
+      currentIndex = 0;
+      renderTrack();
+      updateHeroDisplay(true);
+    }
+
+    // TRACK MANUAL ARROWS
+    function scrollTrack(dir) {
+      const track = document.getElementById('carouselTrack');
+      track.scrollBy({ left: dir * 260, behavior: 'smooth' });
+    }
+
+    // AUTO SCROLL INTERVAL
+    function startAutoScroll() {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+      autoScrollInterval = setInterval(() => {
+        if (!isPaused) {
+          nextHeroDish();
+        }
+      }, 4000);
+    }
+
+    function pauseAutoScroll() {
+      isPaused = true;
+    }
+
+    function resumeAutoScroll() {
+      isPaused = false;
+    }
+
+    // QUANTITY & CART
+    function updateHeroQty(delta) {
+      heroQty = Math.max(1, heroQty + delta);
+      document.getElementById('heroQtyDisplay').innerText = heroQty;
+    }
+
+    function addHeroToCart() {
+      const list = getFilteredDishes();
+      const dish = list[currentIndex];
+      addToCart(dish, heroQty);
+      showToast(`${dish.title} (${heroQty}টি) কার্ট-এ যুক্ত হয়েছে!`);
+    }
+
+    function addToCart(dish, qty) {
+      const existing = cart.find(item => item.dish.id === dish.id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ dish, qty });
+      }
+      updateCartUI();
+    }
+
+    function changeCartQty(dishId, delta) {
+      const idx = cart.findIndex(item => item.dish.id === dishId);
+      if (idx !== -1) {
+        cart[idx].qty += delta;
+        if (cart[idx].qty <= 0) {
+          cart.splice(idx, 1);
+        }
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('navCartCount').innerText = totalCount;
+
+      const list = document.getElementById('cartItemsList');
+      const footer = document.getElementById('cartFooter');
+
+      if (cart.length === 0) {
+        list.innerHTML = `
+          <div class="cart-empty-state">
+            <span>🍽️</span>
+            <p>কার্ট এখনও খালি!</p>
+            <small>মেনু থেকে আপনার পছন্দের খাবার যোগ করুন।</small>
+          </div>
+        `;
+        footer.style.display = 'none';
+        return;
+      }
+
+      footer.style.display = 'block';
+      list.innerHTML = '';
+
+      let subtotal = 0;
+      cart.forEach(item => {
+        const itemTotal = item.dish.price * item.qty;
+        subtotal += itemTotal;
+
+        const row = document.createElement('div');
+        row.className = 'cart-item-row';
+        row.innerHTML = `
+          <img src="${item.dish.image}" alt="${item.dish.title}" class="cart-item-img">
+          <div class="cart-item-details">
+            <div class="cart-item-name">${item.dish.title}</div>
+            <div class="cart-item-unit-price">৳ ${item.dish.price} × ${item.qty} = ৳ ${itemTotal}</div>
+          </div>
+          <div class="cart-item-actions">
+            <button class="cart-item-qty-btn" onclick="changeCartQty('${item.dish.id}', -1)">−</button>
+            <span style="font-weight:700;font-size:13px;width:16px;text-align:center;">${item.qty}</span>
+            <button class="cart-item-qty-btn" onclick="changeCartQty('${item.dish.id}', 1)">+</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+
+      const discount = Math.round(subtotal * 0.05);
+      const finalTotal = subtotal - discount;
+
+      document.getElementById('cartSubtotal').innerText = `৳ ${subtotal}`;
+      document.getElementById('cartDiscount').innerText = `- ৳ ${discount}`;
+      document.getElementById('cartTotal').innerText = `৳ ${finalTotal}`;
+    }
+
+    function toggleCartDrawer() {
+      document.getElementById('cartOverlay').classList.toggle('open');
+    }
+
+    function closeCartDrawer(e) {
+      document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function confirmOrder() {
+      if (cart.length === 0) return;
+      const orderCode = 'AB-' + Math.floor(1000 + Math.random() * 9000);
+      alert(`🎉 আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে!
+
+অর্ডার টোকেন নম্বর: ${orderCode}
+ক্যান্টিন কাউন্টারে এই টোকেনটি দেখিয়ে খাবার সংগ্রহ করুন অথবা লাইভ স্ট্যাটাস ট্র্যাক করুন।`);
+      cart = [];
+      updateCartUI();
+      toggleCartDrawer();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastBox');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark-mode');
+      localStorage.setItem('canteen_theme', isDark ? 'dark' : 'light');
+      const logo = document.getElementById('brandLogo');
+      if (logo) {
+        logo.src = isDark ? 'logo-dark.png' : 'logo-light.png';
+      }
+    }
+
+    // INITIALIZE
+    (function init() {
+      const savedTheme = localStorage.getItem('canteen_theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark-mode');
+        const logo = document.getElementById('brandLogo');
+        if (logo) logo.src = 'logo-dark.png';
+      }
+      renderTrack();
+      updateHeroDisplay(false);
+      startAutoScroll();
+    })();
+  
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu');
+  if (m) m.classList.toggle('open');
+}
+
+function closeMenu() {
+  const m = document.getElementById('mobileMenu');
+  if (m) m.classList.remove('open');
+}
+
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.className = 'toast';
+    t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#20130d;color:#fff;padding:12px 24px;border-radius:30px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.3s;pointer-events:none;";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => { t.style.opacity = '0'; }, 2500);
+}
+
+
+
+// ===== UNIFIED DARK MODE & AUTH SYSTEM =====
+function initThemeMode() {
+  const modeToggle = document.getElementById('modeToggle');
+  const mainLogo = document.getElementById('mainLogo');
+  const footerLogo = document.getElementById('footerLogo');
+  const brandLogo = document.getElementById('brandLogo');
+  const authLogo = document.getElementById('authLogo');
+
+  function applyTheme(isDark) {
+    document.documentElement.classList.toggle('dark-mode', isDark);
+    if (modeToggle) modeToggle.classList.toggle('on', isDark);
+    const logoSrc = isDark ? 'logo-dark.png' : 'logo-light.png';
+    [mainLogo, footerLogo, brandLogo, authLogo].forEach(lg => {
+      if (lg) lg.src = logoSrc;
+    });
+  }
+
+  const savedTheme = localStorage.getItem('canteen_theme');
+  if (savedTheme === 'dark') {
+    applyTheme(true);
+  }
+
+  if (modeToggle) {
+    modeToggle.onclick = function() {
+      const isDark = !document.documentElement.classList.contains('dark-mode');
+      localStorage.setItem('canteen_theme', isDark ? 'dark' : 'light');
+      applyTheme(isDark);
+      showToast(isDark ? 'Dark mode on' : 'Dark mode off');
+    };
+  }
+}
+
+// ===== AUTH MODAL & PROFILE SYSTEM =====
+let currentSelectedRole = 'student';
+
+function openAuthModal(mode = 'signin') {
+  const overlay = document.getElementById('authModalOverlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    setTimeout(() => overlay.classList.add('open'), 10);
+    switchAuthTab(mode);
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeAuthModal() {
+  const overlay = document.getElementById('authModalOverlay');
+  if (overlay) {
+    overlay.classList.remove('open');
+    setTimeout(() => { overlay.style.display = 'none'; }, 250);
+    document.body.style.overflow = '';
+  }
+}
+
+function handleAuthOverlayClick(e) {
+  if (e.target.id === 'authModalOverlay') {
+    closeAuthModal();
+  }
+}
+
+function switchAuthTab(mode) {
+  const tabSignIn = document.getElementById('tabSignIn');
+  const tabSignUp = document.getElementById('tabSignUp');
+  const formSignIn = document.getElementById('signInForm');
+  const formSignUp = document.getElementById('signUpForm');
+  const title = document.getElementById('authModalTitle');
+  const subtitle = document.getElementById('authModalSubtitle');
+
+  if (mode === 'signin') {
+    if (tabSignIn) tabSignIn.classList.add('active');
+    if (tabSignUp) tabSignUp.classList.remove('active');
+    if (formSignIn) formSignIn.style.display = 'block';
+    if (formSignUp) formSignUp.style.display = 'none';
+    if (title) title.innerText = 'আহার বিলাস অ্যাকাউন্টে প্রবেশ';
+    if (subtitle) subtitle.innerText = 'ক্যাম্পাস স্মার্ট ক্যাফেটেরিয়া সিস্টেমে আপনাকে স্বাগতম';
+  } else {
+    if (tabSignUp) tabSignUp.classList.add('active');
+    if (tabSignIn) tabSignIn.classList.remove('active');
+    if (formSignUp) formSignUp.style.display = 'block';
+    if (formSignIn) formSignIn.style.display = 'none';
+    if (title) title.innerText = 'নতুন অ্যাকাউন্ট খুলুন';
+    if (subtitle) subtitle.innerText = 'নিরাপদ খাবার অর্ডার ও ট্র্যাকিংয়ের অংশ হোন';
+  }
+}
+
+function selectAuthRole(role, el) {
+  currentSelectedRole = role;
+  document.querySelectorAll('.auth-modal-overlay .role-pill').forEach(btn => btn.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function togglePasswordVisibility(fieldId, btn) {
+  const input = document.getElementById(fieldId);
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.innerText = '🙈';
+  } else {
+    input.type = 'password';
+    btn.innerText = '👁️';
+  }
+}
+
+function handleAuthSubmit(mode, e) {
+  if (e) e.preventDefault();
+  const roleNames = {
+    student: '🎓 শিক্ষার্থী',
+    faculty: '👨‍🏫 শিক্ষক / কর্মকর্তা',
+    vendor: '👨‍🍳 ক্যান্টিন ভেন্ডর',
+    inspector: '🧪 ফুড ইন্সপেক্টর',
+    admin: '🛡️ অ্যাডমিন'
+  };
+
+  let userName = 'ব্যবহারকারী';
+  let userEmail = 'user@aharbilas.edu';
+
+  if (mode === 'signup') {
+    const regNameEl = document.getElementById('authRegName');
+    const regEmailEl = document.getElementById('authRegEmail');
+    if (regNameEl && regNameEl.value.trim()) userName = regNameEl.value.trim();
+    if (regEmailEl && regEmailEl.value.trim()) userEmail = regEmailEl.value.trim();
+  } else {
+    const loginEmailEl = document.getElementById('authLoginEmail');
+    if (loginEmailEl && loginEmailEl.value.trim()) {
+      userEmail = loginEmailEl.value.trim();
+      userName = userEmail.split('@')[0];
+    }
+  }
+
+  loginUser({
+    name: userName,
+    email: userEmail,
+    role: roleNames[currentSelectedRole] || '🎓 শিক্ষার্থী'
+  });
+
+  closeAuthModal();
+  if (typeof showToast === 'function') {
+    showToast(mode === 'signup' ? '🎉 অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!' : '✅ লগইন সফল হয়েছে!');
+  }
+}
+
+function quickDemoLogin(role) {
+  const demoUsers = {
+    student: { name: 'আহমেদ ওয়ারিসা', email: 'warisa.student@aharbilas.edu', role: '🎓 শিক্ষার্থী' },
+    faculty: { name: 'ড. মাহমুদুর রহমান', email: 'm.rahman@dept.edu', role: '👨‍🏫 শিক্ষক / কর্মকর্তা' },
+    vendor: { name: 'কাদের ভাই (ক্যান্টিন-১)', email: 'kader.canteen@aharbilas.edu', role: '👨‍🍳 ক্যান্টিন ভেন্ডর' },
+    inspector: { name: 'ল্যাব অ্যানালিস্ট সাবরিনা', email: 'sabrina.lab@safety.gov.bd', role: '🧪 ফুড ইন্সপেক্টর' },
+    admin: { name: 'অ্যাডমিন ডেস্ক', email: 'admin@aharbilas.edu', role: '🛡️ অ্যাডমিন' }
+  };
+
+  const user = demoUsers[role] || demoUsers.student;
+  loginUser(user);
+  closeAuthModal();
+  if (typeof showToast === 'function') {
+    showToast(`✅ ${user.role} হিসেবে ডেমো লগইন সফল!`);
+  }
+}
+
+function loginUser(userData) {
+  localStorage.setItem('canteen_user', JSON.stringify(userData));
+  renderAuthState();
+}
+
+function handleSignOut() {
+  localStorage.removeItem('canteen_user');
+  renderAuthState();
+  closeUserDropdown();
+  if (typeof showToast === 'function') {
+    showToast('🚪 সফলভাবে লগআউট করা হয়েছে');
+  }
+}
+
+function toggleUserDropdown() {
+  const menu = document.getElementById('userDropdownMenu');
+  if (menu) menu.classList.toggle('open');
+}
+
+function closeUserDropdown() {
+  const menu = document.getElementById('userDropdownMenu');
+  if (menu) menu.classList.remove('open');
+}
+
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('authUserWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    closeUserDropdown();
+  }
+});
+
+function renderAuthState() {
+  const userJson = localStorage.getItem('canteen_user');
+  const userWrap = document.getElementById('authUserWrap');
+  const mobAuth = document.getElementById('mobileAuthContainer');
+
+  if (userJson) {
+    try {
+      const user = JSON.parse(userJson);
+      if (userWrap) {
+        userWrap.innerHTML = `
+          <div class="user-badge" onclick="toggleUserDropdown()" title="User Profile">
+            <span class="user-avatar">${user.name ? user.name.charAt(0) : '👤'}</span>
+            <span class="user-name">${user.name}</span>
+            <span style="font-size:10px;margin-left:2px;color:var(--muted)">▾</span>
+          </div>
+          <div class="user-dropdown-menu" id="userDropdownMenu">
+            <div class="user-menu-header">
+              <strong>${user.role || '🎓 শিক্ষার্থী'}</strong>
+              <small>${user.email || ''}</small>
+            </div>
+            <a href="javascript:void(0)" onclick="showToast('প্রোফাইল সেটিংস শীঘ্রই আসছে')">⚙️ প্রোফাইল সেটিংস</a>
+            <a href="javascript:void(0)" onclick="showToast('আপনার কোন সক্রিয় অর্ডার নেই')">📋 আমার অর্ডারসমূহ</a>
+            <button type="button" class="btn-signout" onclick="handleSignOut()">🚪 লগআউট (Sign Out)</button>
+          </div>
+        `;
+      }
+      if (mobAuth) {
+        mobAuth.innerHTML = `
+          <div style="padding:10px 0;border-top:1px solid var(--line);margin-top:6px;">
+            <div style="font-size:13.5px;font-weight:700;color:var(--maroon);margin-bottom:6px;">👤 ${user.name} (${user.role})</div>
+            <button class="btn-signout" style="padding:8px 14px;border-radius:999px;background:rgba(217,56,41,0.1);color:#d93829;border:1px solid #d93829;font-weight:700;cursor:pointer;width:100%;text-align:center;" onclick="closeMenu();handleSignOut()">লগআউট (Sign Out)</button>
+          </div>
+        `;
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  } else {
+    if (userWrap) {
+      userWrap.innerHTML = `<button class="login" id="loginBtn" onclick="openAuthModal('signin')">Sign in</button>`;
+    }
+    if (mobAuth) {
+      mobAuth.innerHTML = `<button class="primary m-btn" onclick="closeMenu();openAuthModal('signin')">Sign in / একাউন্ট খুলুন</button>`;
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (typeof initThemeMode === 'function') initThemeMode();
+  renderAuthState();
+});
+</script>
+  <!-- ===== AUTH POPUP MODAL (Hidden by default, opens only on Sign in click) ===== -->
+  <div class="auth-modal-overlay" id="authModalOverlay" onclick="handleAuthOverlayClick(event)" style="display:none;">
+    <div class="auth-modal-box">
+      <button type="button" class="auth-close-btn" onclick="closeAuthModal()" aria-label="Close">✕</button>
+      
+      <div class="auth-header">
+        <img src="logo-light.png" alt="আহার বিলাস" id="authLogo" class="auth-logo">
+        <h3 id="authModalTitle">অ্যাকাউন্টে প্রবেশ করুন</h3>
+        <p id="authModalSubtitle">ক্যাফেটেরিয়া স্মার্ট অর্ডার ও ট্রাস্ট ওয়াচ সিস্টেমে স্বাগতম</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">লগইন (Sign In)</button>
+        <button type="button" class="auth-tab" id="tabSignUp" onclick="switchAuthTab('signup')">রেজিস্ট্রেশন (Sign Up)</button>
+      </div>
+
+      <!-- Role Selector -->
+      <div class="auth-form-group">
+        <label>আপনার ভূমিকা নির্বাচন করুন:</label>
+        <div class="auth-roles">
+          <div class="role-pill active" onclick="selectAuthRole(this, 'student')">🎓 শিক্ষার্থী</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'faculty')">👨‍🏫 শিক্ষক / স্টাফ</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'vendor')">🍳 ক্যান্টিন ভেন্ডর</div>
+          <div class="role-pill" onclick="selectAuthRole(this, 'inspector')">🔬 ল্যাব ইন্সপেক্টর</div>
+        </div>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" onsubmit="handleAuthSubmit(event, 'signin')">
+        <div class="auth-form-group">
+          <label for="authLoginEmail">স্টুডেন্ট আইডি / ইমেইল</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authLoginEmail" placeholder="e.g. C213000 or email@iiuc.ac.bd" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authLoginPass">পাসওয়ার্ড</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="authLoginPass" placeholder="••••••••" required>
+            <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('authLoginPass', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-helper-row">
+          <label>
+            <input type="checkbox" id="authRemember" checked> মনে রাখুন
+          </label>
+          <a href="javascript:void(0)" onclick="showToast('পাসওয়ার্ড রিকভারি লিংক ইমেইলে পাঠানো হয়েছে')">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">
+          <span>লগইন করুন</span> →
+        </button>
+      </form>
+
+      <!-- Sign Up Form (Hidden by default) -->
+      <form id="signUpForm" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
+        <div class="auth-form-group">
+          <label for="authRegName">সম্পূর্ণ নাম</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authRegName" placeholder="e.g. আহমেদ রাফি" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegId">আইডি নম্বর / ডিপার্টমেন্ট</label>
+          <div class="auth-input-wrap">
+            <input type="text" id="authRegId" placeholder="e.g. C213045 (CSE)" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegEmail">বিশ্ববিদ্যালয় ইমেইল</label>
+          <div class="auth-input-wrap">
+            <input type="email" id="authRegEmail" placeholder="name@iiuc.ac.bd" required>
+          </div>
+        </div>
+
+        <div class="auth-form-group">
+          <label for="authRegPass">নতুন পাসওয়ার্ড</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="authRegPass" placeholder="কমপক্ষে ৬ ডিজিটের পাসওয়ার্ড" required minlength="6">
+            <button type="button" class="auth-pw-toggle" onclick="togglePasswordVisibility('authRegPass', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="auth-helper-row">
+          <label>
+            <input type="checkbox" required checked> নিয়ম ও শর্তাবলীতে সম্মত আছি
+          </label>
+        </div>
+
+        <button type="submit" class="auth-submit-btn">
+          <span>অ্যাকাউন্ট তৈরি করুন</span> →
+        </button>
+      </form>
+
+      <!-- Quick Demo Access -->
+      <div class="auth-demo-section">
+        <p>⚡ দ্রুত টেস্ট করার জন্য ডেমো লগইন:</p>
+        <div class="auth-demo-buttons">
+          <button type="button" class="demo-btn" onclick="quickDemoLogin('শিক্ষার্থী (CSE)', 'আহমেদ রাফি', 'rafi@iiuc.ac.bd')">👨‍🎓 Student Demo</button>
+          <button type="button" class="demo-btn" onclick="quickDemoLogin('ল্যাব গবেষক', 'ফার্মেসি QA সেল', 'pharmacy.qa@iiuc.ac.bd')">🔬 Inspector Demo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
